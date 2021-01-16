@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+[ -z "$FIFO_UEBERZUG" ] && exit
+readonly ID_PREVIEW="preview"
+
+if [ "$1" = "imgpreview" ]; then
+        tempdir="/tmp/imgpreview"
+        [[ ! -d $tempdir ]] && mkdir -p $tempdir
+        convert -define jpeg:size=256x256 "$PWD/$6" \
+            -thumbnail 512x512 -quiet -quality 50 "$tempdir/$6.jpg"
+        declare -p -A cmd=([action]=add [identifier]="$ID_PREVIEW" [x]=$2 \
+            [y]=$3 [width]=$4 [height]=$5 [path]="$tempdir/$6.jpg") > "$FIFO_UEBERZUG"
+elif [[ "$1" == "pdfpreview" ]]; then
+        tempdir="/tmp/pdfpreview"
+        [[ ! -d $tempdir ]] && mkdir -p $tempdir
+        pdftoppm -r 60 -jpeg -jpegopt "quality=50" -singlefile "$6" "$tempdir/$6"
+        declare -p -A cmd=([action]=add [identifier]="$ID_PREVIEW" [x]="$2" \
+        [y]="$3" [width]="$4" [height]="$5" [path]="$tempdir/$6.jpg") > "$FIFO_UEBERZUG"
+else
+        declare -p -A cmd=([action]=remove [identifier]="$ID_PREVIEW") > "$FIFO_UEBERZUG"
+fi

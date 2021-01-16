@@ -1,0 +1,51 @@
+Config {
+  -- appearance
+  font = "monospace"
+, bgColor = "black"
+, fgColor = "white"
+, position = Top
+, border = NoBorder
+
+  -- layout
+, sepChar = "%"
+, alignSep = "} {"
+, template = "%StdinReader% } { %alsa:default:Master% | %battery% | %coretemp% | %date%"
+
+  -- plugins
+  -- low color is applied below Low, high when above High, normal otherwise.
+  -- Time is in 1/10 seconds.
+, commands =
+  [
+    Run CoreTemp [
+      "--template", "温 <core0> °C"
+
+    , "--Low", "50"
+    , "--High", "70"
+    , "--low", "green"
+    , "--normal", "yellow"
+    , "--high", "red"
+    ] 100
+  , Run Battery [
+      "--template", "<acstatus> <left> (<timeleft>)"
+    , "--Low", "30"
+    , "--High", "70"
+    , "--low", "red"
+    , "--normal", "yellow"
+    , "--high", "green"
+    , "--"
+    , "-p", "blue"
+    , "-P", "%"
+    , "-o", "放電"
+    , "-O", "充電"
+    , "-i", "充電"
+    ] 600
+  , Run Date "%a %d/%m/%y %H:%M" "date" 600
+  , Run Alsa "default" "Master" [
+      "--template", "<status> <volume> (<dB>dB)"
+    , "--"
+    , "-O", "音"
+    , "-o", "静音"
+    ]
+  , Run StdinReader
+  ]
+}

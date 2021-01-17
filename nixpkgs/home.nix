@@ -3,7 +3,7 @@
 let
   homeDir = /home/pengu;
   configDir = "/home/pengu/Documents/riceDumpling";
-  myTerm = "st";
+  myTerm = "xterm";
 in
 {
   # Let Home Manager install and manage itself.
@@ -45,17 +45,27 @@ in
           sha256 = "0lgg8qiimglar3dr00jn6w4w3zsr6nfmbhdf6p2q3y2nxjvl5baj";
       };
     }))
-    haskellPackages.xmobar
+
 
     ### Applications
-    inkscape
+    exiftool # needed for vifm sixel
     ghc
+    haskellPackages.xmobar
+    highlight
     hugo
+    imagemagick
+    inkscape
+    libsixel
+    neofetch
     okular
+    scrot
+    sxiv
     syncthing
     vifm
+    xterm
 
     ### Admin things and other tools
+    bc
     iftop
     sysstat
     xorg.xbacklight
@@ -78,6 +88,10 @@ in
     wallpapers = {
       source = builtins.fetchTarball "https://jiaxiaodong.com/img/wallpapers/Wallpapers.tar";
       target = "Images/wallpapers";
+    };
+
+    "Scripts" = {
+      source = ./scripts;
     };
   };
 
@@ -107,7 +121,31 @@ in
     export QT_IM_MODULE = "@im=fcitx"
   '';
 
-  xresources.extraConfig = ''
+  xresources.extraConfig = builtins.readFile (
+    pkgs.fetchFromGitHub {
+      owner = "dracula";
+      repo = "xresources";
+      rev = "master";
+      sha256 = "12wmjynk0ryxgwb0hg4kvhhf886yvjzkp96a5bi9j0ryf3pc9kx7";
+    } + "/Xresources"
+  ) + ''
+  XTerm*faceName: Dina
+  XTerm*faceSize: 10
+  XTerm.vt100.translations: #override \n\
+    Ctrl <Key> minus: smaller-vt-font() \n\
+    Ctrl <Key> plus: larger-vt-font() \n\
+    Ctrl <Key> 0: set-vt-font(d) \n\
+    Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
+    Ctrl <Key> 0: set-vt-font(d)
+
+  Xterm.ttyModes: erase ^?
+  XTerm*decTerminalID: vt340
+  XTerm*backarrowKey: false
+  XTerm*bellIsUrgent: true
+  XTerm*selectToClipboard: true
+  XTerm*trimSelection: true
+  XTerm.termName: xterm-256color
   st.font: Dina:size=11:antialias=false:autohint=false
   st.termname: st-256color
   '';

@@ -63,7 +63,7 @@
 
     displayManager.session = [
       {
-        name = "home-manager";
+        name = "xsession";
         start = "${pkgs.runtimeShell} $HOME/.xsession & waitPID=$!";
         manage = "window";
       }
@@ -93,9 +93,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget
-    tmux
+    binutils
+    coreutils
     nix-prefetch-github
+    wget
   ];
 
   fonts.fonts = with pkgs; [

@@ -5,13 +5,13 @@
     enable = true;
     sessionVariables = {
       EDITOR = "nvim";
+      PATH = "$PATH:~/Scripts";
     };
     shellAliases = {
       la = "ls -a";
       lla = "ls -la";
       f = "grep -RHn";
       v ="vim .";
-      vf = "vifm";
     };
     initExtra = ''
     stty -ixon

@@ -1,5 +1,6 @@
 """""""""""""""""""""""""""""FLAGS""""""""""""""""""""""""""
 " set statusline+=%F\ %l:%c
+set autochdir
 set autoindent
 set autowriteall
 set colorcolumn=80

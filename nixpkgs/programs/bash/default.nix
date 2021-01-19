@@ -12,6 +12,7 @@
       lla = "ls -la";
       f = "grep -RHn";
       v ="vim .";
+      vf ="vifm";
     };
     initExtra = ''
     stty -ixon

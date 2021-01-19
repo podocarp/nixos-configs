@@ -11,13 +11,17 @@ systems.
 
 Things in the folder `nixpkgs` are supposed to go into `~/.config/nixpkgs`. The
 file `configuration.nix` goes to `/etc/nixos/configuration.nix`. Afterwards run
-`nixos-rebuild switch` and `home-manager switch`.
+`nixos-rebuild switch` and `home-manager switch`. Certain things need to be
+changed/done as well or you might get stuck.
+
+- Change network interface names in `configuration.nix`
+- Change user/git details
+- Install home-manager
 
 ## Configured things
 
 Check within `nixpkgs/programs` and `nixpkgs/services`. I suggest you use this as 
-guide instead of as a drop-in replacement. There are certain personal things that
-should be swapped out such as your git email.
+guide instead of as a drop-in replacement.
 
 A list of some things that have been configured:
 - XResources uses [dracula](https://github.com/dracula/xresources)

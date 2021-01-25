@@ -37,16 +37,6 @@ in
   ];
 
   home.packages = with pkgs; [
-    (st.overrideAttrs (oldAttrs: {
-      src = fetchFromGitHub {
-          owner = "podocarp";
-          repo = "st";
-          rev = "head";
-          sha256 = "0lgg8qiimglar3dr00jn6w4w3zsr6nfmbhdf6p2q3y2nxjvl5baj";
-      };
-    }))
-
-
     ### Applications
     exiftool # needed for vifm sixel
     ghc
@@ -75,18 +65,17 @@ in
 
   home.file = {
     riceDumpling = {
-      source = pkgs.fetchFromGitHub {
-        owner = "podocarp";
-        repo = "riceDumpling";
-        rev = "master";
-        # sha256 = lib.fakeSha256;
-        sha256 = "00fk83rw6zcnnz6mnii0nnhcbvbagccnmf77x9li00mzmkynnayk";
+      source = builtins.fetchGit {
+        url = "https://github.com/podocarp/riceDumpling";
       };
       target = "Documents/riceDumpling";
     };
 
     wallpapers = {
-      source = builtins.fetchTarball "https://jiaxiaodong.com/img/wallpapers/Wallpapers.tar";
+      source = builtins.fetchTarball {
+        url = "https://jiaxiaodong.com/img/wallpapers/Wallpapers.tar";
+        sha256 = "10992gd3z77r3jaz5dnk0w3ql1nys9sz6swr1n8irxrxw8iqqr9g";
+      };
       target = "Images/wallpapers";
     };
 

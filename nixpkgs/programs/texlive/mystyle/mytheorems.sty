@@ -1,0 +1,31 @@
+\ProvidesPackage{mytheorems}
+
+\theoremstyle{plain}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem*{thm*}{Theorem}
+\newtheorem{cor}{Corollary}[thm]
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}{Proposition}[section]
+\newtheorem*{claim}{Claim}
+\newtheorem*{exercise}{Exercise}
+
+\theoremstyle{definition}
+\newtheorem*{defaultsln}{Solution} % placeholder, used later
+
+\newtheorem{defaultdef}{Definition}[section]
+\newtheorem{defaultex}{Example}[section]
+\newtheorem*{remark}{Remark}
+
+\newenvironment{solution}{% An env for solutions with a helmus
+    \renewcommand{\qedsymbol}{$\square$}
+\pushQED{\qed} \begin{defaultsln}}{\ \popQED \end{defaultsln}}
+
+\newenvironment{definition}{
+    \renewcommand{\qedsymbol}{$\square$}
+\pushQED{\qed} \begin{defaultdef}}{\ \popQED \end{defaultdef}}
+
+\newenvironment{example}{
+    \renewcommand{\qedsymbol}{$\lozenge$}
+\pushQED{\qed} \begin{defaultex}}{\ \popQED \end{defaultex}}

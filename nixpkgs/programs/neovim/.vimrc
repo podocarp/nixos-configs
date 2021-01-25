@@ -16,6 +16,7 @@ set mouse=a
 set nobackup
 set nojoinspaces
 set noshowmode
+set nospell
 set nowrapscan
 set number
 set path+=**
@@ -33,6 +34,7 @@ set smartindent
 set smarttab
 set splitright
 set termguicolors
+set title
 set undofile
 set wildmenu
 set wildmode=longest,list,full
@@ -222,7 +224,6 @@ augroup END
 " Scroll in wrapped lines
 map <Up> gk
 map <Down> gj
-map <Esc><Esc> :w<CR>
 """"""""""""""""""""""""INSERT MODE MAPS"""""""""""""""""""
 
 " paste
@@ -240,6 +241,8 @@ nnoremap <C-S> :sp<CR>:term<CR>A
 
 " Remove search highlights
 nnoremap <F3> :noh<CR>
+
+nnoremap <Esc> :w<CR>
 
 """"""""""""""""""""""SPLIT WINDOWS""""""""""""""""""""""""
 

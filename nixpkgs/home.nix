@@ -28,6 +28,7 @@ in
     ./programs/firefox/default.nix
     ./programs/git/default.nix
     ./programs/neovim/default.nix
+    ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vifm/default.nix
@@ -38,14 +39,12 @@ in
 
   home.packages = with pkgs; [
     ### Applications
-    exiftool # needed for vifm sixel
     ghc
     haskellPackages.xmobar
     highlight
     hugo
     imagemagick
     inkscape
-    libsixel
     neofetch
     okular
     scrot
@@ -127,15 +126,14 @@ in
     Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
     Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
     Ctrl <Key> 0: set-vt-font(d)
-
-  Xterm.ttyModes: erase ^?
-  XTerm*decTerminalID: vt340
   XTerm*backarrowKey: false
+  XTerm.ttyModes: erase ^?
+  XTerm*ptyInitialErase: true
+  XTerm*decTerminalID: vt340
+  XTerm*numColorRegisters: 256
   XTerm*bellIsUrgent: true
   XTerm*selectToClipboard: true
   XTerm*trimSelection: true
-  XTerm.termName: xterm-256color
-  st.font: Dina:size=11:antialias=false:autohint=false
-  st.termname: st-256color
+  XTerm.termName: st-256color
   '';
 }

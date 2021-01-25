@@ -12,9 +12,14 @@
       lla = "ls -la";
       f = "grep -RHn";
       v ="vim .";
-      vf ="vifm";
     };
     initExtra = ''
+    vf(){
+        command vifm "$@"
+        if [ -f /tmp/lastdir ]; then
+            cd `cat /tmp/lastdir`
+        fi
+    }
     stty -ixon
     set -o vi
     HISTCONTROL=ignoreboth

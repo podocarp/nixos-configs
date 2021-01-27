@@ -269,4 +269,3 @@ vnoremap <C-c> "+y
 vnoremap <C-x> "+d
 
 """"""""""""""""""""""""""""MISC""""""""""""""""""""""""""
-let g:python3_host_prog='/usr/bin/python'

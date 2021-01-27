@@ -22,7 +22,11 @@ in
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
+    ((import ./programs/vifm/default.nix) {
+        myTerm = myTerm;
+    })
 
+    ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
     ./programs/firefox/default.nix
@@ -31,7 +35,6 @@ in
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
-    ./programs/vifm/default.nix
 
     ./services/dunst/default.nix
     ./services/random-background/default.nix
@@ -39,7 +42,10 @@ in
 
   home.packages = with pkgs; [
     ### Applications
-    ghc
+    haskellPackages.cabal-install
+    haskellPackages.cabal2nix
+    haskellPackages.ghc
+    haskellPackages.haskell-language-server
     haskellPackages.xmobar
     highlight
     hugo
@@ -47,6 +53,9 @@ in
     inkscape
     neofetch
     okular
+    poppler_utils
+    pavucontrol
+    python38Packages.pygments
     scrot
     sxiv
     syncthing
@@ -54,22 +63,20 @@ in
     xterm
 
     ### Admin things and other tools
-    bc
+    arandr
     iftop
     sysstat
+    thinkfan
     xorg.xbacklight
     xorg.xev
     xorg.xprop
+
+    ### Fonts
+    source-han-mono
+    tamsyn
   ];
 
   home.file = {
-    riceDumpling = {
-      source = builtins.fetchGit {
-        url = "https://github.com/podocarp/riceDumpling";
-      };
-      target = "Documents/riceDumpling";
-    };
-
     wallpapers = {
       source = builtins.fetchTarball {
         url = "https://jiaxiaodong.com/img/wallpapers/Wallpapers.tar";
@@ -82,6 +89,8 @@ in
       source = ./scripts;
     };
   };
+
+  fonts.fontconfig.enable = true;
 
   nixpkgs.config.packageOverrides = pkgs : {
     nur = import
@@ -101,13 +110,19 @@ in
   # changes in each release.
   home.stateVersion = "21.03";
 
-  xsession.enable = true;
-  xsession.initExtra = ''
-    export XMODIFIERS = "@im=fcitx"
-    export XMODIFIER = "@im=fcitx"
-    export GTK_IM_MODULE = "@im=fcitx"
-    export QT_IM_MODULE = "@im=fcitx"
-  '';
+  xsession = {
+    enable = true;
+    initExtra = ''
+      export XMODIFIERS = "@im=fcitx"
+      export XMODIFIER = "@im=fcitx"
+      export GTK_IM_MODULE = "@im=fcitx"
+      export QT_IM_MODULE = "@im=fcitx"
+      autorandr -c
+    '';
+    profileExtra = ''
+      autorandr -c
+    '';
+  };
 
   xresources.extraConfig = builtins.readFile (
     pkgs.fetchFromGitHub {
@@ -117,7 +132,7 @@ in
       sha256 = "12wmjynk0ryxgwb0hg4kvhhf886yvjzkp96a5bi9j0ryf3pc9kx7";
     } + "/Xresources"
   ) + ''
-  XTerm*faceName: Dina
+  XTerm*faceName: Tamsyn
   XTerm*faceSize: 10
   XTerm.vt100.translations: #override \n\
     Ctrl <Key> minus: smaller-vt-font() \n\

@@ -1,1 +1,1 @@
-aplay ~/.config/scripts/boop.wav
+aplay boop.wav

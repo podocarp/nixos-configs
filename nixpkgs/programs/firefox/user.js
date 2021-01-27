@@ -515,7 +515,7 @@ user_pref("privacy.resistFingerprinting",			true);
 // https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2015-2743
 // https://blog.mozilla.org/security/2015/08/06/firefox-exploit-found-in-the-wild/
 // https://www.mozilla.org/en-US/security/advisories/mfsa2015-69/
-user_pref("pdfjs.disabled",					true);
+user_pref("pdfjs.disabled",					false);
 
 // PREF: Disable collection/sending of the health report (healthreport.sqlite*)
 // https://support.mozilla.org/en-US/kb/firefox-health-report-understand-your-browser-perf
@@ -744,7 +744,7 @@ user_pref("browser.cache.offline.enable",			false);
 // NOTICE: Having either of privacy.clearOnShutdown.history or privacy.clearOnShutdown.offlineApps as true will clear service workers when closing Firefox
 user_pref("privacy.sanitize.sanitizeOnShutdown",		true);
 user_pref("privacy.clearOnShutdown.cache",			true);
-//user_pref("privacy.clearOnShutdown.cookies",			true);
+user_pref("privacy.clearOnShutdown.cookies",			false);
 user_pref("privacy.clearOnShutdown.downloads",			true);
 user_pref("privacy.clearOnShutdown.formdata",			true);
 user_pref("privacy.clearOnShutdown.history",			true);
@@ -968,7 +968,7 @@ user_pref("network.stricttransportsecurity.preloadlist",	true);
 // NOTICE: OCSP adds latency (performance)
 // NOTICE: Short-lived certificates are not checked for revocation (security.pki.cert_short_lifetime_in_days, default:10)
 // CIS Version 1.2.0 October 21st, 2011 2.2.4
-user_pref("security.OCSP.enabled",				1);
+user_pref("security.OCSP.enabled",				0);
 
 // PREF: Enable OCSP Stapling support
 // https://en.wikipedia.org/wiki/OCSP_stapling

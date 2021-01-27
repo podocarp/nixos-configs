@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ myTerm, ... }:
 
 {
   xdg.configFile."vifm/colors".source = ./colors;
@@ -6,5 +6,9 @@
     executable = true;
     source = ./scripts;
   };
-  xdg.configFile."vifm/vifmrc".source = ./vifmrc;
+  xdg.configFile."vifm/vifmrc".text = builtins.readFile ./vifmrc + ''
+    filetype *
+            \ {Open in vim}
+            \ ${myTerm} -e vim %c &
+  '';
 }

@@ -11,13 +11,14 @@
     ];
 
   # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  # boot.loader.grub.efiSupport = true;
-  # boot.loader.grub.efiInstallAsRemovable = true;
-  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "nodev";
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+    useOSProber = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
@@ -37,9 +38,9 @@
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp0s25.useDHCP = true;
-  networking.interfaces.wls1.useDHCP = true;
+  networking.useDHCP = true;
+  #networking.interfaces.enp0s25.useDHCP = true;
+  #networking.interfaces.wls1.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -69,9 +70,11 @@
       }
     ];
 
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = [ "modesetting" "nvidia" ];
     useGlamor = true;
   };
+
+  nixpkgs.config.allowUnfree = true;
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -93,9 +96,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    binutils
     coreutils
-    nix-prefetch-github
+    vim
+    git
     wget
   ];
 
@@ -126,7 +129,7 @@
   # networking.firewall.enable = false;
 
   services.udev.extraRules = ''
-ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
   '';
 
   system.autoUpgrade.enable = true;
@@ -135,6 +138,10 @@ ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{dev
     enable = true;
     wheelNeedsPassword = false;
   };
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=10s
+  '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

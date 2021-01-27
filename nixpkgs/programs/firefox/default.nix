@@ -3,12 +3,12 @@
 {
   programs.firefox = {
     enable = true;
-    enableAdobeFlash = false;
-    enableGnomeExtensions = false;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       clearurls
+      darkreader
       decentraleyes
       ecosia
+      privacy-badger
       tree-style-tab
       ublock-origin
       unpaywall
@@ -23,6 +23,7 @@
         settings = {
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "browser.ctrlTab.recentlyUsedOrder" = false;
+          "browser.warnOnQuit" = false;
           "browser.newtabpage.enabled" = false;
           "browser.startup.homepage" = "https://en.wikipedia.org/wiki/Special:Random";
           "browser.urlbar.update2" = false;

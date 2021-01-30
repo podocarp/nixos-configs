@@ -1,7 +1,5 @@
 # NixOS Configs
 
-![Screenshot](./screenshots/ss1.png)
-
 These are my Nix and Home Manager configs. They include dotfiles and things like
 that that have been ported over. This allows for incredibly portable and
 automated builds of the exact same system configuration and RICE across all my
@@ -62,3 +60,9 @@ guide instead of as a drop-in replacement. Some things I recommend changing:
 - nvim configurations
 - Firefox's hardened user.js
 - vifm sixel preview uses XTerm
+
+## Screenshots
+
+![Screenshot](./screenshots/ss1.png)
+
+![Screenshot](./screenshots/ss2.png)

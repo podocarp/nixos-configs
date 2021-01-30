@@ -3,8 +3,8 @@
 {
   programs.autorandr = {
     enable = true;
-    # This is a profile on hybrid graphics with a single 4k monitor attached.
-    # The laptop screen is disabled.
+    # This is a profile on hybrid graphics and docked with a single 4k monitor
+    # attached. The laptop screen is disabled.
     profiles."hybrid-solo-4k" = {
       fingerprint = {
         "DP-1.3" = "00ffffffffffff005a63348c150101011b1e0104b54627783f6875a6564fa2260e5054bfef80d100d1c0b300a94095008180810081c022cc0050f0703e8018103500b9882100001a000000ff005630453230323730303035380a000000fd00184b0f873c000a202020202020000000fc005650333236382d344b0a20202001db02032bf15e61605f5e5d6b666501020304101f05140607080911121315161d1e2021222309070783010000a36600a0f0701f8030203500b9882100001a565e00a0a0a0295030203500b9882100001a1a6800a0f0381f4030203a00b9882100001a4d6c80a070703e8030203a00b9882100001a00000000000000000000000060";
@@ -24,8 +24,8 @@
         };
       };
     };
-    # This is a profile on discrete graphics with a single 4k monitor attached.
-    # The laptop screen is disabled.
+    # This is a profile on discrete graphics and docked with a single 4k
+    # monitor atttached. The laptop screen is disabled.
     profiles."nvidia-solo-4k" = {
       fingerprint = {
         "DP-1.3" = "00ffffffffffff005a63348c150101011b1e0104b54627783f6875a6564fa2260e5054bfef80d100d1c0b300a94095008180810081c022cc0050f0703e8018103500b9882100001a000000ff005630453230323730303035380a000000fd00184b0f873c000a202020202020000000fc005650333236382d344b0a20202001db02032bf15e61605f5e5d6b666501020304101f05140607080911121315161d1e2021222309070783010000a36600a0f0701f8030203500b9882100001a565e00a0a0a0295030203500b9882100001a1a6800a0f0381f4030203a00b9882100001a4d6c80a070703e8030203a00b9882100001a00000000000000000000000060";
@@ -41,6 +41,38 @@
           crtc = 0;
           primary = true;
           mode = "3840x2160";
+          rate = "60.00";
+        };
+      };
+    };
+
+    # Single laptop display on hybrid graphics
+    profiles."hybrid-laptop-only" = {
+      fingerprint = {
+        "eDP-1-1" = "00ffffffffffff000daee81500000000211a0104a5221378022675a6565099270c505400000001010101010101010101010101010101b43b804a713834405036680058c110000018000000fe004e3135364843452d454e310a20000000fe00434d4e0a202020202020202020000000fe004e3135364843452d454e310a2000a2";
+      };
+      config = {
+        "eDP-1-1" = {
+          enable = true;
+          crtc = 0;
+          primary = true;
+          mode = "1920x1080";
+          rate = "60.00";
+        };
+      };
+    };
+
+    # Single laptop display on discrete graphics (docked)
+    profiles."discrete-laptop-only" = {
+      fingerprint = {
+        "DP-2" = "00ffffffffffff000daee81500000000211a0104a5221378022675a6565099270c505400000001010101010101010101010101010101b43b804a713834405036680058c110000018000000fe004e3135364843452d454e310a20000000fe00434d4e0a202020202020202020000000fe004e3135364843452d454e310a2000a2";
+      };
+      config = {
+        "DP-2" = {
+          enable = true;
+          crtc = 0;
+          primary = true;
+          mode = "1920x1080";
           rate = "60.00";
         };
       };

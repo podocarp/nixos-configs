@@ -1,7 +1,6 @@
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.PhysicalScreens
-import XMonad.Actions.WorkspaceNames
 import XMonad.Config.Desktop
 import XMonad.Core
 import XMonad.Hooks.DynamicBars
@@ -42,7 +41,6 @@ myKeys =
   , ("M-S-s", onNextNeighbour def W.shift)
 
   , ("M-<Tab>", toggleWS) -- exclude those on other screens
-  , ("M-n", renameWorkspace myXPConfig)
   ]
   ++
   [("M-" ++ mask ++ key, f scr)
@@ -68,8 +66,10 @@ myKeys =
     volUpCmd = "echo -e 'set Master 1%-\nset Headphone 1%-' | amixer -s"
 
 myManageHook = composeAll
-  [ className =? "Firefox" --> doShift "9"
-  , className =? "Chromium" --> doShift "8"
+  [ className =? "Firefox" --> doShift "0_9"
+  , className =? "Chromium" --> doShift "0_8"
+  , className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
+  , title =? "Picture-in-Picture" --> doFloat
   ]
 
 -- This gives the hidden workspaces and the master window in those workspaces
@@ -111,8 +111,8 @@ myLogHookFocused = xmobarPP
   { ppSep = " | "
   , ppCurrent = xmobarColor "green" "" . wrap "[" "]"
   , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
-  , ppHidden = const ""
-  , ppTitle = xmobarColor "cyan" "" . shorten 70      -- window title format
+  , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
+  , ppTitle = xmobarColor "cyan" "" . shorten 50      -- window title format
   , ppSort = getSortByXineramaPhysicalRule horizontalScreenOrderer
   , ppExtras = myExtras
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
@@ -134,6 +134,7 @@ main = do
     , normalBorderColor = "#999999"
     , focusedBorderColor = "#FF0000"
     , borderWidth = 3
+    , manageHook = myManageHook
     , workspaces = withScreens nScreens (workspaces def)
     , layoutHook = avoidStruts $ Tall 1 (1/100) (1/2)
       ||| ThreeColMid 1 (-1/100) (4/10)

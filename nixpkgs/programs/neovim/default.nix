@@ -4,16 +4,26 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-      ale
-      coc-css coc-html coc-json coc-nvim coc-python coc-vimtex coc-snippets
-      command-t
-      gruvbox
-      nerdtree
-      ultisnips
-      vim-airline
-      vim-snippets
-      vim-surround
-      vimtex
+        ale
+        coc-css
+        coc-html
+        coc-json
+        coc-nvim
+        coc-snippets
+        coc-vimtex
+        command-t
+        gruvbox
+        nerdtree
+        ultisnips
+        vim-airline
+        vim-snippets
+        vim-surround
+        vimtex
+        ];
+
+    extraPackages = with pkgs; [
+      python38Packages.jedi
+      python38Packages.pylint
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

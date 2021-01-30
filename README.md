@@ -9,27 +9,43 @@ systems.
 
 ## Usage
 
-Things in the folder `nixpkgs` are supposed to go into `~/.config/nixpkgs`. The
-file `configuration.nix` goes to `/etc/nixos/configuration.nix`. Afterwards run
-`nixos-rebuild switch` and `home-manager switch`. Certain things need to be
-changed/done as well or you might get stuck.
+First install as per the manual. However, before the final build step, run
+```
+nixos-prefetch-url --unpack https://github.com/podocarp/nixos-configs
+```
+Then visit the path it was extracted to, and copy the desired `.nix` from the
+`nixos/` folder. This simplifies things and prevents you from making mistakes
+like forgetting to enable wireless support and having to reboot. This also adds
+an user you can log into. HOWEVER please read the configs before adding. Certain
+configs contain settings such as undervolting and allowing non-free software you
+might not want.
 
-- Change network interface names in `configuration.nix`
-- Change user/git details
-- Install home-manager
+After rebooting into your successful install, log into root and `passwd` the
+non-root user. Then log into that user.
+
+Install home-manager:
+```
+nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+nix-channel --update
+nix-env '<home-manager>' -A install
+```
+
+Next, you want to get this repo to a proper place. The original `prefetch`
+will get GC'd after some time.
+```
+cd ~/Documents
+git clone http://github.com/podocarp/nixos-configs
+```
+
+Finally, you will `ln -s` the files to where they are required. (NOTE: if
+`/home` and `/` are on different partitions the symbolic link cannot be created,
+and you will have to find another way).
 
 ## Configured things
 
 Check within `nixpkgs/programs` and `nixpkgs/services`. I suggest you use this as 
-guide instead of as a drop-in replacement.
+guide instead of as a drop-in replacement. Some things I recommend changing:
 
-A list of some things that have been configured:
-- XResources uses [dracula](https://github.com/dracula/xresources)
-- Crap ton of nvim things
-- Okular vim-like keybinds (have to manually add)
-- Firefox with hardened user.js
-- XMonad & XMobar & Rofi
-- vifm with sixel preview
-- Texlive with my conveniences
-- Dunst
-- And more
+- nvim configurations
+- Firefox's hardened user.js
+- vifm sixel preview uses XTerm

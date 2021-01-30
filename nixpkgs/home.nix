@@ -52,15 +52,21 @@ in
     imagemagick
     inkscape
     neofetch
+    neovim-remote # needed for synctex reverse
+    nodePackages.node2nix
     okular
     poppler_utils
     pavucontrol
+    python38
     python38Packages.pygments
     scrot
     sxiv
     syncthing
+    tdesktop # telegram desktop
     vifm
     xterm
+    yarn
+    yarn2nix
 
     ### Admin things and other tools
     arandr
@@ -113,16 +119,20 @@ in
   xsession = {
     enable = true;
     initExtra = ''
-      export XMODIFIERS = "@im=fcitx"
-      export XMODIFIER = "@im=fcitx"
-      export GTK_IM_MODULE = "@im=fcitx"
-      export QT_IM_MODULE = "@im=fcitx"
+      # export XMODIFIERS = "@im=fcitx"
+      # export XMODIFIER = "@im=fcitx"
+      # export GTK_IM_MODULE = "@im=fcitx"
+      # export QT_IM_MODULE = "@im=fcitx"
       autorandr -c
     '';
     profileExtra = ''
       autorandr -c
     '';
   };
+
+  gtk.enable = true;
+  gtk.theme.package = pkgs.equilux-theme;
+  gtk.theme.name = "Equilux";
 
   xresources.extraConfig = builtins.readFile (
     pkgs.fetchFromGitHub {

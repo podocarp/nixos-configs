@@ -8,8 +8,8 @@ Config {
 
   -- layout
 , sepChar = "%"
-, alignSep = "} {"
-, template = "%StdinReader% } { %alsa:default:Master% %battery% | %coretemp% | %date%"
+, alignSep = "}{"
+, template = "%StdinReader% }{ %alsa:default:Master% %battery% | %coretemp% | %date%"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.

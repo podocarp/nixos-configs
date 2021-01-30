@@ -4,8 +4,8 @@ def math():
 endglobal
 
 context "math()"
-snippet "([\S]+_|\^)((?:[^\ {}()]{2,}|[\(]\w+[\)]))" "Auto Sub/Super" wrA
-`!p snip.rv = match.group(1)`{`!p snip.rv = match.group(2)`$1}$2
+snippet "([_\^])((?:[^\W_]|[,+\-\\]){2,}|\((?:[^\W_]|[,+\-\\])+)" "Auto Sub/Super" wrA
+`!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
 endsnippet
 
 snippet frac "Fraction" w
@@ -113,7 +113,7 @@ snippet "!=" "neq" rA
 endsnippet
 
 context "math()"
-snippet "<([^\$<]*?)>>" "Angle" rA
+snippet "\<([^\$\<]*?)\>\>" "Angle" rA
 \langle `!p snip.rv = match.group(1)` \rangle
 endsnippet
 

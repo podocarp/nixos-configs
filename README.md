@@ -39,7 +39,20 @@ git clone http://github.com/podocarp/nixos-configs
 
 Finally, you will `ln -s` the files to where they are required. (NOTE: if
 `/home` and `/` are on different partitions the symbolic link cannot be created,
-and you will have to find another way).
+and you will have to find another way). Suppose you want config `x.nix`, then
+you will do something like
+```
+ln -s ~/Documents/nixos-configs/nixos/x.nix /etc/nixos/x.nix
+ln -s ~/Documents/nixos-configs/nixos/common.nix /etc/nixos/common.nix
+cat << EOF > /etc/nixos/configuration.nix
+{
+    imports = [
+      ./x.nix
+      ./hardware-configuration.nix # This should have been created by the installer
+    ];
+}
+EOF
+```
 
 ## Configured things
 

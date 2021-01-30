@@ -2,12 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, libs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ''${builtins.fetchGit {
+          url = "https://github.com/NixOS/nixos-hardware.git";
+	} }/lenovo/thinkpad/x1-extreme''
     ];
 
   # Use the GRUB 2 boot loader.
@@ -18,6 +21,19 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
     useOSProber = true;
+  };
+
+  boot.extraModprobeConfig = ''
+    options iwlwifi power_save=1
+    options thinkpad_acpi fan_control
+  '';
+
+  boot.blacklistedKernelModules = [ "snd_hda_codec_hdmi" ];
+
+  boot.kernel.sysctl = {
+    "kernel.nmi_watchdog" = 0;
+    "vm.dirty_writeback_centisecs" = 6000;
+    "vm.laptop_mode" = 5;
   };
 
   # Set your time zone.
@@ -53,13 +69,20 @@
   #   keyMap = "us";
   # };
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+
+  programs.dconf.enable = true;
+  services.dbus.packages = with pkgs; [ gnome3.dconf ];
+
   services.xserver = {
     enable = true;
     xkbOptions = "caps:escape";
 
     libinput = {
       enable = true;
-      scrollButton = 2;
+      touchpad.scrollButton = 2;
     };
 
     displayManager.session = [
@@ -70,22 +93,49 @@
       }
     ];
 
-    videoDrivers = [ "modesetting" "nvidia" ];
+    videoDrivers = [ "nvidia" "modesetting" ];
     useGlamor = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  hardware.nvidia.prime = {
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:1:0:0";
+  };
 
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  hardware.opengl = {
+    extraPackages = with pkgs; [
+      intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = false;
+  services.thinkfan.enable = true;
+  services.thinkfan.levels = ''
+    (0,     0,      55)
+    (1,     48,     60)
+    (2,     50,     61)
+    (3,     52,     63)
+    (6,     56,     65)
+    (7,     60,     85)
+    (127,   80,     32767)
+  '';
 
-  # Enable sound.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
+    ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", ATTR{link_power_management_policy}="med_power_with_dipm"
+  '';
+
+  services.undervolt = {
+    enable = true;
+    coreOffset = -150;
+    analogioOffset = -100;
+    uncoreOffset = -30;
+  };
+
   sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.pengu = {
@@ -96,14 +146,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    coreutils
-    vim
     git
+    pciutils
+    vim
     wget
-  ];
-
-  fonts.fonts = with pkgs; [
-    dina-font
   ];
 
   i18n.inputMethod.enabled = "fcitx";
@@ -128,12 +174,6 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
-  '';
-
-  system.autoUpgrade.enable = true;
-
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
@@ -142,6 +182,8 @@
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=10s
   '';
+
+  nixpkgs.config.allowUnfree = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

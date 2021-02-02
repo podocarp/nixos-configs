@@ -38,12 +38,25 @@
     ];
   };
 
- # WARNING: Machine specific settings. May crash your machine even if it's the
- # same model (X1 Extreme).
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
+
+  # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {
     enable = true;
     coreOffset = -150;
     analogioOffset = -100;
     uncoreOffset = -30;
   };
+
+  services.thinkfan.enable = true;
+  services.thinkfan.levels = ''
+    (0,     0,      55)
+    (1,     53,     65)
+    (2,     58,     70)
+    (3,     68,     75)
+    (6,     73,     80)
+    (7,     78,     85)
+    (127,   80,     32767)
+  '';
 }

@@ -15,7 +15,7 @@
   # installing home-manager. The others are optional.
   environment.systemPackages = with pkgs; [
     git
-    pciutils
+    pciutils            # for lspci
     vim
     wget
   ];
@@ -30,14 +30,6 @@
     # mandatory in the future. However to supprort multiple machines, we will
     # still continue using it as long as it works.
     useDHCP = true;
-    wireless = {
-      enable = true;
-      networks = {
-        "polypeng" = {
-          pskRaw = "e8a41b5c49b4690579db770e28cf6903fe69e1b624a9bab8bf06ceace0001633";
-        };
-      };
-    };
   };
 
   # This enables the changing of gtk themes by home-manager.
@@ -65,18 +57,6 @@
     useGlamor = true;
   };
 
-  # Thinkfan should work for non-thinkpad devices as well.
-  services.thinkfan.enable = true;
-  services.thinkfan.levels = ''
-    (0,     0,      55)
-    (1,     48,     60)
-    (2,     50,     61)
-    (3,     52,     63)
-    (6,     56,     65)
-    (7,     60,     85)
-    (127,   80,     32767)
-  '';
-
   # First line adds something for trackpoints. Doesn't matter if you lack one.
   # Second enables link power managerment.
   services.udev.extraRules = ''
@@ -98,13 +78,16 @@
     wheelNeedsPassword = false;
   };
 
+  fonts.fontconfig.enable = true;
+  fonts.fontconfig.subpixel.rgba = "none";
+
   # Installs fcitx for CJK input. Remove if not needed.
   i18n.inputMethod.enabled = "fcitx";
   i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];
 
   # Kills hanging services faster.
   systemd.extraConfig = ''
-    DefaultTimeoutStopSec=10s
+    DefaultTimeoutStopSec=30s
   '';
 
   nixpkgs.config.allowUnfree = true;

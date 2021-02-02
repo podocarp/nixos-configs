@@ -21,9 +21,10 @@
         vimtex
         ];
 
-    extraPackages = with pkgs; [
-      python38Packages.jedi
-      python38Packages.pylint
+    extraPython3Packages = p: with p; [
+      inotify-simple
+      jedi
+      pyflakes
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

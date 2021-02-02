@@ -31,6 +31,7 @@ in
     ./programs/chromium/default.nix
     ./programs/firefox/default.nix
     ./programs/git/default.nix
+    ./programs/mpv/default.nix
     ./programs/neovim/default.nix
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
@@ -54,19 +55,27 @@ in
     neofetch
     neovim-remote # needed for synctex reverse
     nodePackages.node2nix
+    octaveFull
     okular
     poppler_utils
     pavucontrol
-    python38
+    (python38.withPackages(p: with p; [
+        matplotlib
+        numpy
+        scipy
+      ]
+    ))
     python38Packages.pygments
     scrot
     sxiv
     syncthing
     tdesktop # telegram desktop
+    unzip
     vifm
     xterm
     yarn
     yarn2nix
+    zip
 
     ### Admin things and other tools
     arandr
@@ -123,11 +132,15 @@ in
       # export XMODIFIER = "@im=fcitx"
       # export GTK_IM_MODULE = "@im=fcitx"
       # export QT_IM_MODULE = "@im=fcitx"
-      autorandr -c
     '';
     profileExtra = ''
-      autorandr -c
+     autorandr -c
     '';
+    pointerCursor = {
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+      size = 64;
+    };
   };
 
   gtk.enable = true;

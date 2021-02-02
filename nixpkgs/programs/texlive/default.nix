@@ -24,6 +24,7 @@
         fvextra
         hyperref
         ifoddpage
+        import
         latexmk
         lineno
         mathtools

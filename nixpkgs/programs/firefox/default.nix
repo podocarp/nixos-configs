@@ -17,6 +17,7 @@ in
       darkreader
       decentraleyes
       ecosia
+      https-everywhere
       privacy-badger
       tree-style-tab
       ublock-origin

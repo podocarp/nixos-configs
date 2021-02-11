@@ -8,6 +8,7 @@
     extraConfig = {
         pull.rebase = false;
         credential.helper = "cache --timeout 3600";
+        init.defaultBranch = "master";
     };
   };
 }

@@ -35,12 +35,14 @@
         physics
         relsize
         rsfs
-        scheme-small
+        rsfso
+        scheme-basic
         siunitx
         stmaryrd
         tikz-cd
         upquote
         wrapfig
+        xkeyval
         xstring
         ;
     };

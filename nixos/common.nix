@@ -25,7 +25,6 @@
 
   # Add your wireless networks.
   networking = {
-    hostName = "pebble"; # Define your hostname.
     # The global useDHCP flag is deprecated. Per-interface useDHCP will be
     # mandatory in the future. However to supprort multiple machines, we will
     # still continue using it as long as it works.
@@ -65,7 +64,6 @@
   '';
 
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
 
   # Add a user that can sudo.
   users.users.pengu = {

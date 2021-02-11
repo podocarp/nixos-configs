@@ -1,6 +1,19 @@
-{ pkgs, ... }:
+{ pkgs, homeDir, ... }:
 
+let
+  # This should match the
+  soundpath = ".config/dunst";
+in
 {
+  # Sound is taken from KDE repo.
+  home.file."${soundpath}/boop.ogg".source = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/KDE/oxygen/master/sounds/Oxygen-Sys-App-Message.ogg";
+    sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
+  };
+  home.file."${soundpath}/boop.sh" = {
+    text = "${pkgs.mpv}/bin/mpv ${homeDir}/${soundpath}/boop.ogg";
+    executable = true;
+  };
   services.dunst = {
     enable = true;
     iconTheme.package = pkgs.paper-icon-theme;
@@ -9,7 +22,7 @@
       global = {
         font = "DejaVu Sans";
         markup = true;
-        format = "<b>%s</b>\n%b%p";
+        format = "<b>%s</b>\\n%b%p";
         sort = false;
         indicate_hidden = true;
         alignment = "center";
@@ -49,6 +62,10 @@
         foreground = "#B7472A";
         background = "#191311";
         timeout = 10;
+      };
+      play_sound = {
+        summary = "*";
+        script = "${homeDir}/${soundpath}/boop.sh";
       };
     };
   };

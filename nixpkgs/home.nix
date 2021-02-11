@@ -1,9 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  homeDir = /home/pengu;
-  configDir = "/home/pengu/Documents/riceDumpling";
+  # It is important to change this when needed. This is a global setting for
+  # many other configs.
   myTerm = "xterm";
+  homeDir = /home/pengu;
 in
 {
   # Let Home Manager install and manage itself.
@@ -15,7 +16,7 @@ in
   home.homeDirectory = homeDir;
 
   imports = [
-    # xmonad configuration contains xmobar as well.
+    # this contains xmobar configs as well.
     ((import ./programs/xmonad/default.nix) {
       pkgs = pkgs; myTerm = myTerm;
     })
@@ -36,9 +37,14 @@ in
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
+    ./programs/zathura/default.nix
 
-    ./services/dunst/default.nix
+    ((import ./services/dunst/default.nix) {
+      pkgs = pkgs; homeDir = homeDir;
+    })
     ./services/random-background/default.nix
+
+    ./scripts/default.nix
   ];
 
   home.packages = with pkgs; [
@@ -52,9 +58,11 @@ in
     hugo
     imagemagick
     inkscape
+    libnotify # for dunst
     neofetch
     neovim-remote # needed for synctex reverse
     nodePackages.node2nix
+    nodePackages.firebase-tools
     octaveFull
     okular
     poppler_utils
@@ -82,29 +90,22 @@ in
     iftop
     sysstat
     thinkfan
+    xdotool # vimtex might need this
     xorg.xbacklight
     xorg.xev
     xorg.xprop
 
     ### Fonts
+    lmodern
     source-han-mono
     tamsyn
   ];
 
+  # Note that some files are pulled in by the imports.
   home.file = {
-    wallpapers = {
-      source = builtins.fetchTarball {
-        url = "https://jiaxiaodong.com/img/wallpapers/Wallpapers.tar";
-        sha256 = "10992gd3z77r3jaz5dnk0w3ql1nys9sz6swr1n8irxrxw8iqqr9g";
-      };
-      target = "Images/wallpapers";
-    };
-
-    "Scripts" = {
-      source = ./scripts;
-    };
   };
 
+  # This must be enabled for fonts to be installed through packages.
   fonts.fontconfig.enable = true;
 
   nixpkgs.config.packageOverrides = pkgs : {
@@ -115,14 +116,12 @@ in
     };
   };
 
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
+  # This value determines the Home Manager release that your configuration is
+  # compatible with. This helps avoid breakage when a new Home Manager release
+  # introduces backwards incompatible changes.
   #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
+  # You can update Home Manager without changing this value. See the Home
+  # Manager release notes for a list of state version changes in each release.
   home.stateVersion = "21.03";
 
   xsession = {

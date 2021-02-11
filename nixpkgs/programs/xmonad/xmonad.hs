@@ -66,9 +66,7 @@ myKeys =
     volUpCmd = "echo -e 'set Master 1%-\nset Headphone 1%-' | amixer -s"
 
 myManageHook = composeAll
-  [ className =? "Firefox" --> doShift "0_9"
-  , className =? "Chromium" --> doShift "0_8"
-  , className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
+  [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
   , title =? "Picture-in-Picture" --> doFloat
   ]
 

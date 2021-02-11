@@ -4,7 +4,7 @@ def math():
 endglobal
 
 context "math()"
-snippet "([_\^])((?:[^\W_]|[,+\-\\]){2,}|\((?:[^\W_]|[,+\-\\])+)" "Auto Sub/Super" wrA
+snippet "([_\^])([^\W_]+[,+-][^\W_]+|[^\W_]{2,}|\(.+\))" "Auto Sub/Super" wrA
 `!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
 endsnippet
 

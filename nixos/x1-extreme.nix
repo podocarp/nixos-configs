@@ -42,7 +42,7 @@
   };
 
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = true;
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {

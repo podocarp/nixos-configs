@@ -6,6 +6,7 @@ import XMonad.Core
 import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Grid
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.ThreeColumns
@@ -32,7 +33,7 @@ myKeys =
   , ("M-c", spawn "xmonad --recompile; xmonad --restart") -- reload
   , ("M-S-q", kill) -- close focused window
   , ("M-S-<Return>", spawn myTerm) -- launch terminal
-  , ("M-d", spawn "rofi -show combi") -- launch dmenu
+  , ("M-d", spawn "rofi -show combi -monitor primary") -- launch dmenu
 
   -- Xinerama controls, using Actions.PhysicalScreens
   , ("M-a", onPrevNeighbour def W.view)
@@ -61,13 +62,16 @@ myKeys =
   , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10")
   ]
   where
-    muteCmd = "echo -e 'set Master toggle\nset Headphone toggle' | amixer -s"
-    volDownCmd = "echo -e 'set Master 1%+\nset Headphone 1%+' | amixer -s"
-    volUpCmd = "echo -e 'set Master 1%-\nset Headphone 1%-' | amixer -s"
+    -- This might be needed on ALSA.
+    -- "echo -e 'sset Master toggle\nset Headphone toggle'
+    muteCmd = "echo -e 'sset Master toggle' | amixer -s"
+    volDownCmd = "echo -e 'sset Master 1%+' | amixer -s"
+    volUpCmd = "echo -e 'sset Master 1%-' | amixer -s"
 
 myManageHook = composeAll
   [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
   , title =? "Picture-in-Picture" --> doFloat
+  , title =? "Volume Control" --> doRectFloat (W.RationalRect (3/8) (3/8) (1/4) (1/4))
   ]
 
 -- This gives the hidden workspaces and the master window in those workspaces

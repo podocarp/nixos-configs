@@ -1,7 +1,7 @@
 cat /proc/asound/cards
 read -p "Select card number: " n
 
-cat << EOF > /etc/asound.conf
+cat << EOF | sudo tee /etc/asound.conf
 pcm.!default {
     type hw
     card $n

@@ -9,7 +9,7 @@ Config {
   -- layout
 , sepChar = "%"
 , alignSep = "}{"
-, template = "%StdinReader% }{ %alsa:default:Master% %battery% | %coretemp% | %date%"
+, template = "%StdinReader% }{| %alsa:default:Master% | %battery% | %coretemp% | %date%"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.
@@ -43,7 +43,7 @@ Config {
   , Run Alsa "default" "Master" [
       "--template", "<status> <volume>%"
     , "--"
-    , "-O", "音"
+    , "-O", "音 "
     , "-o", "静音"
     ]
   , Run StdinReader

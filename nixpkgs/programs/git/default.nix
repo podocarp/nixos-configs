@@ -7,7 +7,7 @@
     userEmail = "xdjiaxd@gmail.com";
     extraConfig = {
         pull.rebase = false;
-        credential.helper = "cache --timeout 3600";
+        credential.helper = "cache";
         init.defaultBranch = "master";
     };
   };

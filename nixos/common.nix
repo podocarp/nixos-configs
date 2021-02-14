@@ -36,6 +36,9 @@
   programs.dconf.enable = true;
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
 
+  # Disables GUI askpass prompt
+  programs.ssh.askPassword = "";
+
   services.xserver = {
     enable = true;
     xkbOptions = "caps:escape"; # this maps caps to escape.

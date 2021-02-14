@@ -34,6 +34,7 @@ in
     ./programs/git/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
+    ./programs/password-store/default.nix
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
@@ -42,6 +43,7 @@ in
     ((import ./services/dunst/default.nix) {
       pkgs = pkgs; homeDir = homeDir;
     })
+    ./services/gpg-agent/default.nix
     ./services/random-background/default.nix
 
     ./scripts/default.nix

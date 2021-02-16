@@ -24,7 +24,10 @@ in
       myTerm = myTerm;
     })
     ((import ./programs/vifm/default.nix) {
-        myTerm = myTerm;
+      myTerm = myTerm;
+    })
+    ((import ./programs/password-store/default.nix) {
+      homeDir = homeDir;
     })
 
     ./programs/autorandr/default.nix
@@ -32,9 +35,9 @@ in
     ./programs/chromium/default.nix
     ./programs/firefox/default.nix
     ./programs/git/default.nix
+    ./programs/gpg/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
-    ./programs/password-store/default.nix
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
@@ -51,6 +54,7 @@ in
 
   home.packages = with pkgs; [
     ### Applications
+    ffmpeg
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
     haskellPackages.ghc
@@ -62,11 +66,10 @@ in
     inkscape
     libnotify # for dunst
     neofetch
-    neovim-remote # needed for synctex reverse
+    neovim-remote
     nodePackages.node2nix
     nodePackages.firebase-tools
     octaveFull
-    okular
     poppler_utils
     pavucontrol
     (python38.withPackages(p: with p; [
@@ -98,7 +101,6 @@ in
     xorg.xprop
 
     ### Fonts
-    lmodern
     source-han-mono
     tamsyn
   ];

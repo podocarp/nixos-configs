@@ -16,9 +16,10 @@
   environment.systemPackages = with pkgs; [
     git
     pciutils            # for lspci
+    sof-firmware        # some audio devices need this
+    tmux
     vim
     wget
-    sof-firmware
   ];
 
   # Set your time zone.
@@ -32,33 +33,8 @@
     useDHCP = true;
   };
 
-  # This enables the changing of gtk themes by home-manager.
-  programs.dconf.enable = true;
-  services.dbus.packages = with pkgs; [ gnome3.dconf ];
-
   # Disables GUI askpass prompt
   programs.ssh.askPassword = "";
-
-  services.xserver = {
-    enable = true;
-    xkbOptions = "caps:escape"; # this maps caps to escape.
-
-    libinput = {
-      enable = true;
-      touchpad.scrollButton = 2;
-    };
-
-    # This starts ~/.xsession, which allows home-manager to control some things.
-    displayManager.session = [
-      {
-        name = "xsession";
-        start = "${pkgs.runtimeShell} $HOME/.xsession & waitPID=$!";
-        manage = "window";
-      }
-    ];
-
-    useGlamor = true;
-  };
 
   # First line adds something for trackpoints. Doesn't matter if you lack one.
   # Second enables link power managerment.
@@ -77,9 +53,6 @@
     enable = true;
     wheelNeedsPassword = false;
   };
-
-  fonts.fontconfig.enable = true;
-  fonts.fontconfig.subpixel.rgba = "none";
 
   # Installs fcitx for CJK input. Remove if not needed.
   i18n.inputMethod.enabled = "fcitx";

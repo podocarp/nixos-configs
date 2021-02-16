@@ -17,8 +17,6 @@
     options thinkpad_acpi fan_control
   '';
 
-  boot.blacklistedKernelModules = [ "snd_hda_codec_hdmi" ];
-
   networking.hostName = "pebble"; # Define your hostname.
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -27,7 +25,8 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
-    sync.enable = true;
+    # this is useless, fuck nvidia
+    # sync.enable = true;
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
   };
@@ -43,6 +42,8 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+
+  fonts.fontconfig.subpixel.rgba = "none";
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {

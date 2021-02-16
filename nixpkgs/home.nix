@@ -52,6 +52,7 @@ in
     ./scripts/default.nix
   ];
 
+
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
@@ -104,6 +105,10 @@ in
     source-han-mono
     tamsyn
   ];
+
+  home.activation = {
+    gitCredExit = "git credential-cache exit";
+  };
 
   # Note that some files are pulled in by the imports.
   home.file = {

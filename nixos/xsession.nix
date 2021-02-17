@@ -1,5 +1,5 @@
 # This file includes things related to X and stuff on X.
-{ ... }:
+{ pkgs, ... }:
 
 {
   services.xserver = {

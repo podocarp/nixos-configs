@@ -15,7 +15,7 @@
       enable = true;
       stores = [ "~/.password-store" ];
       extraConfig = ''
-        EDITOR='vi'
+        EDITOR='${myTerm} -e vi'
         type_pass="Alt+1"
         type_user="Alt+2"
         autotype="Alt+3"

@@ -7,7 +7,6 @@
     userEmail = "xdjiaxd@gmail.com";
     extraConfig = {
         pull.rebase = false;
-        credential.helper = "cache";
         init.defaultBranch = "master";
     };
   };

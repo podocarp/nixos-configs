@@ -106,10 +106,6 @@ in
     tamsyn
   ];
 
-  home.activation = {
-    gitCredExit = "git credential-cache exit";
-  };
-
   # Note that some files are pulled in by the imports.
   home.file = {
   };

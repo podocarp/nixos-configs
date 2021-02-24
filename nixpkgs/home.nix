@@ -41,6 +41,7 @@ in
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
+    ./programs/vscode/default.nix
     ./programs/zathura/default.nix
 
     ((import ./services/dunst/default.nix) {
@@ -52,7 +53,7 @@ in
     ./scripts/default.nix
   ];
 
-
+  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
@@ -94,6 +95,7 @@ in
     ### Admin things and other tools
     arandr
     iftop
+    glxinfo
     sysstat
     thinkfan
     xdotool # vimtex might need this
@@ -108,6 +110,15 @@ in
 
   # Note that some files are pulled in by the imports.
   home.file = {
+  };
+
+  # Used for a particular nvim snippet.
+  xdg.configFile.inkscapeTemplate = {
+    source = builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/podocarp/riceDumpling/master/.config/inkscape/templates/default1024.svg";
+      sha256 = "1kyasmdv02ylk6qz3kxv46rp3czxv5ss07cs91dacadpy4l1dfrq";
+    };
+    target = "inkscape/templates/default1024.svg";
   };
 
   # This must be enabled for fonts to be installed through packages.

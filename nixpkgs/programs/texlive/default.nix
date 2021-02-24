@@ -7,8 +7,6 @@
       inherit (texpkgs)
         algorithm2e
         amsmath
-        bbm
-        bbm-macros
         biber
         biblatex
         calrsfs

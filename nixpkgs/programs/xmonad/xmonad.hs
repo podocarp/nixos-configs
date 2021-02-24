@@ -72,6 +72,8 @@ myManageHook = composeAll
   [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
   , title =? "Picture-in-Picture" --> doFloat
   , title =? "Volume Control" --> doRectFloat (W.RationalRect (3/8) (3/8) (1/4) (1/4))
+  , className =? "net-runelite-client-RuneLite"
+    <||> className =? "net-runelite-launcher-Launcher" --> doFloat
   ]
 
 -- This gives the hidden workspaces and the master window in those workspaces

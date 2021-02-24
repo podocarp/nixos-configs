@@ -1,4 +1,4 @@
-{pkgs, configDir, ...}:
+{ pkgs, configDir, ... }:
 
 {
   programs.neovim = {
@@ -10,21 +10,32 @@
         coc-json
         coc-nvim
         coc-snippets
+        coc-tsserver
         coc-vimtex
         command-t
         gruvbox
         nerdtree
         ultisnips
         vim-airline
+        vim-nix
         vim-snippets
         vim-surround
         vimtex
         ];
 
     extraPython3Packages = p: with p; [
+      black
       inotify-simple
       jedi
       pyflakes
+    ];
+
+    extraPackages = with pkgs; [
+      haskellPackages.hlint
+
+      nodePackages.eslint
+      nodePackages.prettier
+      nodePackages.typescript
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

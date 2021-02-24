@@ -60,18 +60,22 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_linters = {
     \'c': ['clang'],
     \'cpp': ['clang'],
+    \'haskell': ['hlint'],
+    \'javascript': ['eslint'],
     \'python': ['pylint'],
-    \'tex': ['chktex'],
-    \'haskell': ['hlint']
-            \}
+    \'typescript': ['eslint', 'tsserver'],
+    \'tex': ['chktex']
+    \}
 let g:ale_fixers = {
     \'*': ['remove_trailing_lines', 'trim_whitespace'],
-    \'c': ['clang-format', 'trim_whitespace'],
-    \'cpp': ['clang-format', 'trim_whitespace'],
-    \'java': ['prettier', 'trim_whitespace'],
-    \'python': ['black', 'trim_whitespace'],
-    \'haskell': ['hlint', 'trim_whitespace']
-            \}
+    \'c': ['clang-format'],
+    \'cpp': ['clang-format'],
+    \'haskell': ['hlint'],
+    \'java': ['prettier'],
+    \'javascript': ['eslint'],
+    \'python': ['black'],
+    \'typescript': ['prettier']
+    \}
 let g:ale_c_clang_options='-std=c11 -Wall -pthread'
 let g:ale_c_gcc_options='-std=c11 -Wall -lpthread'
 let g:ale_echo_msg_error_str='E'
@@ -195,31 +199,30 @@ let g:netrw_winsize = 20
 """""""File Extension defaults
 augroup MDProj
     au!
-    autocmd BufRead,BufNewFile *.md set tw=80
-    autocmd BufRead,BufNewFile *.md set spell spelllang=en_gb
+    autocmd BufRead,BufNewFile *.md setlocal tw=80
+    autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_gb
     autocmd BufRead,BufNewFile *.md setlocal syntax=off
 augroup END
 
 augroup TexProj
     au!
-    autocmd BufRead,BufNewFile *.tex set tw=80
-    autocmd BufRead,BufNewFile *.tex set spell spelllang=en_gb
+    autocmd BufRead,BufNewFile *.tex setlocal tw=80
+    autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=en_gb
 augroup END
 
 augroup CProj
     au!
-    autocmd BufRead,BufNewFile *.c,*.cpp,*.h set cindent shiftwidth=8
+    autocmd BufRead,BufNewFile *.c,*.cpp,*.h setlocal cindent shiftwidth=8
 augroup END
 
 augroup JSProj
     au!
-    autocmd BufRead,BufNewFile *.js,*.jsx,*.ts,*.tsx set filetype=javascript
-    autocmd BufRead,BufNewFile *.js,*.jsx,*.ts,*.tsx set softtabstop=2 shiftwidth=2
+    autocmd BufRead,BufNewFile *.js,*.jsx,*.ts,*.tsx setlocal softtabstop=2 shiftwidth=2
 augroup END
 
 augroup PyProj
     au!
-    autocmd BufRead,BufNewFile *.py set softtabstop=4 shiftwidth=4
+    autocmd BufRead,BufNewFile *.py setlocal softtabstop=4 shiftwidth=4
 augroup END
 
 """"""""""""""""""""""""""GENERAL MAPS"""""""""""""""""""""

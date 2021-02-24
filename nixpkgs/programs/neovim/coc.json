@@ -15,5 +15,13 @@
       "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
       "filetypes": ["haskell", "lhaskell"]
     }
+  },
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript": {
+    "disableAutomaticTypeAcquisition": true,
+    "referencesCodeLens.enable": false,
+    "suggest.completeFunctionCals": false,
+    "suggest.includeAutomaticOptionalChainCompletions": false,
+    "format.enabled": false
   }
 }

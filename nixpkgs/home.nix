@@ -96,7 +96,9 @@ in
     arandr
     iftop
     glxinfo
+    nmap
     sysstat
+    telnet
     thinkfan
     xdotool # vimtex might need this
     xorg.xbacklight

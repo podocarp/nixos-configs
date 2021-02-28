@@ -16,6 +16,7 @@
         gruvbox
         nerdtree
         ultisnips
+        undotree
         vim-airline
         vim-nix
         vim-snippets

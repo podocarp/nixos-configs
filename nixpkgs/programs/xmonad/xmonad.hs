@@ -5,6 +5,7 @@ import XMonad.Config.Desktop
 import XMonad.Core
 import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Grid
@@ -132,7 +133,7 @@ myDynBar (S n) = spawnPipe $ "xmobar -x " ++ show n
 
 main = do
   nScreens <- countScreens
-  xmonad $ desktopConfig
+  xmonad $ docks $ ewmh desktopConfig
     { terminal = myTerm
     , modMask = mod4Mask  -- meta key
     , normalBorderColor = "#999999"
@@ -146,5 +147,6 @@ main = do
     , startupHook = dynStatusBarStartup
         myDynBar (return ())
     , logHook = multiPP myLogHookFocused myLogHookUnfocused
+    , handleEventHook = handleEventHook def <+> fullscreenEventHook
     }
     `additionalKeysP` myKeys

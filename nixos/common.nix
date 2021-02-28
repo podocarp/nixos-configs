@@ -49,6 +49,9 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "pengu" ];
+
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;

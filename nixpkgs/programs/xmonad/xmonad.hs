@@ -18,7 +18,7 @@ import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.WorkspaceCompare
 
 import qualified XMonad.StackSet as W
-import qualified Data.ByteString.Char8 as B
+import qualified Data.Text as T
 
 import System.IO
 import System.Exit
@@ -84,23 +84,23 @@ myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidd
   where
     -- Gets the master window's (if any) name in the workspace
     ripName (W.Workspace i _ (Just stack)) =
-      liftM2 (\x y -> B.concat [header, x, dash, y, footer]) c t
+      liftM2 (\x y -> T.concat [header, x, dash, y, footer]) c t
         where
-          header = B.pack (i ++ ":(")
-          dash = B.pack " - "
-          footer = B.pack ") "
-          fshorten = fmap (B.pack . shorten 13)
+          header = T.pack (i ++ ":(")
+          dash = T.pack " - "
+          footer = T.pack ") "
+          fshorten = fmap (T.pack . shorten 13)
           t = fshorten (runQuery title (W.focus stack))
           c = fshorten (runQuery className (W.focus stack))
-    ripName _ = return B.empty
+    ripName _ = return T.empty
     -- Given a stack of workspaces, return a list of names as per above
-    getNames ws = foldl (liftM2 B.append) (return B.empty) (map ripName ws)
-    extraFormatting = fmap (\s -> front `B.append` s `B.append` back)
+    getNames ws = foldl (liftM2 T.append) (return T.empty) (map ripName ws)
+    extraFormatting = fmap (\s -> front `T.append` s `T.append` back)
       where
-        front = B.pack "<fc=lightgray>"
-        back = B.pack "</fc>"
+        front = T.pack "<fc=lightgray>"
+        back = T.pack "</fc>"
     -- Gets the Maybe String out.
-    safeUnpack s = if B.null s then Nothing else (Just . B.unpack) s
+    safeUnpack s = if T.null s then Nothing else (Just . T.unpack) s
 
 -- Coerces string to be length `n`.
 -- If string is too long, cut and put ellipses, otherwise right pad with spaces.

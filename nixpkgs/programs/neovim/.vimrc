@@ -144,7 +144,7 @@ let g:NERDTreeDirArrowCollapsible = '-'
 let g:NERDTreeNodeDelimiter = "\u00a0"
 
 "Plug 'mbbill/undotree'
-https://github.com/mbbill/undotree
+nnoremap <F5> :UndotreeToggle<CR>
 
 "Plug 'wincent/command-t', {'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'}
 let g:CommandTCursorColor = 'Search'

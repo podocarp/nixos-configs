@@ -18,6 +18,7 @@
       ];
       "editor.lineNumbers" = "relative";
       "editor.acceptSuggestionOnCommitCharacter" = false;
+      "workbench.activityBar.visible" = false;
     };
   };
 }

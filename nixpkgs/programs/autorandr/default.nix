@@ -80,10 +80,10 @@ in
     # Single laptop display on hybrid graphics
     profiles."laptop-only" = {
       fingerprint = {
-        "eDP-1" = laptopscreen;
+        "eDP-1-1" = laptopscreen;
       };
       config = {
-        "eDP-1" = settingslaptop;
+        "eDP-1-1" = settingslaptop;
       };
     };
   };

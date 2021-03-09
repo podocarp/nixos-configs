@@ -6,7 +6,6 @@ let
     laptopscreen = "0*";
     settingslaptop = {
       enable = true;
-      crtc = 0;
       primary = true;
       mode = "1920x1080";
       dpi = 110;

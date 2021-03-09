@@ -4,7 +4,7 @@ let
   # It is important to change this when needed. This is a global setting for
   # many other configs.
   myTerm = "xterm";
-  homeDir = /home/pengu;
+  homeDir = "/home/pengu";
 in
 {
   # Let Home Manager install and manage itself.

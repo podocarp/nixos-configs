@@ -17,6 +17,7 @@
         enumitem
         esint
         esint-type1
+        extsizes
         fancyvrb
         float
         framed

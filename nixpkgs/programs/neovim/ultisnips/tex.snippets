@@ -118,12 +118,12 @@ snippet "\<([^\$\<]*?)\>\>" "Angle" rA
 endsnippet
 
 context "math()"
-snippet "\\abs{(.+?)}\|\|" "Norm" rA
+snippet "\\abs\{([^\$\}]+?)\}\|\|" "Norm" rA
 \norm{`!p snip.rv = match.group(1)`}
 endsnippet
 
 context "math()"
-snippet "\|([^\$\|]*?)\|" "Abs" rA
+snippet "\|([^\$\|]+?)\|" "Abs" rA
 \abs{`!p snip.rv = match.group(1)`}
 endsnippet
 

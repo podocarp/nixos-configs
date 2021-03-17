@@ -136,13 +136,13 @@ main = do
   xmonad $ docks $ ewmh desktopConfig
     { terminal = myTerm
     , modMask = mod4Mask  -- meta key
-    , normalBorderColor = "#999999"
+    , normalBorderColor = "#AAAAAA"
     , focusedBorderColor = "#FF0000"
-    , borderWidth = 3
+    , borderWidth = 5
     , manageHook = myManageHook
     , workspaces = withScreens nScreens (workspaces def)
     , layoutHook = avoidStruts $ Tall 1 (1/100) (1/2)
-      ||| ThreeColMid 1 (-1/100) (4/10)
+      ||| ThreeColMid 1 (1/100) (25/100)
       ||| Grid
     , startupHook = dynStatusBarStartup
         myDynBar (return ())

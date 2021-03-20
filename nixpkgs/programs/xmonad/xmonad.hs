@@ -59,8 +59,8 @@ myKeys =
   , ("<XF86AudioRaiseVolume>", spawn volDownCmd)
   , ("<XF86AudioLowerVolume>", spawn volUpCmd)
   -- Brightness controls
-  , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10")
-  , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10")
+  , ("<XF86MonBrightnessUp>", spawn "brightnessctl s 1%+")
+  , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 1%-")
   ]
   where
     -- This might be needed on ALSA.

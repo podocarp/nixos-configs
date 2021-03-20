@@ -57,6 +57,7 @@ in
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
+    gdb
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
     haskellPackages.ghc
@@ -72,6 +73,7 @@ in
     nodePackages.node2nix
     nodePackages.firebase-tools
     octaveFull
+    openvpn
     poppler_utils
     pavucontrol
     (python38.withPackages(p: with p; [
@@ -94,14 +96,15 @@ in
 
     ### Admin things and other tools
     arandr
+    brightnessctl
     iftop
+    iotop
     glxinfo
     nmap
     sysstat
     telnet
     thinkfan
     xdotool # vimtex might need this
-    xorg.xbacklight
     xorg.xev
     xorg.xprop
 

@@ -13,7 +13,7 @@
         coc-tsserver
         coc-vimtex
         command-t
-        gruvbox
+        gruvbox-community
         nerdtree
         ultisnips
         undotree

@@ -168,18 +168,19 @@ let g:gruvbox_contrast_dark='hard'
 let g:gruvbox_contrast_light='soft'
 let g:gruvbox_invert_indent_guides=1
 let g:gruvbox_sign_column='bg0'
+let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
 """"""
 "call plug#end()
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
 colorscheme gruvbox
 " hi Comment guifg=#999090
-hi CocCodeLens guibg=#333333 guifg=#999090
-hi Normal guibg=#000000
-hi LineNr guibg=#202020
-hi SignColumn guibg=#202020
-hi ALEErrorSign guibg=#202020
-hi ALEWarningSign guibg=#202020
+" hi CocCodeLens guibg=#333333 guifg=#999090
+" hi Normal guibg=#000000
+" hi LineNr guibg=#202020
+" hi SignColumn guibg=#202020
+" hi ALEErrorSign guibg=#202020
+" hi ALEWarningSign guibg=#202020
 
 " Disable neovim insert mode bar cursor
 set guicursor=

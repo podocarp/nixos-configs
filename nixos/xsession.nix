@@ -4,7 +4,7 @@
 {
   services.xserver = {
     enable = true;
-    xkbOptions = "caps:escape"; # this maps caps to escape.
+    xkbOptions = "caps:escape,keypad:pointerkeys"; # this maps caps to escape.
 
     libinput = {
       enable = true;

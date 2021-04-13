@@ -115,7 +115,6 @@ let g:vimtex_compiler_latexmk = {
             \   '-interaction=nonstopmode',
             \   '-synctex=1',
             \   '-shell-escape',
-            \   '-pdf',
             \ ],
             \}
 
@@ -161,19 +160,20 @@ let g:airline#extensions#whitespace#enabled = 0
 "Plug 'tpope/vim-surround'
 
 "Plug 'morhetz/gruvbox'
-let g:gruvbox_italic=1
-let g:gruvbox_italicize_comments=0
-let g:gruvbox_italicize_strings=1
-let g:gruvbox_contrast_dark='hard'
-let g:gruvbox_contrast_light='soft'
-let g:gruvbox_invert_indent_guides=1
-let g:gruvbox_sign_column='bg0'
-let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
+" let g:gruvbox_contrast_dark='hard'
+" let g:gruvbox_contrast_light='hard'
+" let g:gruvbox_invert_indent_guides=1
+" let g:gruvbox_sign_column='bg0'
+" let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
+
+"Plug 'NLKNguyen/papercolor-theme'
+let g:airline_theme='papercolor'
 """"""
 "call plug#end()
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
-colorscheme gruvbox
+set background=light
+colorscheme PaperColor
 " hi Comment guifg=#999090
 " hi CocCodeLens guibg=#333333 guifg=#999090
 " hi Normal guibg=#000000

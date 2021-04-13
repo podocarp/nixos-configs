@@ -13,11 +13,12 @@
         coc-tsserver
         coc-vimtex
         command-t
-        gruvbox-community
         nerdtree
+        papercolor-theme
         ultisnips
         undotree
         vim-airline
+        vim-airline-themes
         vim-nix
         vim-snippets
         vim-surround

@@ -12,6 +12,10 @@ snippet frac "Fraction" w
 \frac{${1:n}}{${2:d}}$3
 endsnippet
 
+snippet f "Fraction shortform" w
+\frac{${1:n}}{${2:d}}$3
+endsnippet
+
 snippet beg "Begin" w
 \begin{$1}
     $2
@@ -82,6 +86,42 @@ snippet em "Emph" w
 \emph{$1}$2
 endsnippet
 
+snippet abs "Abs" w
+\abs{$1}$2
+endsnippet
+
+snippet norm "Norm" w
+\norm{$1}$2
+endsnippet
+
+snippet lim "Limit" w
+\lim_{$1}$2
+endsnippet
+
+snippet sup "Supremum" w
+\sup\qty{$1}$2
+endsnippet
+
+snippet inf "Infimum" w
+\inf\qty{$1}$2
+endsnippet
+
+snippet () "Bracket" i
+\qty($1)$2
+endsnippet
+
+snippet [] "Bracket" i
+\qty[$1]$2
+endsnippet
+
+snippet {} "Bracket" i
+\qty{$1}$2
+endsnippet
+
+snippet <> "Angle" i
+\langle $1 \rangle $2
+endsnippet
+
 context "math()"
 snippet "<-" "gets" rA
 \gets
@@ -115,16 +155,6 @@ endsnippet
 context "math()"
 snippet "\<([^\$\<]*?)\>\>" "Angle" rA
 \langle `!p snip.rv = match.group(1)` \rangle
-endsnippet
-
-context "math()"
-snippet "\\abs\{([^\$\}]+?)\}\|\|" "Norm" rA
-\norm{`!p snip.rv = match.group(1)`}
-endsnippet
-
-context "math()"
-snippet "\|([^\$\|]+?)\|" "Abs" rA
-\abs{`!p snip.rv = match.group(1)`}
 endsnippet
 
 context "math()"
@@ -185,7 +215,7 @@ cmd], universal_newlines=True).split('\n')[-2]
 endsnippet
 
 snippet subfigure "Fig with subfigs" w
-\begin{figure}[H] 
+\begin{figure}[H]
     \begin{subfigure}[${1:t}]{${2:0.45}\textwidth}
     \centering
     \includegraphics[width=\linewidth]{${3:}}
@@ -215,7 +245,7 @@ endsnippet
 snippet cas "Case" w
 \begin{cases}
     ${1:case1} ,&\text{ if }${2} \\\\
-    ${3} ,&\text{ otherwise }${4}
+    ${3:case2} ,&\text{ ${4:otherwise} }${5}
 \end{cases}
 endsnippet
 

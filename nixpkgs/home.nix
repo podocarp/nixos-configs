@@ -110,7 +110,7 @@ in
 
     ### Fonts
     source-han-mono
-    tamsyn
+    inconsolata
   ];
 
   # Note that some files are pulled in by the imports.
@@ -163,19 +163,44 @@ in
     };
   };
 
-  gtk.enable = true;
-  gtk.theme.package = pkgs.equilux-theme;
-  gtk.theme.name = "Equilux";
-
-  xresources.extraConfig = builtins.readFile (
-    pkgs.fetchFromGitHub {
-      owner = "dracula";
-      repo = "xresources";
-      rev = "master";
-      sha256 = "12wmjynk0ryxgwb0hg4kvhhf886yvjzkp96a5bi9j0ryf3pc9kx7";
-    } + "/Xresources"
-  ) + ''
-  XTerm*faceName: Tamsyn
+  xresources.extraConfig =
+  # builtins.readFile (
+  #   pkgs.fetchFromGitHub {
+  #     owner = "morhetz";
+  #     repo = "gruvbox-contrib";
+  #     rev = "master";
+  #     sha256 = "181irx5jas3iqqdlc6v34673p2s6bsr8l0nqbs8gsv88r8q066l6";
+  #   } + "/xresources/gruvbox-light.xresources"
+  #   ) +
+  ''
+  ! PaperColor Theme
+  *.foreground: #4D4D4C
+  *.background: #E7E8EB
+  ! black
+  *.color0: #EDEDED
+  *.color8: #969694
+  ! red
+  *.color1: #D7005F
+  *.color9: #D7005F
+  ! green
+  *.color2: #718C00
+  *.color10: #718C00
+  ! yellow / orange
+  *.color3: #D75F00
+  *.color11: #D75F00
+  ! blue
+  *.color4: #4271AE
+  *.color12: #4271AE
+  ! magenta
+  *.color5: #8959A8
+  *.color13: #8959A8
+  ! cyan
+  *.color6: #3E999F
+  *.color14: #3E999F
+  ! white
+  *.color7: #F5F5F5
+  *.color15: #2D2D2C
+  XTerm*faceName: xft:Inconsolata Regular:family=mono
   XTerm*faceSize: 10
   XTerm.vt100.translations: #override \n\
     Ctrl <Key> minus: smaller-vt-font() \n\

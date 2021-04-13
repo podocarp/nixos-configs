@@ -1,16 +1,25 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.chromium = {
     enable = true;
-    package = pkgs.ungoogled-chromium;
+    package = pkgs.chromium {
+      homepageLocation = "asd";
+    };
+    homepageLocation = "asd";
     extensions = [
       { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
       { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger
-      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # dark reader
-      { id = "fngmhnnpilhplaeedifhccceomclgfbg"; } # edit this cookie
       { id = "djflhoibgkdhkhhcedjiklpkjnoahfmg"; } # user agent switcher
-      { id = "fbfecjjfhcgpocehenopdofhkdjfpcgl"; } # fready
+      { crxPath = pkgs.fetchFromGitHub {
+          owner = "NeverDecaf";
+          repo = "chromium-web-store";
+          rev = "master";
+          sha256 = "1xxqg61g9mvxja8kp8g01dmdrd51sidfsk62jwzaazawkpdv3624";
+        } + "/Chromium Web Store.crx";
+        version = "1.3.0";
+        id = "ocaahdebbfolfmndjeplogmgcagdmblk";
+      }
     ];
   };
 }

@@ -7,12 +7,14 @@
       inherit (texpkgs)
         algorithm2e
         amsmath
+        beamer
         biber
         biblatex
         calrsfs
         cancel
         caption
         catchfile
+        collection-fontsrecommended
         cleveref
         enumitem
         esint
@@ -27,12 +29,14 @@
         import
         latexmk
         lineno
+        mathdots
         mathtools
         microtype
         minted
         multirow
         pgf
         physics
+        prftree
         relsize
         rsfs
         rsfso

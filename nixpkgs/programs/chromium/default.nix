@@ -3,10 +3,7 @@
 {
   programs.chromium = {
     enable = true;
-    package = pkgs.chromium {
-      homepageLocation = "asd";
-    };
-    homepageLocation = "asd";
+    package = pkgs.chromium;
     extensions = [
       { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
       { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # privacy badger

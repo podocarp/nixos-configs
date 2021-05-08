@@ -46,7 +46,6 @@
     vimdiffAlias = true;
 
     withNodeJs = true;
-    withPython = false;
     withPython3 = true;
     withRuby = true;
 

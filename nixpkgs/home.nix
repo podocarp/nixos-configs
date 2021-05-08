@@ -17,9 +17,9 @@ in
 
   imports = [
     # this contains xmobar configs as well.
-    ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm;
-    })
+    # ((import ./programs/xmonad/default.nix) {
+    #   pkgs = pkgs; myTerm = myTerm;
+    # })
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
@@ -44,11 +44,11 @@ in
     ./programs/vscode/default.nix
     ./programs/zathura/default.nix
 
-    ((import ./services/dunst/default.nix) {
-      pkgs = pkgs; homeDir = homeDir;
-    })
+    # ((import ./services/dunst/default.nix) {
+    #   pkgs = pkgs; homeDir = homeDir;
+    # })
     ./services/gpg-agent/default.nix
-    ./services/random-background/default.nix
+    # ./services/random-background/default.nix
 
     ./scripts/default.nix
   ];
@@ -62,7 +62,7 @@ in
     haskellPackages.cabal2nix
     haskellPackages.ghc
     haskellPackages.haskell-language-server
-    haskellPackages.xmobar
+    # haskellPackages.xmobar
     highlight
     hugo
     imagemagick
@@ -147,6 +147,7 @@ in
 
   xsession = {
     enable = true;
+    windowManager.command = "exec startplasma-x11";
     initExtra = ''
       # export XMODIFIERS = "@im=fcitx"
       # export XMODIFIER = "@im=fcitx"
@@ -156,11 +157,12 @@ in
     profileExtra = ''
      autorandr -c
     '';
-    pointerCursor = {
-      package = pkgs.vanilla-dmz;
-      name = "Vanilla-DMZ";
-      size = 32;
-    };
+    # pointerCursor = {
+    #   package = pkgs.vanilla-dmz;
+    #   name = "Vanilla-DMZ";
+    #   size = 64;
+    # };
+    # scriptPath = ".xsession-hm";
   };
 
   xresources.extraConfig =

@@ -71,7 +71,8 @@ myKeys =
 
 myManageHook = composeAll
   [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
-  , title =? "Picture-in-Picture" --> doFloat
+  , title =? "Picture-in-Picture" --> doFloat -- firefox
+  , title =? "Picture in picture" --> doFloat -- chromium
   , title =? "Volume Control" --> doRectFloat (W.RationalRect (3/8) (3/8) (1/4) (1/4))
   , className =? "net-runelite-client-RuneLite"
     <||> className =? "net-runelite-launcher-Launcher" --> doFloat

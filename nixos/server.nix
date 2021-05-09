@@ -30,11 +30,44 @@ in
     # Random 8 digit hex string for ZFS to work
     hostId = "492A28F4";
 
-    interfaces.enp35s0.useDHCP = true;
-    interfaces.enp36s0.useDHCP = true;
+    interfaces.enp36s0 = {
+      useDHCP = true;
+      ipv4.routes = [
+        {
+          address = "0.0.0.0";
+          prefixLength = 0;
+          via = "192.168.0.1";
+          options = {
+            dev = "enp36s0";
+          };
+        }
+      ];
+    };
 
-    firewall.allowedTCPPorts = [ 139 445 2049 8080 ];
-    firewall.allowedUDPPorts = [ 137 138 ];
+    interfaces.enp35s0 = {
+      # useDHCP = false;
+      ipv4.addresses = [
+        {
+          address = "192.168.1.107";
+          prefixLength = 24;
+        }
+      ];
+      ipv4.routes = [
+        {
+          address = "192.168.1.0";
+          prefixLength = 24;
+          options = {
+            dev = "enp35s0";
+          };
+        }
+      ];
+    };
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 80 443 ];
+      allowedUDPPorts = [ ];
+    };
   };
 
   # Select internationalisation properties.
@@ -52,7 +85,9 @@ in
     openssh.authorizedKeys.keys = [ jxdkey ];
   };
 
+  # This is a public user made available to NFS and Samba
   users.users.fileshare = {
+    isNormalUser = true;
     createHome = false;
     shell = "/run/current-system/sw/bin/nologin";
     uid = 42069;
@@ -101,10 +136,6 @@ in
     };
   };
 
-  services.nfs.server = {
-    enable = true;
-  };
-
   services.zfs = {
     autoSnapshot = {
       enable = true;
@@ -113,6 +144,10 @@ in
       daily = 7;
       weekly = 4;
       monthly = 0;
+    };
+    autoScrub = {
+      enable = true;
+      interval = "monthly";
     };
   };
 
@@ -124,6 +159,6 @@ in
 
   nix.optimise = {
     automatic = true;
-    dates = "weekly";
+    dates = [ "weekly" ];
   };
 }

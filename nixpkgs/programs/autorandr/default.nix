@@ -39,7 +39,7 @@ let
 in
 {
   programs.autorandr = {
-    enable = true;
+    enable = false;
 
     profiles."solo-4k" = {
       fingerprint = {

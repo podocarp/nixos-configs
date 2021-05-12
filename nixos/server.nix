@@ -7,6 +7,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./containers/tinode/default.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -17,7 +18,6 @@ in
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.device = "nodev";
   boot.loader.efi.canTouchEfiVariables = true;
-
 
   time.timeZone = "Asia/Singapore";
 
@@ -30,8 +30,15 @@ in
     # Random 8 digit hex string for ZFS to work
     hostId = "492A28F4";
 
+    # Internet facing
     interfaces.enp36s0 = {
       useDHCP = true;
+      ipv4.addresses = [
+        {
+          address = "192.168.1.108";
+          prefixLength = 24;
+        }
+      ];
       ipv4.routes = [
         {
           address = "0.0.0.0";
@@ -44,8 +51,8 @@ in
       ];
     };
 
+    # Local
     interfaces.enp35s0 = {
-      # useDHCP = false;
       ipv4.addresses = [
         {
           address = "192.168.1.107";
@@ -63,13 +70,8 @@ in
       ];
     };
 
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 80 443 ];
-      allowedUDPPorts = [ ];
-    };
+    firewall.enable = false;
   };
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -113,6 +115,17 @@ in
     wget
   ];
 
+  # Enable the Apache server
+  services.httpd = {
+    enable = true;
+    adminAddr = "xdjiaxd@gmail.com";
+    extraModules = [
+      "proxy"
+      "proxy_http"
+      "proxy_wstunnel"
+    ];
+  };
+
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
@@ -126,6 +139,13 @@ in
       path = "/tank/public";
       writeable = "yes";
       browseable = "yes";
+    };
+    shares.private= {
+      path = "/tank/private";
+      writeable = "yes";
+      browseable = "yes";
+      public = "no";
+      "valid users" = "pengu";
     };
     shares.global = {
       "usershare path" = "/var/lib/samba/usershares";

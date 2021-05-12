@@ -1,1 +1,4 @@
 hardware-configuration.nix
+*.key
+*.cert
+tinode.conf

@@ -2,12 +2,15 @@
 
 let
   jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
+  otherpkgs = [];
 in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./containers/tinode/default.nix
+
+      # ./containers/tinode/default.nix
+      ./containers/prosody/default.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -25,7 +28,6 @@ in
   # Per-interface useDHCP will be mandatory in the future.
   # networking.useDHCP = false;
   networking = {
-    # Define your hostname.
     hostName = "obsidian";
     # Random 8 digit hex string for ZFS to work
     hostId = "492A28F4";
@@ -33,36 +35,22 @@ in
     # Internet facing
     interfaces.enp36s0 = {
       useDHCP = true;
-      ipv4.addresses = [
-        {
-          address = "192.168.1.108";
-          prefixLength = 24;
-        }
-      ];
-      ipv4.routes = [
-        {
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = "192.168.0.1";
-          options = {
-            dev = "enp36s0";
-          };
-        }
-      ];
     };
 
     # Local
     interfaces.enp35s0 = {
+      useDHCP = false;
       ipv4.addresses = [
         {
           address = "192.168.1.107";
           prefixLength = 24;
         }
       ];
-      ipv4.routes = [
+        ipv4.routes = [
         {
           address = "192.168.1.0";
           prefixLength = 24;
+          via = "192.168.1.1";
           options = {
             dev = "enp35s0";
           };
@@ -89,15 +77,15 @@ in
 
   # This is a public user made available to NFS and Samba
   users.users.fileshare = {
-    isNormalUser = true;
-    createHome = false;
-    shell = "/run/current-system/sw/bin/nologin";
-    uid = 42069;
-    group = "fileshare";
+    isSystemUser = true;
+    # createHome = false;
+    # shell = "/run/current-system/sw/bin/nologin";
+    # uid = 42069;
+    group = "users";
   };
 
   users.groups = {
-    fileshare.gid = 42069;
+    # fileshare.gid = 42069;
   };
 
   environment.systemPackages = with pkgs; [
@@ -139,13 +127,24 @@ in
       path = "/tank/public";
       writeable = "yes";
       browseable = "yes";
+      public = "yes";
+      "force user" = "fileshare";
+      "force group" = "users";
+      "create mask" = "0774";
+      "force create mode" = "0774";
+      "directory mask" = "2774";
+      "force directory mode" = "2774";
     };
     shares.private= {
       path = "/tank/private";
       writeable = "yes";
       browseable = "yes";
-      public = "no";
       "valid users" = "pengu";
+      "force user" = "pengu";
+      "create mask" = "0700";
+      "force create mode" = "0700";
+      "directory mask" = "2700";
+      "force directory mode" = "2700";
     };
     shares.global = {
       "usershare path" = "/var/lib/samba/usershares";
@@ -153,6 +152,7 @@ in
       "usershare allow guests" = "yes";
       "usershare owner only" = "no";
       "server min protocol" = "SMB2_02";
+      "socket options" = "TPC_NODELAY IPTOS_LOWDELAY";
     };
   };
 

@@ -97,6 +97,7 @@ in
     ### Admin things and other tools
     arandr
     brightnessctl
+    bind # nslookup
     iftop
     iotop
     glxinfo

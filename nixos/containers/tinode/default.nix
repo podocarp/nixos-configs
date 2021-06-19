@@ -5,7 +5,7 @@
     image = "mysql:5.7";
     volumes = [
       "/var/log/mysql:/var/log"
-      "/tank/public/tinode/mysql:/var/lib/mysql"
+      "/tank/local/tinode/mysql:/var/lib/mysql"
     ];
     environment = {
       MYSQL_ALLOW_EMPTY_PASSWORD = "yes";
@@ -23,7 +23,7 @@
       in
       [
         "${conf}:/tinode.conf"
-        "/tank/public/tinode/uploads:/uploads"
+        "/tank/local/tinode/uploads:/uploads"
         "/var/log/tinode:/var/log"
       ];
     environment = {
@@ -47,8 +47,8 @@
   services.httpd.virtualHosts."chat"= {
     hostName = "chat.jiaxiaodong.com";
     addSSL = true;
-    sslServerCert = ./host.cert;
-    sslServerKey = ./host.key;
+    sslServerCert = ../../ssl/host.cert;
+    sslServerKey = ../../ssl/host.key;
     extraConfig = ''
       ProxyRequests Off
       ProxyPreserveHost On

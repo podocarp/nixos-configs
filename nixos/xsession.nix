@@ -6,11 +6,6 @@
     enable = true;
     xkbOptions = "caps:escape,keypad:pointerkeys"; # this maps caps to escape.
 
-    libinput = {
-      enable = true;
-      touchpad.scrollButton = 2;
-    };
-
     desktopManager.plasma5.enable = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.

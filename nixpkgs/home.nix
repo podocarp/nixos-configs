@@ -75,7 +75,6 @@ in
     octaveFull
     openvpn
     poppler_utils
-    pavucontrol
     (python38.withPackages(p: with p; [
         matplotlib
         numpy
@@ -89,15 +88,15 @@ in
     tdesktop # telegram desktop
     unzip
     vifm
+    xdotool # vimtex might need this
     xterm
     yarn
     yarn2nix
     zip
 
     ### Admin things and other tools
-    arandr
     brightnessctl
-    bind # nslookup
+    bind # for nslookup
     iftop
     iotop
     glxinfo
@@ -105,7 +104,6 @@ in
     sysstat
     telnet
     thinkfan
-    xdotool # vimtex might need this
     xorg.xev
     xorg.xprop
 

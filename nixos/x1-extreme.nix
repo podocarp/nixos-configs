@@ -66,4 +66,9 @@
     [7     67     76]
     [127   70     32767]
   ];
+
+  services.xsession.libinput = {
+    enable = true;
+    touchpad.scrollButton = 2;
+  };
 }

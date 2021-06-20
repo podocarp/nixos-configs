@@ -2,7 +2,7 @@
 
 let
   jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
-  otherpkgs = [];
+  webroot = "/var/www/hs";
 in
 {
   imports =
@@ -10,7 +10,9 @@ in
       ./hardware-configuration.nix
 
       # ./containers/tinode/default.nix
-      ./containers/prosody/default.nix
+      ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
+
+      ((import ./services/acme/default.nix) {dir = webroot;})
     ];
 
   # Use the GRUB 2 boot loader.
@@ -181,4 +183,14 @@ in
     automatic = true;
     dates = [ "weekly" ];
   };
+
+  # 242 is 1 hour. Visit man hdparm
+  powerManagement.powerUpCommands = ''
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sda
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdb
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdd
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sde
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdf
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdg
+  '';
 }

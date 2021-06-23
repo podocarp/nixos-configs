@@ -2,8 +2,15 @@
 
 let
   jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
+  # This path is used by Let's encrypt and all services that use it to generate
+  # and withdraw certs
   webroot = "/var/www/hs";
-  trans_port = 9091;
+  trans_rpc_port = 9091;
+  jellyfin_port = 8096;
+  servicesToPortMapping = [
+    ["transmission" (toString trans_rpc_port)]
+    ["jellyfin" (toString jellyfin_port)]
+  ];
 in
 {
   imports =
@@ -12,9 +19,11 @@ in
 
       # ./containers/tinode/default.nix
       ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
-      ((import ./containers/transmission/default.nix) {port = trans_port;})
+      ((import ./containers/transmission/default.nix) {config = config; port = trans_rpc_port;})
+      ./containers/jellyfin/default.nix
 
       ((import ./services/acme/default.nix) {dir = webroot;})
+      ./services/samba/default.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -71,7 +80,11 @@ in
     keyMap = "us";
   };
 
-  users.users.pengu.openssh.authorizedKeys.keys = [ jxdkey ];
+  users.users.pengu = {
+    isNormalUser = true;
+    openssh.authorizedKeys.keys = [ jxdkey ];
+    uid = 1000;
+  };
 
   users.users.git = {
     isNormalUser = true;
@@ -88,9 +101,8 @@ in
     group = "users";
   };
 
-  users.groups = {
-    # fileshare.gid = 42069;
-  };
+  users.groups."users".gid = 100;
+  # users.groups."fileshare".gid = 42069;
 
   environment.systemPackages = with pkgs; [
     bonnie
@@ -116,60 +128,56 @@ in
       "proxy_http"
       "proxy_wstunnel"
     ];
-    virtualHosts."obsidian".locations."/" = {
-      alias = (builtins.toFile "index.html"
-      ("<html><h1>Welcome. A list of services:</h1><ul>" +
-      (builtins.foldl'
-      (x: y:
-        x + ''<li><a href="http://obsidian:${toString (builtins.elemAt y 1)}">'' +
-        ''${builtins.elemAt y 0}</a></li>'')
-        "" [
-          ["Transmission" trans_port]
-        ]
-      ) + "</ul></html>"));
-    };
+
+    # virtualHosts."obsidian" = {
+    #   locations."/" = {
+    #     alias = (builtins.toFile "index.html"
+    #     ("<html><h1>Welcome. A list of services:</h1><ul>" +
+    #     (builtins.foldl'
+    #     (x: y:
+    #       x + ''<li><a href="http://obsidian:${toString (builtins.elemAt y 1)}">'' +
+    #       ''${builtins.elemAt y 0}</a></li>'') "" servicesToPortMapping
+    #     ) + "</ul></html>"));
+    #   };
+
+    #   listen = [{
+    #     ip = "*";
+    #     port = 1234;
+    #   }];
+    # };
+
+    # virtualHosts."home" = {
+    #   serverAliases = ["home"];
+    #   extraConfig = ''
+    #     ProxyRequests Off
+    #     ProxyPreserveHost On
+
+    #     ProxyPass / http://localhost:1234/
+    #     ProxyPassReverse / http://localhost:1234/
+    #   '';
+    # };
+
+    virtualHosts = builtins.listToAttrs (map
+      (xs: {
+        name = builtins.elemAt xs 0;
+        value = {
+          serverAliases = ["${builtins.elemAt xs 0}.home.com"];
+          extraConfig = ''
+            ProxyRequests Off
+            ProxyPreserveHost On
+
+            ProxyPass / http://localhost:${builtins.elemAt xs 1}/
+            ProxyPassReverse / http://localhost:${builtins.elemAt xs 1}/
+          '';
+        };
+      }) servicesToPortMapping
+    );
   };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
-  };
-
-  services.samba = {
-    enable = true;
-    securityType = "user";
-    shares.public = {
-      path = "/tank/public";
-      writeable = "yes";
-      browseable = "yes";
-      public = "yes";
-      "force user" = "fileshare";
-      "force group" = "users";
-      "create mask" = "0774";
-      "force create mode" = "0774";
-      "directory mask" = "2774";
-      "force directory mode" = "2774";
-    };
-    shares.private= {
-      path = "/tank/private";
-      writeable = "yes";
-      browseable = "yes";
-      "valid users" = "pengu";
-      "force user" = "pengu";
-      "create mask" = "0700";
-      "force create mode" = "0700";
-      "directory mask" = "2700";
-      "force directory mode" = "2700";
-    };
-    shares.global = {
-      "usershare path" = "/var/lib/samba/usershares";
-      "usershare max shares" = "100";
-      "usershare allow guests" = "yes";
-      "usershare owner only" = "no";
-      "server min protocol" = "SMB2_02";
-      "socket options" = "TPC_NODELAY IPTOS_LOWDELAY";
-    };
   };
 
   services.zfs = {

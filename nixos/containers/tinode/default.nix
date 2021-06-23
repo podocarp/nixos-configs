@@ -17,8 +17,7 @@
     autoStart = true;
     image = "tinode/tinode-mysql:latest";
     ports = [ "6060:6060" ];
-    volumes =
-      let
+    volumes = let
         conf = ./tinode.conf;
       in
       [

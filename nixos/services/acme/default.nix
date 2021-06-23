@@ -8,6 +8,13 @@
   services.httpd.virtualHosts."root"= {
     hostName = "hs.jiaxiaodong.com";
     documentRoot = dir;
+    extraConfig = ''
+      <Directory ${dir}>
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+      </Directory>
+    '';
   };
 
   systemd.tmpfiles.rules = [

@@ -53,10 +53,19 @@ in
     ./scripts/default.nix
   ];
 
+  nixpkgs.overlays = [
+    (self: super: {
+      gajim = super.gajim.override {
+        extraPythonPackages = ps: with ps; [ pygments ];
+      };
+    })
+  ];
+
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
+    gajim
     gdb
     haskellPackages.cabal-install
     haskellPackages.cabal2nix

@@ -1,8 +1,16 @@
 { config, pkgs, libs, ... }:
 
 {
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
+  boot.loader = {
+    timeout = null;
+    grub = {
+      enable = true;
+      version = 2;
+      gfxmodeEfi = "640x480";
+      gfxmodeBios = "640x480";
+      useOSProber = true;
+    };
+  };
 
   boot.kernel.sysctl = {
     "kernel.nmi_watchdog" = 0;

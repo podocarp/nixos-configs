@@ -27,6 +27,7 @@
     tmux
     vim
     wget
+    hdparm              # for spin down later on
   ];
 
   # Set your time zone.
@@ -47,7 +48,6 @@
   # Second enables link power managerment.
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
-    ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", ATTR{link_power_management_policy}="med_power_with_dipm"
   '';
 
   # Add a user that can sudo.
@@ -74,6 +74,11 @@
   '';
 
   nixpkgs.config.allowUnfree = true;
+
+  powerManagement = {
+    powertop.enable = true;
+    scsiLinkPolicy = "med_power_with_dipm";
+  };
 
   system.stateVersion = "20.09";
 }

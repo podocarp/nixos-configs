@@ -7,9 +7,13 @@ let
   webroot = "/var/www/hs";
   trans_rpc_port = 9091;
   jellyfin_port = 8096;
+  gitea_port = 3001;
+  gitea_ssh_port = 3002;
   servicesToPortMapping = [
     ["transmission" (toString trans_rpc_port)]
     ["jellyfin" (toString jellyfin_port)]
+    ["gitea" (toString gitea_port)]
+    ["ssh.gitea" (toString gitea_ssh_port)]
   ];
 in
 {
@@ -17,9 +21,12 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
+      ((import ./containers/gitea/default.nix) {config = config;
+        port = gitea_port; sshPort = gitea_ssh_port; })
       # ./containers/tinode/default.nix
-      ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
-      ((import ./containers/transmission/default.nix) {config = config; port = trans_rpc_port;})
+      # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
+      ((import ./containers/transmission/default.nix) {config = config;
+        port = trans_rpc_port;})
       ./containers/jellyfin/default.nix
 
       ((import ./services/acme/default.nix) {dir = webroot;})
@@ -69,6 +76,14 @@ in
           };
         }
       ];
+    };
+
+
+    nat = {
+      # Remap container traffic to use external IP address
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "enp36s0";
     };
 
     firewall.enable = false;

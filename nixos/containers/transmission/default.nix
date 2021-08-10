@@ -11,6 +11,10 @@ in
         hostPath = "/tank/private/transmission";
         isReadOnly = false;
       };
+      "/Downloads_priv" = {
+        hostPath = "/tank/private/Downloads";
+        isReadOnly = false;
+      };
       "/Downloads" = {
         hostPath = "/tank/public/Downloads";
         isReadOnly = false;

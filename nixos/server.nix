@@ -9,11 +9,13 @@ let
   jellyfin_port = 8096;
   gitea_port = 3001;
   gitea_ssh_port = 3002;
+  gollum_port = 4000;
   servicesToPortMapping = [
     ["transmission" (toString trans_rpc_port)]
     ["jellyfin" (toString jellyfin_port)]
     ["gitea" (toString gitea_port)]
     ["ssh.gitea" (toString gitea_ssh_port)]
+    ["wiki" (toString gollum_port)]
   ];
 in
 {
@@ -23,6 +25,8 @@ in
 
       ((import ./containers/gitea/default.nix) {config = config;
         port = gitea_port; sshPort = gitea_ssh_port; })
+      ((import ./containers/gollum/default.nix) {config = config;
+        port = gollum_port; })
       # ./containers/tinode/default.nix
       # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
       ((import ./containers/transmission/default.nix) {config = config;

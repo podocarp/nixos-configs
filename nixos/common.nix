@@ -1,13 +1,20 @@
 { config, pkgs, libs, ... }:
 
 {
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
+  boot.loader = {
+    timeout = null;
+    grub = {
+      enable = true;
+      version = 2;
+      gfxmodeEfi = "640x480";
+      gfxmodeBios = "640x480";
+      useOSProber = true;
+    };
+  };
 
   boot.kernel.sysctl = {
     "kernel.nmi_watchdog" = 0;
     "vm.dirty_writeback_centisecs" = 6000;
-    "vm.laptop_mode" = 5;
   };
 
   # Packages we want system-wide. Git is essential to obtain this repo before
@@ -34,13 +41,24 @@
   };
 
   # Disables GUI askpass prompt
-  programs.ssh.askPassword = "";
+  programs.ssh = {
+    askPassword = "";
+    extraConfig = ''
+      StrictHostKeyChecking ask
+    '';
+  };
 
-  # First line adds something for trackpoints. Doesn't matter if you lack one.
-  # Second enables link power managerment.
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
   '';
+
+  services.tlp = {
+    enable = true;
+    settings = {
+    	"TLP_DEFAULT_MODE" = "AC";
+	"TLP_PERSISTENT_DEFAULT" = 1;
+    };
+  };
 
   # Add a user that can sudo.
   users.users.pengu = {
@@ -66,11 +84,6 @@
   '';
 
   nixpkgs.config.allowUnfree = true;
-
-  powerManagement = {
-    powertop.enable = true;
-    scsiLinkPolicy = "med_power_with_dipm";
-  };
 
   system.stateVersion = "20.09";
 }

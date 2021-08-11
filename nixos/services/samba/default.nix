@@ -7,7 +7,6 @@
       path = "/tank/public";
       writeable = "yes";
       browseable = "yes";
-      public = "yes";
       "force user" = "fileshare";
       "force group" = "users";
       "create mask" = "0774";

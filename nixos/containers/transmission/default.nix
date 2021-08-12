@@ -41,7 +41,7 @@ in
 
           rpc-bind-address = "0.0.0.0";
           rpc-port = port;
-          rpc-host-whitelist = "obsidian,server,*.home.com";
+          rpc-host-whitelist = "server,*.home.com";
           rpc-whitelist = "192.168.1.*,127.0.0.1";
 
           peer-port-random-on-start = true;

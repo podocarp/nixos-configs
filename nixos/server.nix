@@ -5,16 +5,18 @@ let
   # This path is used by Let's encrypt and all services that use it to generate
   # and withdraw certs
   webroot = "/var/www/hs";
-  trans_rpc_port = 9091;
-  jellyfin_port = 8096;
   gitea_port = 3001;
   gitea_ssh_port = 3002;
   gollum_port = 4000;
+  jellyfin_port = 8096;
+  syncthing_port = 8384;
+  trans_rpc_port = 9001;
   servicesToPortMapping = [
-    ["transmission" (toString trans_rpc_port)]
-    ["jellyfin" (toString jellyfin_port)]
     ["gitea" (toString gitea_port)]
     ["ssh.gitea" (toString gitea_ssh_port)]
+    ["jellyfin" (toString jellyfin_port)]
+    ["sync" (toString syncthing_port)]
+    ["transmission" (toString trans_rpc_port)]
     ["wiki" (toString gollum_port)]
   ];
 in
@@ -35,6 +37,7 @@ in
 
       ((import ./services/acme/default.nix) {dir = webroot;})
       ./services/samba/default.nix
+      ((import ./services/syncthing/default.nix) {guiport = syncthing_port;})
     ];
 
   # Use the GRUB 2 boot loader.
@@ -90,7 +93,13 @@ in
       externalInterface = "enp36s0";
     };
 
-    firewall.enable = false;
+    firewall = {
+      enable = true;
+      checkReversePath = "loose";
+      allowedTCPPorts = [
+        22 80
+      ];
+    };
   };
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -177,16 +186,25 @@ in
     # };
 
     virtualHosts = builtins.listToAttrs (map
-      (xs: {
-        name = builtins.elemAt xs 0;
+    (xs:
+    let
+      name = builtins.elemAt xs 0;
+      port = builtins.elemAt xs 1;
+    in
+    {
+        name = name;
         value = {
-          serverAliases = ["${builtins.elemAt xs 0}.home.com"];
+          serverAliases = [
+            "${name}.home.com"
+            "${name}.home"
+            "${name}.server"
+          ];
           extraConfig = ''
             ProxyRequests Off
             ProxyPreserveHost On
 
-            ProxyPass / http://localhost:${builtins.elemAt xs 1}/
-            ProxyPassReverse / http://localhost:${builtins.elemAt xs 1}/
+            ProxyPass / http://localhost:${port}/
+            ProxyPassReverse / http://localhost:${port}/
           '';
         };
       }) servicesToPortMapping

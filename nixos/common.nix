@@ -2,7 +2,7 @@
 
 {
   boot.loader = {
-    timeout = null;
+    timeout = 30;
     grub = {
       enable = true;
       version = 2;

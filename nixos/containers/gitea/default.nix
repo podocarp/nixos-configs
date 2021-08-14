@@ -1,5 +1,7 @@
-{ config, port, sshPort, ... }:
+{ port, sshPort, ... }:
 {
+  # This is a private network only instance. We do not open the ssh ports in
+  # the system firewall.
   containers.gitea = {
     autoStart = true;
     ephemeral = true;
@@ -10,21 +12,25 @@
       };
     };
 
-    config = {
-      services.openssh = {
-        enable = true;
-        ports = [ sshPort ];
-      };
+    forwardPorts = [
+        {
+    containerPort = sshPort;
+    hostPort = 443;
+    protocol = "tcp";
+  }
+    ];
 
+    config = {
       services.gitea = {
         enable = true;
-        domain = "gitea.jiaxiaodong";
-        rootUrl = "https://gitea.jiaxiaodong.com";
+        domain = "gitea.home.com";
+        rootUrl = "https://gitea.home.com";
         httpPort = port;
         ssh.clonePort = sshPort;
 
         settings = {
           server = {
+            START_SSH_SERVER = true;
             SSH_DOMAIN = "ssh.%(DOMAIN)s";
             LANDING_PAGE = "login";
           };

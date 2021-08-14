@@ -1,23 +1,22 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
   # This path is used by Let's encrypt and all services that use it to generate
   # and withdraw certs
   webroot = "/var/www/hs";
-  gitea_port = 3001;
-  gitea_ssh_port = 3002;
-  gollum_port = 4000;
-  jellyfin_port = 8096;
-  syncthing_port = 8384;
-  trans_rpc_port = 9001;
+  giteaPort = 3001;
+  giteaSshPort = 3002;
+  gollumPort = 4000;
+  jellyfinPort = 8096;
+  syncthingPort = 8384;
+  transRpcPort = 9001;
   servicesToPortMapping = [
-    ["gitea" (toString gitea_port)]
-    ["ssh.gitea" (toString gitea_ssh_port)]
-    ["jellyfin" (toString jellyfin_port)]
-    ["sync" (toString syncthing_port)]
-    ["transmission" (toString trans_rpc_port)]
-    ["wiki" (toString gollum_port)]
+    ["gitea" (toString giteaPort)]
+    ["jellyfin" (toString jellyfinPort)]
+    ["sync" (toString syncthingPort)]
+    ["transmission" (toString transRpcPort)]
+    ["wiki" (toString gollumPort)]
   ];
 in
 {
@@ -25,19 +24,19 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
-      ((import ./containers/gitea/default.nix) {config = config;
-        port = gitea_port; sshPort = gitea_ssh_port; })
-      ((import ./containers/gollum/default.nix) {config = config;
-        port = gollum_port; })
-      # ./containers/tinode/default.nix
+      ((import ./containers/gitea/default.nix) { port = giteaPort;
+        sshPort = giteaSshPort; })
+      ((import ./containers/gollum/default.nix) { port = gollumPort; })
+      ((import ./containers/syncthing/default.nix) {config = config; lib = lib;
+        guiPort = syncthingPort;})
       # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
       ((import ./containers/transmission/default.nix) {config = config;
-        port = trans_rpc_port;})
+        port = transRpcPort;})
       ./containers/jellyfin/default.nix
 
       ((import ./services/acme/default.nix) {dir = webroot;})
+      ./services/fail2ban/default.nix
       ./services/samba/default.nix
-      ((import ./services/syncthing/default.nix) {guiport = syncthing_port;})
     ];
 
   # Use the GRUB 2 boot loader.
@@ -97,7 +96,7 @@ in
       enable = true;
       checkReversePath = "loose";
       allowedTCPPorts = [
-        22 80
+        69 80 443 giteaSshPort
       ];
     };
   };
@@ -133,7 +132,6 @@ in
   # users.groups."fileshare".gid = 42069;
 
   environment.systemPackages = with pkgs; [
-    bonnie
     fio
     git
     hdparm
@@ -141,6 +139,7 @@ in
     iotop
     iperf
     neovim
+    openssl
     pciutils # for lspci
     smbclient
     tmux
@@ -154,36 +153,8 @@ in
     extraModules = [
       "proxy"
       "proxy_http"
-      "proxy_wstunnel"
+      # "proxy_wstunnel" only for websocket tunneling used by tinode
     ];
-
-    # virtualHosts."obsidian" = {
-    #   locations."/" = {
-    #     alias = (builtins.toFile "index.html"
-    #     ("<html><h1>Welcome. A list of services:</h1><ul>" +
-    #     (builtins.foldl'
-    #     (x: y:
-    #       x + ''<li><a href="http://obsidian:${toString (builtins.elemAt y 1)}">'' +
-    #       ''${builtins.elemAt y 0}</a></li>'') "" servicesToPortMapping
-    #     ) + "</ul></html>"));
-    #   };
-
-    #   listen = [{
-    #     ip = "*";
-    #     port = 1234;
-    #   }];
-    # };
-
-    # virtualHosts."home" = {
-    #   serverAliases = ["home"];
-    #   extraConfig = ''
-    #     ProxyRequests Off
-    #     ProxyPreserveHost On
-
-    #     ProxyPass / http://localhost:1234/
-    #     ProxyPassReverse / http://localhost:1234/
-    #   '';
-    # };
 
     virtualHosts = builtins.listToAttrs (map
     (xs:
@@ -191,13 +162,12 @@ in
       name = builtins.elemAt xs 0;
       port = builtins.elemAt xs 1;
     in
-    {
-        name = name;
+      {
+        # * is not a valid name
+        name = builtins.replaceStrings ["*"] ["fallback"] name;
         value = {
           serverAliases = [
             "${name}.home.com"
-            "${name}.home"
-            "${name}.server"
           ];
           extraConfig = ''
             ProxyRequests Off
@@ -215,6 +185,7 @@ in
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    ports = [ 69 ];
   };
 
   services.zfs = {
@@ -242,6 +213,11 @@ in
     automatic = true;
     dates = [ "weekly" ];
   };
+
+  nix.extraOptions = ''
+    plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+    extra-builtins-file = ${toString ./misc/extra-builtins.nix}
+  '';
 
   # 242 is 1 hour. Visit man hdparm
   powerManagement.powerUpCommands = ''

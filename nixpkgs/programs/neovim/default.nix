@@ -52,7 +52,7 @@
     extraConfig = builtins.readFile ./.vimrc + ''
       " Unfortunately having the snippets file RO is too troublesome.
       let g:UltiSnipsSnippetDirectories=[
-       \ $HOME.'/.config/nixpkgs/programs/neovim/ultisnips',
+       \ '${toString ./ultisnips}',
        \ '${pkgs.vimPlugins.vim-snippets}/share/vim-plugins/vim-snippets/UltiSnips']
     '';
   };

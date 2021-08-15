@@ -43,8 +43,10 @@
   # Disables GUI askpass prompt
   programs.ssh = {
     askPassword = "";
+    # disable checking for home network
     extraConfig = ''
-      StrictHostKeyChecking ask
+      Host *.home.com
+        StrictHostKeyChecking no
     '';
   };
 

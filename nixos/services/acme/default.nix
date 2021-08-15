@@ -7,7 +7,7 @@
 
   services.httpd.virtualHosts."root"= {
     hostName = "hs.jiaxiaodong.com";
-    documentRoot = dir;
+    documentRoot = "${dir}";
     extraConfig = ''
       <Directory ${dir}>
         Options FollowSymLinks

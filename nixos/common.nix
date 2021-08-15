@@ -2,13 +2,14 @@
 
 {
   boot.loader = {
-    timeout = null;
+    timeout = 30;
     grub = {
       enable = true;
       version = 2;
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
       useOSProber = true;
+      configurationLimit = 5;
     };
   };
 
@@ -16,6 +17,8 @@
     "kernel.nmi_watchdog" = 0;
     "vm.dirty_writeback_centisecs" = 6000;
   };
+
+  boot.crashDump.enable = true;
 
   # Packages we want system-wide. Git is essential to obtain this repo before
   # installing home-manager. The others are optional.

@@ -33,5 +33,14 @@
       "server min protocol" = "SMB2_02";
       "socket options" = "TPC_NODELAY IPTOS_LOWDELAY";
     };
+
+    extraConfig = ''
+      load printers = no
+      printing = bsd
+      printcap name = /dev/null
+      disable spoolss = yes
+    '';
   };
+
+  networking.firewall.allowedTCPPorts = [ 137 138 139 445 ];
 }

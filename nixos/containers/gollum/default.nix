@@ -1,4 +1,4 @@
-{ config, port, ... }:
+{ port, ... }:
 {
   containers.gollum = {
     autoStart = true;

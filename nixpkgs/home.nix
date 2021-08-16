@@ -109,6 +109,7 @@ in
     iftop
     iotop
     glxinfo
+    gnumake
     nmap
     sysstat
     telnet

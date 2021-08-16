@@ -20,6 +20,8 @@
     useGlamor = true;
   };
 
+  console.useXkbConfig = true;
+
   # This enables the changing of gtk themes by home-manager.
   programs.dconf.enable = true;
   services.dbus.packages = with pkgs; [ gnome3.dconf ];

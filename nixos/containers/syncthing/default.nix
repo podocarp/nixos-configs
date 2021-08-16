@@ -23,21 +23,17 @@
     };
 
     extraOptions = {
-      device = {
-        id = "E56JZUG-GDNH6ZD-CN5SEJJ-P7F7UBT-R34777D-ZMN7CAA-OILU4JL-BCIGUQC";
-      };
-
       gui = {
         insecureSkipHostcheck = true;
       } //
-      (# file has format: pass\n---\nuser: <user>\nblablabla
+      (# file has format: <pass>\n---\nbcrypt: <hash>\nuser: <user>\nblablabla
       let
         xs = lib.strings.splitString "\n"
           (builtins.extraBuiltins.getSecret "nix/syncthing");
       in
       {
-        user = lib.strings.removePrefix "user: " (builtins.elemAt xs 2);
-        pass = builtins.elemAt xs 0;
+        password = lib.strings.removePrefix "bcrypt: " (builtins.elemAt xs 2);
+        user = lib.strings.removePrefix "user: " (builtins.elemAt xs 3);
       });
 
       options = {

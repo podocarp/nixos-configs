@@ -4,26 +4,26 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-        ale
-        coc-css
-        coc-html
-        coc-json
-        coc-nvim
-        coc-snippets
-        coc-tsserver
-        coc-vimtex
-        command-t
-        nerdtree
-        papercolor-theme
-        ultisnips
-        undotree
-        vim-airline
-        vim-airline-themes
-        vim-nix
-        vim-snippets
-        vim-surround
-        vimtex
-        ];
+      # ale
+      coc-css
+      coc-html
+      coc-json
+      coc-nvim
+      coc-snippets
+      coc-tsserver
+      coc-vimtex
+      command-t
+      nerdtree
+      papercolor-theme
+      ultisnips
+      undotree
+      vim-airline
+      vim-airline-themes
+      vim-nix
+      vim-snippets
+      vim-surround
+      vimtex
+    ];
 
     extraPython3Packages = p: with p; [
       black

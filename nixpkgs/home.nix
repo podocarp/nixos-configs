@@ -82,9 +82,10 @@ in
     nodePackages.node2nix
     nodePackages.firebase-tools
     octaveFull
+    okular
     openvpn
     poppler_utils
-    (python38.withPackages(p: with p; [
+    (python3.withPackages(p: with p; [
         matplotlib
         numpy
         scipy

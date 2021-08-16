@@ -4,7 +4,6 @@
   boot.loader.grub.device = "nodev";
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
-  boot.extraModulePackages = [ pkgs.linuxPackages.digimend ];
   boot.extraModprobeConfig = ''
   '';
 

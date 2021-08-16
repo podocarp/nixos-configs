@@ -18,6 +18,7 @@
     ];
 
     useGlamor = true;
+    wacom.enable = true;
   };
 
   console.useXkbConfig = true;

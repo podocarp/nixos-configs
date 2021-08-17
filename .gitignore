@@ -2,3 +2,4 @@ hardware-configuration.nix
 *.key
 *.cert
 tinode.conf
+wireless.nix

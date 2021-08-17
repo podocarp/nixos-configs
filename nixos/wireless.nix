@@ -5,9 +5,8 @@
     enable = true;
     userControlled.enable = true;
     networks = {
-      "ssid" = {
-        # run wpa_passphrase ssid password
-        pskRaw = "";
+      "potato" = {
+        pskRaw = "b669ba9875b3bf734052b11fcab0856661c2cab652867dd0d280a195041fa00be";
       };
       "eduroam" = {
       	auth = ''

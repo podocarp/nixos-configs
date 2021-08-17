@@ -57,7 +57,8 @@ set vimhelp
 set norunexec
 
 " Selected color scheme
-colorscheme reicheltd-light
+colorscheme snowwhite
+highlight TabLine cterm=none ctermfg=0 ctermbg=16
 
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
@@ -157,7 +158,9 @@ command! reload :write | restart
 " PDF, PS
 filextype *.pdf,*.ps
         \ {View in zathura}
-        \ zathura %f &
+        \ zathura %f &,
+        \ {View in okular}
+        \ okular %f &> /dev/null &,
 
 fileviewer *.pdf
         \ pdftotext -l 3 -layout %c -

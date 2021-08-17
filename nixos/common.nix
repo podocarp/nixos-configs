@@ -1,14 +1,24 @@
 { config, pkgs, libs, ... }:
 
 {
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
+  boot.loader = {
+    timeout = 30;
+    grub = {
+      enable = true;
+      version = 2;
+      gfxmodeEfi = "640x480";
+      gfxmodeBios = "640x480";
+      useOSProber = true;
+      configurationLimit = 5;
+    };
+  };
 
   boot.kernel.sysctl = {
     "kernel.nmi_watchdog" = 0;
     "vm.dirty_writeback_centisecs" = 6000;
-    "vm.laptop_mode" = 5;
   };
+
+  boot.crashDump.enable = true;
 
   # Packages we want system-wide. Git is essential to obtain this repo before
   # installing home-manager. The others are optional.
@@ -19,6 +29,7 @@
     tmux
     vim
     wget
+    hdparm              # for spin down later on
   ];
 
   # Set your time zone.
@@ -33,14 +44,26 @@
   };
 
   # Disables GUI askpass prompt
-  programs.ssh.askPassword = "";
+  programs.ssh = {
+    askPassword = "";
+    # disable checking for home network
+    extraConfig = ''
+      Host *.home.com
+        StrictHostKeyChecking no
+    '';
+  };
 
-  # First line adds something for trackpoints. Doesn't matter if you lack one.
-  # Second enables link power managerment.
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
-    ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", ATTR{link_power_management_policy}="med_power_with_dipm"
   '';
+
+  services.tlp = {
+    enable = true;
+    settings = {
+    	"TLP_DEFAULT_MODE" = "AC";
+	"TLP_PERSISTENT_DEFAULT" = 1;
+    };
+  };
 
   # Add a user that can sudo.
   users.users.pengu = {

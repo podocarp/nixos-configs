@@ -1,13 +1,42 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
+  # This path is used by Let's encrypt and all services that use it to generate
+  # and withdraw certs
+  webroot = "/var/www/hs";
+  giteaPort = 3001;
+  giteaSshPort = 3002;
+  gollumPort = 4000;
+  jellyfinPort = 8096;
+  syncthingPort = 8384;
+  transRpcPort = 9001;
+  servicesToPortMapping = [
+    ["gitea" (toString giteaPort)]
+    ["jellyfin" (toString jellyfinPort)]
+    ["sync" (toString syncthingPort)]
+    ["transmission" (toString transRpcPort)]
+    ["wiki" (toString gollumPort)]
+  ];
 in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./containers/tinode/default.nix
+
+      ((import ./containers/gitea/default.nix) { port = giteaPort;
+        sshPort = giteaSshPort; })
+      ((import ./containers/gollum/default.nix) { port = gollumPort; })
+      ((import ./containers/syncthing/default.nix) {config = config; lib = lib;
+        guiPort = syncthingPort;})
+      # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
+      ((import ./containers/transmission/default.nix) {config = config;
+        port = transRpcPort;})
+      ./containers/jellyfin/default.nix
+
+      ((import ./services/acme/default.nix) {dir = webroot;})
+      ./services/fail2ban/default.nix
+      ./services/samba/default.nix
     ];
 
   # Use the GRUB 2 boot loader.
@@ -25,7 +54,6 @@ in
   # Per-interface useDHCP will be mandatory in the future.
   # networking.useDHCP = false;
   networking = {
-    # Define your hostname.
     hostName = "obsidian";
     # Random 8 digit hex string for ZFS to work
     hostId = "492A28F4";
@@ -33,36 +61,22 @@ in
     # Internet facing
     interfaces.enp36s0 = {
       useDHCP = true;
-      ipv4.addresses = [
-        {
-          address = "192.168.1.108";
-          prefixLength = 24;
-        }
-      ];
-      ipv4.routes = [
-        {
-          address = "0.0.0.0";
-          prefixLength = 0;
-          via = "192.168.0.1";
-          options = {
-            dev = "enp36s0";
-          };
-        }
-      ];
     };
 
     # Local
     interfaces.enp35s0 = {
+      useDHCP = false;
       ipv4.addresses = [
         {
           address = "192.168.1.107";
           prefixLength = 24;
         }
       ];
-      ipv4.routes = [
+        ipv4.routes = [
         {
           address = "192.168.1.0";
           prefixLength = 24;
+          via = "192.168.1.1";
           options = {
             dev = "enp35s0";
           };
@@ -70,7 +84,21 @@ in
       ];
     };
 
-    firewall.enable = false;
+
+    nat = {
+      # Remap container traffic to use external IP address
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "enp36s0";
+    };
+
+    firewall = {
+      enable = true;
+      checkReversePath = "loose";
+      allowedTCPPorts = [
+        69 80 443 giteaSshPort
+      ];
+    };
   };
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -79,7 +107,11 @@ in
     keyMap = "us";
   };
 
-  users.users.pengu.openssh.authorizedKeys.keys = [ jxdkey ];
+  users.users.pengu = {
+    isNormalUser = true;
+    openssh.authorizedKeys.keys = [ jxdkey ];
+    uid = 1000;
+  };
 
   users.users.git = {
     isNormalUser = true;
@@ -89,19 +121,17 @@ in
 
   # This is a public user made available to NFS and Samba
   users.users.fileshare = {
-    isNormalUser = true;
-    createHome = false;
-    shell = "/run/current-system/sw/bin/nologin";
-    uid = 42069;
-    group = "fileshare";
+    isSystemUser = true;
+    # createHome = false;
+    # shell = "/run/current-system/sw/bin/nologin";
+    # uid = 42069;
+    group = "users";
   };
 
-  users.groups = {
-    fileshare.gid = 42069;
-  };
+  users.groups."users".gid = 100;
+  # users.groups."fileshare".gid = 42069;
 
   environment.systemPackages = with pkgs; [
-    bonnie
     fio
     git
     hdparm
@@ -109,6 +139,7 @@ in
     iotop
     iperf
     neovim
+    openssl
     pciutils # for lspci
     smbclient
     tmux
@@ -122,38 +153,39 @@ in
     extraModules = [
       "proxy"
       "proxy_http"
-      "proxy_wstunnel"
+      # "proxy_wstunnel" only for websocket tunneling used by tinode
     ];
+
+    virtualHosts = builtins.listToAttrs (map
+    (xs:
+    let
+      name = builtins.elemAt xs 0;
+      port = builtins.elemAt xs 1;
+    in
+      {
+        # * is not a valid name
+        name = builtins.replaceStrings ["*"] ["fallback"] name;
+        value = {
+          serverAliases = [
+            "${name}.home.com"
+          ];
+          extraConfig = ''
+            ProxyRequests Off
+            ProxyPreserveHost On
+
+            ProxyPass / http://localhost:${port}/
+            ProxyPassReverse / http://localhost:${port}/
+          '';
+        };
+      }) servicesToPortMapping
+    );
   };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
-  };
-
-  services.samba = {
-    enable = true;
-    securityType = "user";
-    shares.public = {
-      path = "/tank/public";
-      writeable = "yes";
-      browseable = "yes";
-    };
-    shares.private= {
-      path = "/tank/private";
-      writeable = "yes";
-      browseable = "yes";
-      public = "no";
-      "valid users" = "pengu";
-    };
-    shares.global = {
-      "usershare path" = "/var/lib/samba/usershares";
-      "usershare max shares" = "100";
-      "usershare allow guests" = "yes";
-      "usershare owner only" = "no";
-      "server min protocol" = "SMB2_02";
-    };
+    ports = [ 69 ];
   };
 
   services.zfs = {
@@ -181,4 +213,19 @@ in
     automatic = true;
     dates = [ "weekly" ];
   };
+
+  nix.extraOptions = ''
+    plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
+    extra-builtins-file = ${toString ./misc/extra-builtins.nix}
+  '';
+
+  # 242 is 1 hour. Visit man hdparm
+  powerManagement.powerUpCommands = ''
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sda
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdb
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdd
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sde
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdf
+    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdg
+  '';
 }

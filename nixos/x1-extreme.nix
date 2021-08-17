@@ -10,7 +10,6 @@
 
   boot.loader.grub.device = "nodev";
   boot.loader.grub.efiSupport = true;
-  boot.loader.grub.useOSProber = true;
   boot.loader.grub.efiInstallAsRemovable = true;
 
   boot.extraModprobeConfig = ''
@@ -66,4 +65,9 @@
     [7     67     76]
     [127   70     32767]
   ];
+
+  services.xsession.libinput = {
+    enable = true;
+    touchpad.scrollButton = 2;
+  };
 }

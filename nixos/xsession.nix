@@ -6,11 +6,6 @@
     enable = true;
     xkbOptions = "caps:escape,keypad:pointerkeys"; # this maps caps to escape.
 
-    libinput = {
-      enable = true;
-      touchpad.scrollButton = 2;
-    };
-
     desktopManager.plasma5.enable = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.
@@ -23,7 +18,10 @@
     ];
 
     useGlamor = true;
+    wacom.enable = true;
   };
+
+  console.useXkbConfig = true;
 
   # This enables the changing of gtk themes by home-manager.
   programs.dconf.enable = true;

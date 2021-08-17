@@ -53,10 +53,19 @@ in
     ./scripts/default.nix
   ];
 
+  nixpkgs.overlays = [
+    (self: super: {
+      gajim = super.gajim.override {
+        extraPythonPackages = ps: with ps; [ pygments ];
+      };
+    })
+  ];
+
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
+    gajim
     gdb
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
@@ -73,9 +82,10 @@ in
     nodePackages.node2nix
     nodePackages.firebase-tools
     octaveFull
+    okular
     openvpn
     poppler_utils
-    (python38.withPackages(p: with p; [
+    (python3.withPackages(p: with p; [
         matplotlib
         numpy
         scipy
@@ -100,6 +110,7 @@ in
     iftop
     iotop
     glxinfo
+    gnumake
     nmap
     sysstat
     telnet

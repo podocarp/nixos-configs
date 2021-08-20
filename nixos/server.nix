@@ -185,6 +185,7 @@ in
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    challengeResponseAuthentication = false;
     ports = [ 69 ];
   };
 

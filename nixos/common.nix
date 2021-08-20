@@ -101,5 +101,7 @@
     dates = [ "weekly" ];
   };
 
+  nix.allowedUsers = [ "@wheel" ];
+
   system.stateVersion = "20.09";
 }

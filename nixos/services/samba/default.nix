@@ -30,7 +30,7 @@
       "usershare max shares" = "100";
       "usershare allow guests" = "yes";
       "usershare owner only" = "no";
-      "server min protocol" = "SMB2_02";
+      "server min protocol" = "SMB3_00";
       "socket options" = "TPC_NODELAY IPTOS_LOWDELAY";
     };
 

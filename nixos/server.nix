@@ -219,13 +219,13 @@ in
     extra-builtins-file = ${toString ./misc/extra-builtins.nix}
   '';
 
-  # 242 is 1 hour. Visit man hdparm
+  # 250 is 5 hours. Visit man hdparm for details.
   powerManagement.powerUpCommands = ''
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sda
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdb
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdd
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sde
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdf
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdg
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sda
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdb
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdd
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sde
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
 }

@@ -30,7 +30,6 @@ set shortmess+=ac
 set showcmd
 set signcolumn=yes
 set smartcase
-set smartindent
 set smarttab
 set splitright
 set termguicolors

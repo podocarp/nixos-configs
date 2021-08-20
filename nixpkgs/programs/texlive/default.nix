@@ -40,6 +40,7 @@
         relsize
         rsfs
         rsfso
+        scalerel
         scheme-basic
         siunitx
         stmaryrd

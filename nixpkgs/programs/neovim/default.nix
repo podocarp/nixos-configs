@@ -4,14 +4,14 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-      # ale
+      ale
       coc-css
       coc-html
       coc-json
-      coc-nvim
       coc-snippets
       coc-tsserver
       coc-vimtex
+      coc-nvim
       command-t
       nerdtree
       papercolor-theme
@@ -19,7 +19,6 @@
       undotree
       vim-airline
       vim-airline-themes
-      vim-nix
       vim-snippets
       vim-surround
       vimtex
@@ -49,12 +48,41 @@
     withPython3 = true;
     withRuby = true;
 
-    extraConfig = builtins.readFile ./.vimrc + ''
+    extraConfig = builtins.readFile (toString ./.vimrc) + ''
       " Unfortunately having the snippets file RO is too troublesome.
       let g:UltiSnipsSnippetDirectories=[
        \ '${toString ./ultisnips}',
        \ '${pkgs.vimPlugins.vim-snippets}/share/vim-plugins/vim-snippets/UltiSnips']
     '';
+
+    coc.enable = true;
+    coc.settings = {
+      "coc.source.around.enable" = false;
+      "diagnostic.displayByAle" = true;
+      "diagnostic.refreshAfterSave"= true;
+      "suggest.maxCompleteItemCount" = 10;
+      "codeLens" = {
+        "enable" = true;
+        "separator" = "▸";
+        "subseparator" = "▹";
+      };
+      "languageserver"= {
+        "haskell"= {
+          "command"= "haskell-language-server-wrapper";
+          "args"= ["--lsp"];
+          "rootPatterns"= ["*.cabal" "stack.yaml" "cabal.project"
+            "package.yaml" "hie.yaml"];
+          "filetypes"= ["haskell" "lhaskell"];
+        };
+      };
+      "typescript.disableAutomaticTypeAcquisition" = true;
+      "typescript" = {
+        "disableAutomaticTypeAcquisition"= true;
+        "referencesCodeLens.enable"= false;
+        "suggest.completeFunctionCals"= false;
+        "suggest.includeAutomaticOptionalChainCompletions"= false;
+        "format.enabled"= false;
+      };
+    };
   };
-  xdg.configFile."nvim/coc-settings.json".source = ./coc.json;
 }

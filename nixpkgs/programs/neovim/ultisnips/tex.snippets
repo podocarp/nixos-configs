@@ -72,13 +72,13 @@ endsnippet
 
 snippet item "Itemize" b
 \begin{itemize}[${1:<+->}]
-\item $0
+    \item $0
 \end{itemize}
 endsnippet
 
 snippet enum "Enumerate" b
 \begin{enumerate}[${1:i.}]
-\item $0
+    \item $0
 \end{enumerate}
 endsnippet
 
@@ -154,7 +154,7 @@ endsnippet
 
 context "math()"
 snippet "\<([^\$\<]*?)\>\>" "Angle" rA
-\langle `!p snip.rv = match.group(1)` \rangle
+\expval{`!p snip.rv = match.group(1)`}
 endsnippet
 
 context "math()"
@@ -168,8 +168,21 @@ snippet "\|([^\$\ ]+?)\>" "Ket" rA
 endsnippet
 
 context "math()"
-snippet "\\bra{(.+?)}([^\|]+?)\>" "Braket" riA
-`!p snip.rv = match.group(1)`\braket{`!p snip.rv = match.group(2)`}{`!p snip.rv = match.group(3)`}
+snippet "\\bra{(.+?)}([^\|\$\ ]+?)\>" "Braket" riA
+`!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+priority 1
+
+context "math()"
+snippet "\\ket{(.+?)}\<([^\|\$\ ]+?)\|" "Ketbra" riA
+`!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+context "math()"
+snippet "\\bra{(.+?)}(.+?)\|([^\|\$\ ]+?)\>" "Matrix element" riA
+`!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
+    match.group(1), match.group(2), match.group(3))`
 endsnippet
 
 snippet arr "Array" b

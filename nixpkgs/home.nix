@@ -33,7 +33,7 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
-    ./programs/firefox/default.nix
+    # ./programs/firefox/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/mpv/default.nix
@@ -45,7 +45,7 @@ in
     ./programs/zathura/default.nix
 
     # ((import ./services/dunst/default.nix) {
-    #   pkgs = pkgs; homeDir = homeDir;
+    #   pkgs = pkgs; config = config; homeDir = homeDir;
     # })
     ./services/gpg-agent/default.nix
     # ./services/random-background/default.nix
@@ -54,18 +54,18 @@ in
   ];
 
   nixpkgs.overlays = [
-    (self: super: {
-      gajim = super.gajim.override {
-        extraPythonPackages = ps: with ps; [ pygments ];
-      };
-    })
+    # (self: super: {
+    #   gajim = super.gajim.override {
+    #     extraPythonPackages = ps: with ps; [ pygments ];
+    #   };
+    # })
   ];
 
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
-    gajim
+    # gajim
     gdb
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
@@ -76,7 +76,6 @@ in
     hugo
     imagemagick
     inkscape
-    libnotify # for dunst
     neofetch
     neovim-remote
     nodePackages.node2nix
@@ -105,7 +104,7 @@ in
     zip
 
     ### Admin things and other tools
-    brightnessctl
+    # brightnessctl
     bind # for nslookup
     iftop
     iotop
@@ -140,11 +139,11 @@ in
   fonts.fontconfig.enable = true;
 
   nixpkgs.config.packageOverrides = pkgs : {
-    nur = import
-      (builtins.fetchTarball
-        "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
+    # nur = import
+    #   (builtins.fetchTarball
+    #     "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+    #   inherit pkgs;
+    # };
   };
 
   # This value determines the Home Manager release that your configuration is
@@ -185,50 +184,50 @@ in
   #   } + "/xresources/gruvbox-light.xresources"
   #   ) +
   ''
-  ! PaperColor Theme
-  *.foreground: #4D4D4C
-  *.background: #E7E8EB
-  ! black
-  *.color0: #EDEDED
-  *.color8: #969694
-  ! red
-  *.color1: #D7005F
-  *.color9: #D7005F
-  ! green
-  *.color2: #718C00
-  *.color10: #718C00
-  ! yellow / orange
-  *.color3: #D75F00
-  *.color11: #D75F00
-  ! blue
-  *.color4: #4271AE
-  *.color12: #4271AE
-  ! magenta
-  *.color5: #8959A8
-  *.color13: #8959A8
-  ! cyan
-  *.color6: #3E999F
-  *.color14: #3E999F
-  ! white
-  *.color7: #F5F5F5
-  *.color15: #2D2D2C
-  XTerm*faceName: xft:Inconsolata Regular:family=mono
-  XTerm*faceSize: 10
-  XTerm.vt100.translations: #override \n\
-    Ctrl <Key> minus: smaller-vt-font() \n\
-    Ctrl <Key> plus: larger-vt-font() \n\
-    Ctrl <Key> 0: set-vt-font(d) \n\
-    Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
-    Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
-    Ctrl <Key> 0: set-vt-font(d)
-  XTerm*backarrowKey: false
-  XTerm.ttyModes: erase ^?
-  XTerm*ptyInitialErase: true
-  XTerm*decTerminalID: vt340
-  XTerm*numColorRegisters: 256
-  XTerm*bellIsUrgent: true
-  XTerm*selectToClipboard: true
-  XTerm*trimSelection: true
-  XTerm.termName: st-256color
+      ! PaperColor Theme
+      *.foreground: #4D4D4C
+      *.background: #E7E8EB
+      ! black
+      *.color0: #EDEDED
+      *.color8: #969694
+      ! red
+      *.color1: #D7005F
+      *.color9: #D7005F
+      ! green
+      *.color2: #718C00
+      *.color10: #718C00
+      ! yellow / orange
+      *.color3: #D75F00
+      *.color11: #D75F00
+      ! blue
+      *.color4: #4271AE
+      *.color12: #4271AE
+      ! magenta
+      *.color5: #8959A8
+      *.color13: #8959A8
+      ! cyan
+      *.color6: #3E999F
+      *.color14: #3E999F
+      ! white
+      *.color7: #F5F5F5
+      *.color15: #2D2D2C
+      XTerm*faceName: xft:Inconsolata Regular:family=mono
+      XTerm*faceSize: 10
+      XTerm.vt100.translations: #override \n\
+        Ctrl <Key> minus: smaller-vt-font() \n\
+        Ctrl <Key> plus: larger-vt-font() \n\
+        Ctrl <Key> 0: set-vt-font(d) \n\
+        Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
+        Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
+        Ctrl <Key> 0: set-vt-font(d)
+      XTerm*backarrowKey: false
+      XTerm.ttyModes: erase ^?
+      XTerm*ptyInitialErase: true
+      XTerm*decTerminalID: vt340
+      XTerm*numColorRegisters: 256
+      XTerm*bellIsUrgent: true
+      XTerm*selectToClipboard: true
+      XTerm*trimSelection: true
+      XTerm.termName: st-256color
   '';
 }

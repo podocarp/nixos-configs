@@ -27,9 +27,10 @@
   };
 
   virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+
+  system.stateVersion = "20.09";
 }

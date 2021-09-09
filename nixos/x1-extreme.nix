@@ -70,4 +70,6 @@
     enable = true;
     touchpad.scrollButton = 2;
   };
+
+  system.stateVersion = "20.09";
 }

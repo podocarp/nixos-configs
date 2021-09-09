@@ -61,10 +61,12 @@
   services.tlp = {
     enable = true;
     settings = {
-    	"TLP_DEFAULT_MODE" = "AC";
-	"TLP_PERSISTENT_DEFAULT" = 1;
+        "TLP_DEFAULT_MODE" = "AC";
+        "TLP_PERSISTENT_DEFAULT" = 1;
     };
   };
+
+  powerManagement.cpuFreqGovernor = "schedutil";
 
   # Add a user that can sudo.
   users.users.pengu = {
@@ -101,5 +103,9 @@
 
   nix.allowedUsers = [ "@wheel" ];
 
-  system.stateVersion = "20.09";
+  system.autoUpgrade = {
+    enable = true;
+    allowReboot = false;
+    channel = "https://nixos.org/channels/nixos-unstable";
+  };
 }

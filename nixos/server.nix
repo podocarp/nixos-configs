@@ -236,4 +236,6 @@ in
     INTERVAL=10
     '';
   };
+
+  system.stateVersion = "20.09";
 }

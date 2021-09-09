@@ -99,23 +99,31 @@ let g:vimtex_view_zathura_check_libsynctex=0
 " let g:vimtex_view_general_viewer='okular'
 " let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
 " let g:vimtex_view_general_options_latexmk=''
-let g:vimtex_syntax_alpha=1
+let g:vimtex_syntax_conceal = {
+    \ 'math_bounds' : 0,
+    \ 'math_fracs' : 0,
+\}
+set conceallevel=2
+let g:tex_conceal="abdgm"
+
 let g:vimtex_compiler_latexmk = {
-            \ 'backend' : 'nvim',
-            \ 'background' : 1,
-            \ 'build_dir' : "_latexmk",
-            \ 'callback' : 1,
-            \ 'continuous' : 1,
-            \ 'executable' : 'latexmk',
-            \ 'hooks' : [],
-            \ 'options' : [
-            \   '-verbose',
-            \   '-file-line-error',
-            \   '-interaction=nonstopmode',
-            \   '-synctex=1',
-            \   '-shell-escape',
-            \ ],
-            \}
+    \ 'backend' : 'nvim',
+    \ 'background' : 1,
+    \ 'build_dir' : "_latexmk",
+    \ 'callback' : 1,
+    \ 'continuous' : 1,
+    \ 'executable' : 'latexmk',
+    \ 'hooks' : [],
+    \ 'options' : [
+    \   '-pdf',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-interaction=nonstopmode',
+    \   '-synctex=1',
+    \   '-shell-escape',
+    \ ],
+\}
+
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
@@ -165,19 +173,27 @@ let g:airline#extensions#whitespace#enabled = 0
 " let g:gruvbox_sign_column='bg0'
 " let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
 
-"Plug 'NLKNguyen/papercolor-theme'
-let g:airline_theme='papercolor'
 """"""
 "call plug#end()
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
+"Plug 'NLKNguyen/papercolor-theme'
 set background=light
+let g:airline_theme='papercolor'
+let g:PaperColor_Theme_Options = {
+    \ 'theme': {
+    \   'default.light': {
+    \     'override' : {
+    \       'color00' : ['#ffffff', '255'],
+    \       'linenumber_fg' : ['#000000', '255'],
+    \       'linenumber_bg' : ['#ffffff', '255'],
+    \       'visual_fg' : ['#ffffff', '255'],
+    \     }
+    \   }
+    \ }
+\ }
 colorscheme PaperColor
-" hi Comment guifg=#999090
 " hi CocCodeLens guibg=#333333 guifg=#999090
-" hi Normal guibg=#000000
-" hi LineNr guibg=#202020
-" hi SignColumn guibg=#202020
 " hi ALEErrorSign guibg=#202020
 " hi ALEWarningSign guibg=#202020
 

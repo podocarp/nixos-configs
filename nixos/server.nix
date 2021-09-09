@@ -188,6 +188,7 @@ in
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    challengeResponseAuthentication = false;
     ports = [ 69 ];
   };
 
@@ -231,4 +232,13 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
+
+  hardware.fancontrol = {
+    enable = false;
+    config = ''
+    INTERVAL=10
+    '';
+  };
+
+  system.stateVersion = "20.09";
 }

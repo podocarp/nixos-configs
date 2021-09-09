@@ -85,4 +85,6 @@
       };
     };
   };
+
+  xdg.configFile."nvim/after/syntax/tex.vim".source = ./syntax/tex.vim;
 }

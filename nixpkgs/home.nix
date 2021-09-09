@@ -80,6 +80,7 @@ in
     neovim-remote
     nodePackages.node2nix
     nodePackages.firebase-tools
+    nomacs
     octaveFull
     okular
     openvpn
@@ -92,7 +93,6 @@ in
     ))
     python38Packages.pygments
     scrot
-    sxiv
     syncthing
     tdesktop # telegram desktop
     unzip
@@ -119,7 +119,7 @@ in
 
     ### Fonts
     source-han-mono
-    inconsolata
+    julia-mono
   ];
 
   # Note that some files are pulled in by the imports.
@@ -186,7 +186,7 @@ in
   ''
       ! PaperColor Theme
       *.foreground: #4D4D4C
-      *.background: #E7E8EB
+      *.background: #FFFFFF
       ! black
       *.color0: #EDEDED
       *.color8: #969694
@@ -211,8 +211,17 @@ in
       ! white
       *.color7: #F5F5F5
       *.color15: #2D2D2C
-      XTerm*faceName: xft:Inconsolata Regular:family=mono
+      XTerm*faceName: xft:JuliaMono
       XTerm*faceSize: 10
+      xterm*renderFont: true
+      xterm*faceSize1: 10
+      xterm*faceSize2: 12
+      xterm*faceSize3: 15
+      xterm*faceSize4: 18
+      xterm*faceSize5: 21
+      xterm*faceSize6: 25
+      xterm*forceBoxChars: false
+      xterm*scaleHeight: 1.0
       XTerm.vt100.translations: #override \n\
         Ctrl <Key> minus: smaller-vt-font() \n\
         Ctrl <Key> plus: larger-vt-font() \n\

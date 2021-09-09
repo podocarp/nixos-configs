@@ -29,7 +29,8 @@
     tmux
     vim
     wget
-    hdparm              # for spin down later on
+    hdparm
+    lm_sensors
   ];
 
   # Set your time zone.
@@ -70,9 +71,6 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "pengu" ];
 
   security.sudo = {
     enable = true;

@@ -4,7 +4,7 @@ def math():
 endglobal
 
 context "math()"
-snippet "([_\^])([^\W_]*[,+-][^\W_]+|[^\W_]{2,}|\(.+\))" "Auto Sub/Super" wrA
+snippet "(\w[\_\^])([\(]?[^\_\^\$\ \{\}\(\)\<\>\|]{2,})" "Auto Sub/Super" wrA
 `!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
 endsnippet
 
@@ -158,29 +158,29 @@ snippet "\<([^\$\<]*?)\>\>" "Angle" rA
 endsnippet
 
 context "math()"
-snippet "\<([^\$\ ]+?)\|" "Bra" rA
+snippet "\<([^\$]+?)\|\|" "Bra" rA
 \bra{`!p snip.rv = match.group(1)`}
 endsnippet
 
 context "math()"
-snippet "\|([^\$\ ]+?)\>" "Ket" rA
+snippet "\|([^\$]+?)\>\>" "Ket" rA
 \ket{`!p snip.rv = match.group(1)`}
 endsnippet
 
 context "math()"
-snippet "\\bra{(.+?)}([^\|\$\ ]+?)\>" "Braket" riA
+snippet "\\bra{(.+?)}([^\|\$]+?)\>\>" "Braket" riA
 `!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
 endsnippet
 
 priority 1
 
 context "math()"
-snippet "\\ket{(.+?)}\<([^\|\$\ ]+?)\|" "Ketbra" riA
+snippet "\\ket{(.+?)}\<([^\|\$]+?)\|\|" "Ketbra" riA
 `!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
 endsnippet
 
 context "math()"
-snippet "\\bra{(.+?)}(.+?)\|([^\|\$\ ]+?)\>" "Matrix element" riA
+snippet "\\bra{([^\|\$]+)}(.+?)\|([^\|\$]+?)\>\>" "Matrix element" riA
 `!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
     match.group(1), match.group(2), match.group(3))`
 endsnippet

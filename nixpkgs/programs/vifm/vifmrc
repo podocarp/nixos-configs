@@ -222,8 +222,8 @@ filetype *.svg
 
 " Images
 filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
-        \ {Open in sxiv}
-        \ sxiv %f &,
+        \ {Open in nomacs}
+        \ nomacs %f &,
         \ {sxiv thumbnail gallery}
         \ sxiv -t %d &,
 

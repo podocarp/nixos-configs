@@ -30,6 +30,7 @@ set shortmess+=ac
 set showcmd
 set signcolumn=yes
 set smartcase
+set smartindent
 set smarttab
 set splitright
 set termguicolors
@@ -136,13 +137,15 @@ let b:csv_arrange_align = 'l*'
 
 """"""Misc
 "Plug 'scrooloose/nerdtree'
+
+" Start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
 autocmd StdinReadPre * let s:std_in=1
-" Open NERDTree if no file specified
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" Open NERDTree if opening a directory
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-" Close vim if the only window left is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '+'

@@ -29,6 +29,7 @@
       inotify-simple
       jedi
       pyflakes
+      unidecode
     ];
 
     extraPackages = with pkgs; [

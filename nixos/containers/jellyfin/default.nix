@@ -1,4 +1,4 @@
-{ ... }:
+{ port, ... }:
 {
   virtualisation.oci-containers.containers."jellyfin" = {
     autoStart = true;
@@ -9,7 +9,7 @@
       "/tank/local/jellyfin/log:/log"
       "/tank/public/Media:/media"
     ];
-    ports = [ "8096:8096" ];
+    ports = [ "${toString port}:${toString port}" ];
     environment = {
       JELLYFIN_LOG_DIR = "/log";
     };

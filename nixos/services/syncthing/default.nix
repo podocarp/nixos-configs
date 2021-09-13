@@ -1,10 +1,10 @@
-{ config, lib, guiPort, ... }:
+{ lib, port, ... }:
 {
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;
     group = "users";
-    guiAddress = "localhost:${toString guiPort}";
+    guiAddress = "localhost:${toString port}";
 
     devices = {
       desktop = {

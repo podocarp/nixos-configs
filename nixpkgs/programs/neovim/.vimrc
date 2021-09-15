@@ -7,7 +7,6 @@ set colorcolumn=80
 set cursorline
 set dictionary+=/usr/share/dict/words
 set expandtab
-set ignorecase
 set incsearch
 set lazyredraw
 set linebreak
@@ -15,13 +14,10 @@ set list
 set mouse=a
 set nobackup
 set nojoinspaces
-set noshowmode
-set nospell
 set nowrapscan
 set number
 set path+=**
 set relativenumber
-set regexpengine=1
 set ruler
 set scrolloff=4
 set shada=:10,'10,%,n~/.local/share/nvim/shada/main.shada
@@ -125,6 +121,7 @@ let g:vimtex_compiler_latexmk = {
     \ ],
 \}
 
+let g:vimtex_indent_ignored_envs = ['frame', 'document']
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 

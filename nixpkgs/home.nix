@@ -65,6 +65,7 @@ in
   home.packages = with pkgs; [
     ### Applications
     ffmpeg
+    fsearch
     # gajim
     gdb
     haskellPackages.cabal-install
@@ -113,7 +114,6 @@ in
     nmap
     sysstat
     telnet
-    thinkfan
     xorg.xev
     xorg.xprop
 

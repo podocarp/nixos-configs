@@ -4,7 +4,7 @@ def math():
 endglobal
 
 context "math()"
-snippet "(\w[\_\^])([^\^\$\ {}\(\)<>\|,_]{2,}|\w[_,]\w+)" "Auto Sub/Super (2)" wrA
+snippet "(\w[\_\^])([\w\\]{2,}|\w[_,]\w+)" "Auto Sub/Super (2)" wrA
 `!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
 endsnippet
 
@@ -120,6 +120,11 @@ endsnippet
 
 snippet <> "Angle" i
 \langle $1 \rangle $2
+endsnippet
+
+context "math()"
+snippet "\\dd" "Derivative" rA
+\dd{$1}$2
 endsnippet
 
 context "math()"

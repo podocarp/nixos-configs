@@ -102,10 +102,4 @@
   };
 
   nix.allowedUsers = [ "@wheel" ];
-
-  system.autoUpgrade = {
-    enable = true;
-    allowReboot = false;
-    channel = "https://nixos.org/channels/nixos-unstable";
-  };
 }

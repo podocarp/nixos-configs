@@ -9,7 +9,7 @@
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
       useOSProber = true;
-      configurationLimit = 5;
+      configurationLimit = 3;
     };
   };
 

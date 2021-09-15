@@ -44,12 +44,18 @@ in
 
   # Use the GRUB 2 boot loader.
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.requestEncryptionCredentials = true;
-  boot.zfs.extraPools = [ "tank" ];
-  boot.zfs.forceImportAll = false;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.zfs = {
+    requestEncryptionCredentials = true;
+    extraPools = [ "tank" ];
+    forceImportAll = false;
+  };
+  boot.loader.grub = {
+      efiSupport = true;
+      device = "nodev";
+  };
+  boot.loader.efi = {
+      canTouchEfiVariables = true;
+  };
 
   time.timeZone = "Asia/Singapore";
 

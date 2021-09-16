@@ -7,7 +7,6 @@ set colorcolumn=80
 set cursorline
 set dictionary+=/usr/share/dict/words
 set expandtab
-set ignorecase
 set incsearch
 set lazyredraw
 set linebreak
@@ -15,13 +14,10 @@ set list
 set mouse=a
 set nobackup
 set nojoinspaces
-set noshowmode
-set nospell
 set nowrapscan
 set number
 set path+=**
 set relativenumber
-set regexpengine=1
 set ruler
 set scrolloff=4
 set shada=:10,'10,%,n~/.local/share/nvim/shada/main.shada
@@ -100,23 +96,32 @@ let g:vimtex_view_zathura_check_libsynctex=0
 " let g:vimtex_view_general_viewer='okular'
 " let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
 " let g:vimtex_view_general_options_latexmk=''
-let g:vimtex_syntax_alpha=1
+let g:vimtex_syntax_conceal = {
+    \ 'math_bounds' : 0,
+    \ 'math_fracs' : 0,
+\}
+set conceallevel=2
+let g:tex_conceal="abdgm"
+
 let g:vimtex_compiler_latexmk = {
-            \ 'backend' : 'nvim',
-            \ 'background' : 1,
-            \ 'build_dir' : "_latexmk",
-            \ 'callback' : 1,
-            \ 'continuous' : 1,
-            \ 'executable' : 'latexmk',
-            \ 'hooks' : [],
-            \ 'options' : [
-            \   '-verbose',
-            \   '-file-line-error',
-            \   '-interaction=nonstopmode',
-            \   '-synctex=1',
-            \   '-shell-escape',
-            \ ],
-            \}
+    \ 'backend' : 'nvim',
+    \ 'background' : 1,
+    \ 'build_dir' : "_latexmk",
+    \ 'callback' : 1,
+    \ 'continuous' : 1,
+    \ 'executable' : 'latexmk',
+    \ 'hooks' : [],
+    \ 'options' : [
+    \   '-pdf',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-interaction=nonstopmode',
+    \   '-synctex=1',
+    \   '-shell-escape',
+    \ ],
+\}
+
+let g:vimtex_indent_ignored_envs = ['frame', 'document']
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
@@ -129,13 +134,15 @@ let b:csv_arrange_align = 'l*'
 
 """"""Misc
 "Plug 'scrooloose/nerdtree'
+
+" Start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
 autocmd StdinReadPre * let s:std_in=1
-" Open NERDTree if no file specified
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" Open NERDTree if opening a directory
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-" Close vim if the only window left is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '+'
@@ -166,19 +173,27 @@ let g:airline#extensions#whitespace#enabled = 0
 " let g:gruvbox_sign_column='bg0'
 " let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
 
-"Plug 'NLKNguyen/papercolor-theme'
-let g:airline_theme='papercolor'
 """"""
 "call plug#end()
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
+"Plug 'NLKNguyen/papercolor-theme'
 set background=light
+let g:airline_theme='papercolor'
+let g:PaperColor_Theme_Options = {
+    \ 'theme': {
+    \   'default.light': {
+    \     'override' : {
+    \       'color00' : ['#ffffff', '255'],
+    \       'linenumber_fg' : ['#000000', '255'],
+    \       'linenumber_bg' : ['#ffffff', '255'],
+    \       'visual_fg' : ['#ffffff', '255'],
+    \     }
+    \   }
+    \ }
+\ }
 colorscheme PaperColor
-" hi Comment guifg=#999090
 " hi CocCodeLens guibg=#333333 guifg=#999090
-" hi Normal guibg=#000000
-" hi LineNr guibg=#202020
-" hi SignColumn guibg=#202020
 " hi ALEErrorSign guibg=#202020
 " hi ALEWarningSign guibg=#202020
 

@@ -9,7 +9,7 @@
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
       useOSProber = true;
-      configurationLimit = 5;
+      configurationLimit = 3;
     };
   };
 
@@ -29,7 +29,8 @@
     tmux
     vim
     wget
-    hdparm              # for spin down later on
+    hdparm
+    lm_sensors
   ];
 
   # Set your time zone.
@@ -60,19 +61,18 @@
   services.tlp = {
     enable = true;
     settings = {
-    	"TLP_DEFAULT_MODE" = "AC";
-	"TLP_PERSISTENT_DEFAULT" = 1;
+        "TLP_DEFAULT_MODE" = "AC";
+        "TLP_PERSISTENT_DEFAULT" = 1;
     };
   };
+
+  powerManagement.cpuFreqGovernor = "schedutil";
 
   # Add a user that can sudo.
   users.users.pengu = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "pengu" ];
 
   security.sudo = {
     enable = true;
@@ -90,5 +90,16 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  system.stateVersion = "20.09";
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+
+  nix.optimise = {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
+
+  nix.allowedUsers = [ "@wheel" ];
 }

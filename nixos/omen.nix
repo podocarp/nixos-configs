@@ -1,4 +1,4 @@
-{ config, pkgs, libs, ... }:
+{ pkgs, libs, ... }:
 
 {
   boot.loader.grub.device = "nodev";
@@ -6,6 +6,8 @@
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.extraModprobeConfig = ''
   '';
+
+  # boot.kernelParams = [ "acpi_enforce_resources=lax" ];
 
   networking.hostName = "omen"; # Define your hostname.
 
@@ -24,8 +26,11 @@
     ];
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "pengu" ];
+
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  fonts.fontconfig.subpixel.rgba = "none";
+  system.stateVersion = "20.09";
 }

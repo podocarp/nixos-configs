@@ -1,4 +1,4 @@
-{ pkgs, homeDir, ... }:
+{ pkgs, config, homeDir, ... }:
 
 let
   # This should match the
@@ -14,6 +14,9 @@ in
     text = "${pkgs.mpv}/bin/mpv ${homeDir}/${soundpath}/boop.ogg";
     executable = true;
   };
+
+  config.home.packages = [ libnotify ];
+
   services.dunst = {
     enable = true;
     iconTheme.package = pkgs.paper-icon-theme;

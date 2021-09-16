@@ -9,11 +9,13 @@ let
   giteaSshPort = 3002;
   gollumPort = 4000;
   jellyfinPort = 8096;
+  mealiePort = 9925;
   syncthingPort = 8384;
   transRpcPort = 9001;
   servicesToPortMapping = [
     ["gitea" (toString giteaPort)]
     ["jellyfin" (toString jellyfinPort)]
+    ["mealie" (toString mealiePort)]
     ["sync" (toString syncthingPort)]
     ["transmission" (toString transRpcPort)]
     ["wiki" (toString gollumPort)]
@@ -27,26 +29,33 @@ in
       ((import ./containers/gitea/default.nix) { port = giteaPort;
         sshPort = giteaSshPort; })
       ((import ./containers/gollum/default.nix) { port = gollumPort; })
-      ((import ./containers/syncthing/default.nix) {config = config; lib = lib;
-        guiPort = syncthingPort;})
       # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
       ((import ./containers/transmission/default.nix) {config = config;
         port = transRpcPort;})
-      ./containers/jellyfin/default.nix
+      ((import ./containers/jellyfin/default.nix) { port= jellyfinPort; })
+      ((import ./containers/mealie/default.nix) { port= mealiePort; })
 
       ((import ./services/acme/default.nix) {dir = webroot;})
       ./services/fail2ban/default.nix
       ./services/samba/default.nix
+      ((import ./services/syncthing/default.nix) {lib = lib;
+        port = syncthingPort;})
     ];
 
   # Use the GRUB 2 boot loader.
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.requestEncryptionCredentials = true;
-  boot.zfs.extraPools = [ "tank" ];
-  boot.zfs.forceImportAll = false;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.zfs = {
+    requestEncryptionCredentials = true;
+    extraPools = [ "tank" ];
+    forceImportAll = false;
+  };
+  boot.loader.grub = {
+      efiSupport = true;
+      device = "nodev";
+  };
+  boot.loader.efi = {
+      canTouchEfiVariables = true;
+  };
 
   time.timeZone = "Asia/Singapore";
 
@@ -185,6 +194,7 @@ in
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
+    challengeResponseAuthentication = false;
     ports = [ 69 ];
   };
 
@@ -219,13 +229,22 @@ in
     extra-builtins-file = ${toString ./misc/extra-builtins.nix}
   '';
 
-  # 242 is 1 hour. Visit man hdparm
+  # 250 is 5 hours. Visit man hdparm for details.
   powerManagement.powerUpCommands = ''
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sda
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdb
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdd
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sde
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdf
-    ${pkgs.hdparm}/sbin/hdparm -S 242 /dev/sdg
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sda
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdb
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdd
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sde
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
+    ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
+
+  hardware.fancontrol = {
+    enable = false;
+    config = ''
+    INTERVAL=10
+    '';
+  };
+
+  system.stateVersion = "20.09";
 }

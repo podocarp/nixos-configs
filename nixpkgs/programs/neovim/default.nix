@@ -51,7 +51,7 @@
 
     # Unfortunately having the snippets file RO is too troublesome.
     extraConfig = builtins.readFile (toString ./.vimrc) + ''
-      let g:UltiSnipsSnippetDirectories+=[
+      let g:UltiSnipsSnippetDirectories=[
        \ '${toString ./ultisnips}',
        \ 'Ultisnips'
        \ ]

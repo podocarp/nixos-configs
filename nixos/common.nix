@@ -79,6 +79,11 @@
     wheelNeedsPassword = false;
   };
 
+  security.wrappers = {
+    "mount.nfs".source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
+    "mount.cifs".source = "${pkgs.cifs-utils}/bin/mount.cifs";
+  };
+
   # Installs fcitx for CJK input. Remove if not needed.
   i18n.inputMethod.enabled = "fcitx";
   i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];

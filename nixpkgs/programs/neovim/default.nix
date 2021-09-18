@@ -49,11 +49,12 @@
     withPython3 = true;
     withRuby = true;
 
+    # Unfortunately having the snippets file RO is too troublesome.
     extraConfig = builtins.readFile (toString ./.vimrc) + ''
-      " Unfortunately having the snippets file RO is too troublesome.
-      let g:UltiSnipsSnippetDirectories=[
+      let g:UltiSnipsSnippetDirectories+=[
        \ '${toString ./ultisnips}',
-       \ '${pkgs.vimPlugins.vim-snippets}/share/vim-plugins/vim-snippets/UltiSnips']
+       \ 'Ultisnips'
+       \ ]
     '';
 
     coc.enable = true;

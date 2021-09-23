@@ -5,25 +5,21 @@ let
   # This path is used by Let's encrypt and all services that use it to generate
   # and withdraw certs
   webroot = "/var/www/hs";
+
   giteaPort = 3001;
   giteaSshPort = 3002;
   gollumPort = 4000;
+  grafanaPort = 3000;
   jellyfinPort = 8096;
   mealiePort = 9925;
   syncthingPort = 8384;
   transRpcPort = 9001;
-  servicesToPortMapping = [
-    ["gitea" (toString giteaPort)]
-    ["jellyfin" (toString jellyfinPort)]
-    ["mealie" (toString mealiePort)]
-    ["sync" (toString syncthingPort)]
-    ["transmission" (toString transRpcPort)]
-    ["wiki" (toString gollumPort)]
-  ];
+  trans2RpcPort = 9002;
+  wireguardPort = 50000;
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
 
       ((import ./containers/gitea/default.nix) { port = giteaPort;
@@ -32,11 +28,25 @@ in
       # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
       ((import ./containers/transmission/default.nix) {config = config;
         port = transRpcPort;})
+      ((import ./containers/transmission/private.nix) { lib = lib; port = trans2RpcPort;})
       ((import ./containers/jellyfin/default.nix) { port= jellyfinPort; })
       ((import ./containers/mealie/default.nix) { port= mealiePort; })
 
       ((import ./services/acme/default.nix) {dir = webroot;})
       ./services/fail2ban/default.nix
+      # ((import ./services/grafana/default.nix) { port = grafanaPort;})
+      ((import ./services/httpd/default.nix) {
+          portMap = [
+            ["gitea" giteaPort]
+            ["grafana" grafanaPort]
+            ["jellyfin" jellyfinPort]
+            ["mealie" mealiePort]
+            ["sync" syncthingPort]
+            ["transmission" transRpcPort]
+            ["torrent" trans2RpcPort]
+            ["wiki" gollumPort]
+          ];
+      })
       ./services/samba/default.nix
       ((import ./services/syncthing/default.nix) {lib = lib;
         port = syncthingPort;})
@@ -93,6 +103,38 @@ in
       ];
     };
 
+    wireguard = {
+      enable = true;
+      interfaces = {
+        wg0 = {
+          ips = [ "192.168.1.109/24" ];
+          listenPort = wireguardPort;
+
+          # This allows the wireguard server to route traffic to the
+          # internet
+          postSetup = ''
+${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
+          '';
+
+          postShutdown = ''
+${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
+          '';
+
+          privateKey =
+            builtins.elemAt
+              (lib.strings.splitString "\n"
+                (builtins.extraBuiltins.getSecret "nix/wireguard"))
+              0;
+
+          peers = [
+            {
+              publicKey = "EnNBgGNhYPEWP+eb/uy4Ye4/YCxFCgy1kMQtb+H/yw4=";
+              allowedIPs = [ "192.168.1.110/32" ];
+            }
+          ];
+        };
+      };
+    };
 
     nat = {
       # Remap container traffic to use external IP address
@@ -107,8 +149,12 @@ in
       allowedTCPPorts = [
         69 80 443 giteaSshPort
       ];
+      allowedUDPPorts = [
+        wireguardPort
+      ];
     };
   };
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -155,41 +201,6 @@ in
     wget
   ];
 
-  # Enable the Apache server
-  services.httpd = {
-    enable = true;
-    adminAddr = "xdjiaxd@gmail.com";
-    extraModules = [
-      "proxy"
-      "proxy_http"
-      # "proxy_wstunnel" only for websocket tunneling used by tinode
-    ];
-
-    virtualHosts = builtins.listToAttrs (map
-    (xs:
-    let
-      name = builtins.elemAt xs 0;
-      port = builtins.elemAt xs 1;
-    in
-      {
-        # * is not a valid name
-        name = builtins.replaceStrings ["*"] ["fallback"] name;
-        value = {
-          serverAliases = [
-            "${name}.home.com"
-          ];
-          extraConfig = ''
-            ProxyRequests Off
-            ProxyPreserveHost On
-
-            ProxyPass / http://localhost:${port}/
-            ProxyPassReverse / http://localhost:${port}/
-          '';
-        };
-      }) servicesToPortMapping
-    );
-  };
-
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
@@ -213,17 +224,6 @@ in
     };
   };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
-
-  nix.optimise = {
-    automatic = true;
-    dates = [ "weekly" ];
-  };
-
   nix.extraOptions = ''
     plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
     extra-builtins-file = ${toString ./misc/extra-builtins.nix}
@@ -238,13 +238,6 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
-
-  hardware.fancontrol = {
-    enable = false;
-    config = ''
-    INTERVAL=10
-    '';
-  };
 
   system.stateVersion = "20.09";
 }

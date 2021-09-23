@@ -14,7 +14,7 @@
         cancel
         caption
         catchfile
-        collection-fontsrecommended
+        # collection-fontsrecommended
         cleveref
         enumitem
         esint
@@ -35,6 +35,7 @@
         minted
         multirow
         pgf
+        pgfplots
         physics
         prftree
         relsize

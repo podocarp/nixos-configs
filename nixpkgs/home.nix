@@ -36,6 +36,7 @@ in
     # ./programs/firefox/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
+    ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
     ./programs/readline/default.nix
@@ -64,58 +65,60 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
+    bind # for nslookup
     ffmpeg
-    fsearch
-    # gajim
+    gcc
     gdb
+    glxinfo
+    gnumake
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
     haskellPackages.ghc
     haskellPackages.haskell-language-server
-    # haskellPackages.xmobar
     highlight
     hugo
+    iftop
     imagemagick
     inkscape
+    iotop
+    jmtpfs
+    kfind
+    lm_sensors
     neofetch
     neovim-remote
-    nodePackages.node2nix
+    nmap
     nodePackages.firebase-tools
     nomacs
     octaveFull
     okular
     openvpn
     poppler_utils
+    scrot
+    stress
+    syncthing
+    sysstat
+    tdesktop # telegram desktop
+    telnet
+    unzip
+    usbutils # for lsusb
+    veracrypt
+    vifm
+    xdotool # vimtex needs this
+    xorg.xev
+    xorg.xprop
+    xterm
+    yarn
+    zip
+
     (python3.withPackages(p: with p; [
+        jupyterlab
         matplotlib
         numpy
+        pandas
+        pip
         scipy
       ]
     ))
-    python38Packages.pygments
-    scrot
-    syncthing
-    tdesktop # telegram desktop
-    unzip
-    vifm
-    xdotool # vimtex might need this
-    xterm
-    yarn
-    yarn2nix
-    zip
-
-    ### Admin things and other tools
-    # brightnessctl
-    bind # for nslookup
-    iftop
-    iotop
-    glxinfo
-    gnumake
-    nmap
-    sysstat
-    telnet
-    xorg.xev
-    xorg.xprop
 
     ### Fonts
     source-han-mono
@@ -145,14 +148,6 @@ in
     #   inherit pkgs;
     # };
   };
-
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See the Home
-  # Manager release notes for a list of state version changes in each release.
-  home.stateVersion = "21.03";
 
   xsession = {
     enable = true;

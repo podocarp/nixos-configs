@@ -49,36 +49,36 @@ let g:UltiSnipsEditSplit="vertical"
 nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
 nmap <silent> co <Plug>(coc-codelens-action)
 
-let g:ale_disable_lsp = 1
 "Plug 'w0rp/ale'
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_linters = {
-    \'c': ['clang'],
-    \'cpp': ['clang'],
-    \'haskell': ['hlint'],
-    \'javascript': ['eslint'],
-    \'python': ['pylint'],
-    \'typescript': ['eslint', 'tsserver'],
-    \'tex': ['chktex']
-    \}
-let g:ale_fixers = {
-    \'*': ['remove_trailing_lines', 'trim_whitespace'],
-    \'c': ['clang-format'],
-    \'cpp': ['clang-format'],
-    \'haskell': ['hlint'],
-    \'java': ['prettier'],
-    \'javascript': ['eslint'],
-    \'python': ['black'],
-    \'typescript': ['prettier']
-    \}
-let g:ale_c_clang_options='-std=c11 -Wall -pthread'
-let g:ale_c_gcc_options='-std=c11 -Wall -lpthread'
-let g:ale_echo_msg_error_str='E'
-let g:ale_echo_msg_warning_str='W'
-let g:ale_echo_msg_info_str='I'
-let g:ale_echo_msg_format='[%linter%][%severity%] %s'
-let g:ale_max_signs=20
+" let g:ale_disable_lsp = 1
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_insert_leave = 0
+" let g:ale_linters = {
+"     \'c': ['clang'],
+"     \'cpp': ['clang'],
+"     \'haskell': ['hlint'],
+"     \'javascript': ['eslint'],
+"     \'python': ['pylint'],
+"     \'typescript': ['eslint', 'tsserver'],
+"     \'tex': ['chktex']
+"     \}
+" let g:ale_fixers = {
+"     \'*': ['remove_trailing_lines', 'trim_whitespace'],
+"     \'c': ['clang-format'],
+"     \'cpp': ['clang-format'],
+"     \'haskell': ['hlint'],
+"     \'java': ['prettier'],
+"     \'javascript': ['eslint'],
+"     \'python': ['black'],
+"     \'typescript': ['prettier']
+"     \}
+" let g:ale_c_clang_options='-std=c11 -Wall -pthread'
+" let g:ale_c_gcc_options='-std=c11 -Wall -lpthread'
+" let g:ale_echo_msg_error_str='E'
+" let g:ale_echo_msg_warning_str='W'
+" let g:ale_echo_msg_info_str='I'
+" let g:ale_echo_msg_format='[%linter%][%severity%] %s'
+" let g:ale_max_signs=20
 
 nmap <silent> zk <Plug>(ale_previous_wrap)zz
 nmap <silent> zj <Plug>(ale_next_wrap)zz
@@ -121,13 +121,10 @@ let g:vimtex_compiler_latexmk = {
     \ ],
 \}
 
-let g:vimtex_indent_ignored_envs = ['frame', 'document']
+let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure']
+let g:vimtex_indent_tikz_enabled = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
-
-""""""CSV
-"Plug 'chrisbra/csv.vim', {'for': 'csv'}
-let b:csv_arrange_align = 'l*'
 
 """"""Haskell
 "Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
@@ -150,7 +147,7 @@ let g:NERDTreeDirArrowCollapsible = '-'
 let g:NERDTreeNodeDelimiter = "\u00a0"
 
 "Plug 'mbbill/undotree'
-nnoremap <F5> :UndotreeToggle<CR>
+nnoremap <F1> :UndotreeToggle<CR>
 
 "Plug 'wincent/command-t', {'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'}
 let g:CommandTCursorColor = 'Search'
@@ -227,6 +224,7 @@ augroup TexProj
     au!
     autocmd BufRead,BufNewFile *.tex setlocal tw=80
     autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=en_gb
+    autocmd BufRead,BufNewFile *.tex setlocal indentkeys-=o,O
 augroup END
 
 augroup CProj

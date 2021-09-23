@@ -4,14 +4,14 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-      ale
+      # ale
       coc-css
       coc-html
       coc-json
       coc-snippets
       coc-tsserver
-      coc-vimtex
-      coc-nvim
+      # coc-vimtex
+      # coc-nvim
       command-t
       nerdtree
       papercolor-theme

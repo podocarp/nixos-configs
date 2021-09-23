@@ -4,16 +4,20 @@ def math():
 endglobal
 
 context "math()"
-snippet "(\w[\_\^])([\w\\]{2,}|\w[_,]\w+)" "Auto Sub/Super (2)" wrA
+snippet "(\w[\_\^])([\w\\\-]{2,}|\w[_,]\w+)" "Auto Sub/Super (2)" wrA
 `!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
 endsnippet
 
-snippet frac "Fraction" w
+snippet f "Fraction" w
 \frac{${1:n}}{${2:d}}$3
 endsnippet
 
-snippet f "Fraction shortform" w
-\frac{${1:n}}{${2:d}}$3
+snippet sum "Sum" w
+\sum_{${1:n=1}}^{${2:\infty}}${0}
+endsnippet
+
+snippet prod "Product" w
+\prod_{${1:n=1}}^{${2:\infty}}${0}
 endsnippet
 
 snippet beg "Begin" w
@@ -133,7 +137,7 @@ snippet "<-" "gets" rA
 endsnippet
 
 context "math()"
-snippet "->" "rightarrow" rA
+snippet "->" "to" rA
 \rightarrow
 endsnippet
 
@@ -173,19 +177,19 @@ snippet "\|([^\$]+?)\>\>" "Ket" rA
 endsnippet
 
 context "math()"
-snippet "\\bra{(.+?)}([^\|\$]+?)\>\>" "Braket" riA
+snippet "\\bra{(.+?)}([^\|\$\ ]+?)\>\>" "Braket" riA
 `!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
 endsnippet
 
 priority 1
 
 context "math()"
-snippet "\\ket{(.+?)}\<([^\|\$]+?)\|\|" "Ketbra" riA
+snippet "\\ket{(.+?)}\<([^\|\$\ ]+?)\|\|" "Ketbra" riA
 `!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
 endsnippet
 
 context "math()"
-snippet "\\bra{([^\|\$]+)}(.+?)\|([^\|\$]+?)\>\>" "Matrix element" riA
+snippet "\\bra{(.+?)}([^\|\$\ ]+?)\|([^\|\$\ ]+?)\>\>" "Matrix element" riA
 `!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
     match.group(1), match.group(2), match.group(3))`
 endsnippet
@@ -218,20 +222,6 @@ snippet "mintin" "Minted code inline" b
 \mintinline{${1:lang}}|$2|$3
 endsnippet
 
-priority 1000
-snippet math "Maxima block" w
-math $1 math$0
-endsnippet
-
-priority 10000
-snippet "math(.*)math" "Evaluate Maxima" wr
-`!p import subprocess
-cmd = match.group(1) + " tex(%, false);";
-snip.rv = subprocess.check_output(['maxima', '--very-quiet', '--batch-string',
-cmd], universal_newlines=True).split('\n')[-2]
-`
-endsnippet
-
 snippet subfigure "Fig with subfigs" w
 \begin{figure}[H]
     \begin{subfigure}[${1:t}]{${2:0.45}\textwidth}
@@ -251,6 +241,28 @@ snippet subfig "Subfigure" w
     \caption{${4:}}
     \label{fig:${5:}}
 \end{subfigure}
+endsnippet
+
+snippet plot "pgfplot" w
+\begin{figure}[${1:htpb}]
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+	axis lines = middle,
+	xlabel = $x$,
+	ylabel = $y$,
+    ]
+        \addplot [
+	    domain=-pi:pi,
+	    samples=100,
+	    color=blue,
+	]
+        {${2:sin(deg(x))}};
+        \addlegendentry{$f(x)$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+\end{figure}
 endsnippet
 
 snippet mini "Minipage" w

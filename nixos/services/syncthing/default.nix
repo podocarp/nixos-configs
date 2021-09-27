@@ -34,7 +34,13 @@
       gui = {
         insecureSkipHostcheck = true;
       } //
-      (# file has format: <pass>\n---\nbcrypt: <hash>\nuser: <user>\nblablabla
+      (
+      # file format:
+      # <pass>
+      # ---
+      # bcrypt: <hash>
+      # user: <user>
+      # blablabla
       let
         xs = lib.strings.splitString "\n"
           (builtins.extraBuiltins.getSecret "nix/syncthing");

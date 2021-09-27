@@ -8,11 +8,7 @@ in
     ephemeral = true;
     bindMounts = {
       "${dir}" = {
-        hostPath = "/tank/private/transmission";
-        isReadOnly = false;
-      };
-      "/Downloads_priv" = {
-        hostPath = "/tank/private/Downloads";
+        hostPath = "/tank/local/transmission";
         isReadOnly = false;
       };
       "/Downloads" = {

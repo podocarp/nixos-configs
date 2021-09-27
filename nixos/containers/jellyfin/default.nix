@@ -14,18 +14,4 @@
       JELLYFIN_LOG_DIR = "/log";
     };
   };
-
-  services.httpd.virtualHosts."jellyfin" = {
-    hostName = "jellyfin.jiaxiaodong.com";
-    addSSL = true;
-    sslServerCert = ../../ssl/host.cert;
-    sslServerKey = ../../ssl/host.key;
-    extraConfig = ''
-      ProxyRequests Off
-      ProxyPreserveHost On
-
-      ProxyPass / http://localhost:6060/
-      ProxyPassReverse / http://localhost:6060/
-      '';
-  };
 }

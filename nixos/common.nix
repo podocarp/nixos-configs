@@ -80,8 +80,16 @@
   };
 
   security.wrappers = {
-    "mount.nfs".source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
-    "mount.cifs".source = "${pkgs.cifs-utils}/bin/mount.cifs";
+    "mount.nfs" = {
+        owner = config.users.users.pengu.name;
+        group = "wheel";
+        source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
+    };
+    "mount.cifs" = {
+        owner = config.users.users.pengu.name;
+        group = "wheel";
+        source = "${pkgs.cifs-utils}/bin/mount.cifs";
+    };
   };
 
   # Installs fcitx for CJK input. Remove if not needed.

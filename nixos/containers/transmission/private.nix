@@ -1,4 +1,4 @@
-{ lib, port, ... }:
+{ config, lib, port, ... }:
 let
   dir = "/data";
 in
@@ -23,6 +23,8 @@ in
           (builtins.extraBuiltins.getSecret "nordvpn");
     in
     {
+      PUID = builtins.toString config.users.users."pengu".uid;
+      PGID = builtins.toString config.users.groups."users".gid;
       OPENVPN_PROVIDER = "NORDVPN";
       OPENVPN_USERNAME =
         lib.strings.removePrefix "user: " (builtins.elemAt creds 2);

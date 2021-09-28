@@ -28,7 +28,9 @@ in
       # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
       ((import ./containers/transmission/default.nix) {config = config;
         port = transRpcPort;})
-      ((import ./containers/transmission/private.nix) { lib = lib; port = trans2RpcPort;})
+      ((import ./containers/transmission/private.nix) {
+          config = config; lib = lib; port = trans2RpcPort;
+      })
       ((import ./containers/jellyfin/default.nix) { port= jellyfinPort; })
       ((import ./containers/mealie/default.nix) { port= mealiePort; })
 

@@ -81,13 +81,17 @@
 
   security.wrappers = {
     "mount.nfs" = {
-        owner = config.users.users.pengu.name;
-        group = "wheel";
+        setuid = true;
+        setgid = true;
+        owner = "root";
+        group = "root";
         source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
     };
     "mount.cifs" = {
-        owner = config.users.users.pengu.name;
-        group = "wheel";
+        setuid = true;
+        setgid = true;
+        owner = "root";
+        group = "root";
         source = "${pkgs.cifs-utils}/bin/mount.cifs";
     };
   };

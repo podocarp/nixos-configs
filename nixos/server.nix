@@ -12,6 +12,7 @@ let
   grafanaPort = 3000;
   jellyfinPort = 8096;
   mealiePort = 9925;
+  mediawikiPort = 4001;
   syncthingPort = 8384;
   transRpcPort = 9001;
   trans2RpcPort = 9002;
@@ -22,22 +23,26 @@ in
     [
       ./hardware-configuration.nix
 
-      ((import ./containers/gitea/default.nix) { port = giteaPort;
-        sshPort = giteaSshPort; })
-      ((import ./containers/gollum/default.nix) { port = gollumPort; })
-      # ((import ./containers/prosody/default.nix) {pkgs = pkgs; dir = webroot;})
-      ((import ./containers/transmission/default.nix) {config = config;
-        port = transRpcPort;})
-      ((import ./containers/transmission/private.nix) {
-          config = config; lib = lib; port = trans2RpcPort;
+      ((import ./containers/gitea/default.nix) {
+        port = giteaPort; sshPort = giteaSshPort;
       })
-      ((import ./containers/jellyfin/default.nix) { port= jellyfinPort; })
-      ((import ./containers/mealie/default.nix) { port= mealiePort; })
+      # ((import ./containers/gollum/default.nix) { port = gollumPort; })
+      # ((import ./containers/prosody/default.nix) { pkgs = pkgs; })
+      ((import ./containers/transmission/default.nix) {
+        config = config; port = transRpcPort;})
+      ((import ./containers/transmission/private.nix) {
+        config = config; lib = lib; port = trans2RpcPort;
+      })
+      ((import ./containers/jellyfin/default.nix) { port = jellyfinPort; })
+      ((import ./containers/mealie/default.nix) { port = mealiePort; })
+      ((import ./containers/mediawiki/default.nix) {
+        lib = lib; port = mediawikiPort;
+      })
 
-      ((import ./services/acme/default.nix) {dir = webroot;})
+      # ((import ./services/acme/default.nix) {dir = webroot;})
       ./services/fail2ban/default.nix
       # ((import ./services/grafana/default.nix) { port = grafanaPort;})
-      ((import ./services/httpd/default.nix) {
+      ((import ./services/nginx/default.nix) {
           portMap = [
             ["gitea" giteaPort]
             ["grafana" grafanaPort]
@@ -46,7 +51,8 @@ in
             ["sync" syncthingPort]
             ["transmission" transRpcPort]
             ["torrent" trans2RpcPort]
-            ["wiki" gollumPort]
+            ["wiki" mediawikiPort]
+            # ["wiki" gollumPort]
           ];
       })
       ./services/samba/default.nix
@@ -200,6 +206,7 @@ ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o eth0 -j 
     pciutils # for lspci
     smbclient
     tmux
+    tcpdump
     wget
   ];
 

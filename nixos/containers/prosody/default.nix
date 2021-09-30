@@ -1,20 +1,6 @@
-{ pkgs, dir, ... }:
+{ pkgs, ... }:
 {
   users.groups."prosody".gid = 149;
-
-  security.acme.certs = {
-    "hs.jiaxiaodong.com" = {
-      webroot = dir;
-      email = "xdjiaxd@gmai.com";
-      keyType = "rsa2048";
-      group = "prosody";
-      extraDomainNames = [
-        "chat.jiaxiaodong.com"
-        "upload.jiaxiaodong.com"
-        "conference.jiaxiaodong.com"
-      ];
-    };
-  };
 
   containers.prosody = {
     autoStart = true;

@@ -12,25 +12,31 @@
     virtualHosts = builtins.listToAttrs (map
     (xs:
     let
-      name = builtins.elemAt xs 0;
+      name = "${builtins.elemAt xs 0}.jiaxiaodong.com";
       port = toString (builtins.elemAt xs 1);
     in
-      {
-        # * is not a valid name
-        name = builtins.replaceStrings ["*"] ["fallback"] name;
-        value = {
-          serverAliases = [
-            "${name}.home.com"
-          ];
-          extraConfig = ''
-            ProxyRequests Off
-            ProxyPreserveHost On
+    {
+      name = name;
+      value = {
+        hostName = name;
+        serverAliases = [ name ];
 
-            ProxyPass / http://localhost:${port}/
-            ProxyPassReverse / http://localhost:${port}/
-          '';
-        };
-      }) portMap
+        robotsEntries = ''
+          User-agent: *
+          Disallow: /
+        '';
+
+        extraConfig = ''
+          ProxyPreserveHost On
+          <Proxy *>
+              Order allow,deny
+              Allow from all
+          </Proxy>
+          ProxyPass / http://localhost:${port}/
+          ProxyPassReverse / http://localhost:{port}/
+        '';
+      };
+    }) portMap
     );
   };
 }

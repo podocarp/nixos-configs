@@ -19,6 +19,9 @@
           name = "${name}.${host}";
           value = {
             locations."/".proxyPass = "http://localhost:${port}";
+            addSSL = true;
+            sslCertificate = ../../ssl/server.crt;
+            sslCertificateKey = ../../ssl/server.key;
           };
         }
       );

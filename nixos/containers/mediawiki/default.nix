@@ -13,7 +13,7 @@
     config = {
       services.mediawiki= {
         enable = true;
-        name = "JXD's Wiki";
+        name = "My Wiki";
 
         passwordFile = builtins.toFile "temp"
           (builtins.elemAt
@@ -31,7 +31,7 @@
         };
 
         extraConfig = ''
-          $wgDefaultUserOptions[''] = 1;
+          $wgDefaultUserOptions['gender'] = 'male';
         '';
 
         virtualHost = {

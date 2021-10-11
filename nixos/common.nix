@@ -8,8 +8,8 @@
       version = 2;
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
-      useOSProber = true;
       configurationLimit = 3;
+      efiInstallAsRemovable = true;
     };
   };
 

@@ -13,6 +13,7 @@ let
   jellyfinPort = 8096;
   mealiePort = 9925;
   mediawikiPort = 4001;
+  stashPort = 9999;
   syncthingPort = 8384;
   transRpcPort = 9001;
   trans2RpcPort = 9002;
@@ -26,8 +27,9 @@ in
       ((import ./containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
       })
-      # ((import ./containers/gollum/default.nix) { port = gollumPort; })
-      # ((import ./containers/prosody/default.nix) { pkgs = pkgs; })
+      ((import ./containers/gollum/default.nix) { port = gollumPort; })
+      ((import ./containers/prosody/default.nix) { pkgs = pkgs; })
+      ((import ./containers/stashapp/default.nix) { port = stashPort; })
       ((import ./containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
       ((import ./containers/transmission/private.nix) {
@@ -48,6 +50,7 @@ in
             ["grafana" grafanaPort]
             ["jellyfin" jellyfinPort]
             ["mealie" mealiePort]
+            ["stash" stashPort]
             ["sync" syncthingPort]
             ["transmission" transRpcPort]
             ["torrent" trans2RpcPort]
@@ -65,14 +68,10 @@ in
   boot.zfs = {
     requestEncryptionCredentials = true;
     extraPools = [ "tank" ];
-    forceImportAll = false;
   };
   boot.loader.grub = {
       efiSupport = true;
       device = "nodev";
-  };
-  boot.loader.efi = {
-      canTouchEfiVariables = true;
   };
 
   time.timeZone = "Asia/Singapore";
@@ -111,38 +110,38 @@ in
       ];
     };
 
-    wireguard = {
-      enable = true;
-      interfaces = {
-        wg0 = {
-          ips = [ "192.168.1.109/24" ];
-          listenPort = wireguardPort;
+    # wireguard = {
+    #   enable = true;
+    #   interfaces = {
+    #     wg0 = {
+    #       ips = [ "192.168.1.109/24" ];
+    #       listenPort = wireguardPort;
 
-          # This allows the wireguard server to route traffic to the
-          # internet
-          postSetup = ''
-${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
-          '';
+    #       # This allows the wireguard server to route traffic to the
+    #       # internet
+    #       postSetup = ''
+#${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
+    #       '';
 
-          postShutdown = ''
-${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
-          '';
+    #       postShutdown = ''
+#${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
+    #       '';
 
-          privateKey =
-            builtins.elemAt
-              (lib.strings.splitString "\n"
-                (builtins.extraBuiltins.getSecret "nix/wireguard"))
-              0;
+    #       privateKey =
+    #         builtins.elemAt
+    #           (lib.strings.splitString "\n"
+    #             (builtins.extraBuiltins.getSecret "nix/wireguard"))
+    #           0;
 
-          peers = [
-            {
-              publicKey = "EnNBgGNhYPEWP+eb/uy4Ye4/YCxFCgy1kMQtb+H/yw4=";
-              allowedIPs = [ "192.168.1.110/32" ];
-            }
-          ];
-        };
-      };
-    };
+    #       peers = [
+    #         {
+    #           publicKey = "EnNBgGNhYPEWP+eb/uy4Ye4/YCxFCgy1kMQtb+H/yw4=";
+    #           allowedIPs = [ "192.168.1.110/32" ];
+    #         }
+    #       ];
+    #     };
+    #   };
+    # };
 
     nat = {
       # Remap container traffic to use external IP address

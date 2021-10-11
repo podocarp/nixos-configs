@@ -13,6 +13,9 @@
       x200 = {
         id = "65LWGSU-4PZP5YT-7MOTAGN-QILV4Q6-XXQ2UOG-DP24BML-TPS7YVS-YJJKHAF";
       };
+      x1 = {
+        id = "OX5NYH3-RHKF6DI-AREQDJV-QLX3W3Q-YIATG65-GCL7N7V-ECT2QMR-WBDCSA4";
+      };
     };
 
     folders = {
@@ -21,12 +24,12 @@
         rescanInterval = 36000;
         versioning.type = "trashcan";
         versioning.params = { "cleanoutDays" = "7"; };
-        devices = [ "desktop" "x200" ];
+        devices = [ "desktop" "x200" "x1" ];
       };
       "/tank/public/Books" = {
         id = "Books";
         rescanInterval = 36000;
-        devices = [ "desktop" "x200" ];
+        devices = [ "desktop" "x200" "x1" ];
       };
     };
 

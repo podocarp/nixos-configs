@@ -8,6 +8,10 @@
         hostPath = "/tank/local/mediawiki";
         isReadOnly = false;
       };
+      "/var/lib/mysql" = {
+        hostPath = "/tank/local/mediawiki/mysql";
+        isReadOnly = false;
+      };
     };
 
     config = {

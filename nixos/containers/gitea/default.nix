@@ -12,14 +12,6 @@
       };
     };
 
-    forwardPorts = [
-        {
-    containerPort = sshPort;
-    hostPort = 443;
-    protocol = "tcp";
-  }
-    ];
-
     config = {
       services.gitea = {
         enable = true;

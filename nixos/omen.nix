@@ -1,15 +1,13 @@
 { pkgs, lib, ... }:
 
 {
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
+  boot.loader.grub = {
+    useOSProber = true;
+  };
   boot.extraModprobeConfig = ''
   '';
 
-  # boot.kernelParams = [ "acpi_enforce_resources=lax" ];
-
-  networking.hostName = "omen"; # Define your hostname.
+  networking.hostName = "desktop"; # Define your hostname.
   networking.firewall.allowedUDPPorts = [ 50000 ];
   networking.wireguard = {
     enable = false;

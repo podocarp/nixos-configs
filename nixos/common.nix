@@ -89,7 +89,6 @@
     };
     "mount.cifs" = {
         setuid = true;
-        setgid = true;
         owner = "root";
         group = "root";
         source = "${pkgs.cifs-utils}/bin/mount.cifs";

@@ -25,7 +25,7 @@ syn match texCmdGreek "\\gt\>"      contained conceal cchar=θ
 syn match texCmdGreek "\\vartheta\>"   contained conceal cchar=ϑ
 syn match texCmdGreek "\\iota\>"       contained conceal cchar=ι
 syn match texCmdGreek "\\kappa\>"      contained conceal cchar=κ
-syn match texCmdGreek "\\lambda\>"     contained conceal cchar=λ
+syn match texCmdGreek "\\gl\>"     contained conceal cchar=λ
 syn match texCmdGreek "\\mu\>"         contained conceal cchar=μ
 syn match texCmdGreek "\\nu\>"         contained conceal cchar=ν
 syn match texCmdGreek "\\xi\>"         contained conceal cchar=ξ
@@ -134,5 +134,9 @@ syn match texMathSymbol '\\W\%(scr\|cal\)' contained conceal cchar=𝓦
 syn match texMathSymbol '\\X\%(scr\|cal\)' contained conceal cchar=𝓧
 syn match texMathSymbol '\\Y\%(scr\|cal\)' contained conceal cchar=𝓨
 syn match texMathSymbol '\\Z\%(scr\|cal\)' contained conceal cchar=𝓩
+
+syn match texMathSymbol '\\qquad' contained conceal cchar=┉
+syn match texMathSymbol '\\llt' contained conceal cchar=≪
+syn match texMathSymbol '\\ggt' contained conceal cchar=≫
 
 syn match texSpecialChar '\\#' contained conceal cchar=#

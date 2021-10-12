@@ -8,13 +8,13 @@
         algorithm2e
         amsmath
         beamer
-        biber
-        biblatex
+        # biber
+        # biblatex
         calrsfs
         cancel
         caption
         catchfile
-        # collection-fontsrecommended
+        collection-fontsrecommended
         cleveref
         enumitem
         esint

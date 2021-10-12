@@ -108,6 +108,7 @@ in
     xorg.xprop
     xterm
     yarn
+    yt-dlp
     zip
 
     (python3.withPackages(p: with p; [

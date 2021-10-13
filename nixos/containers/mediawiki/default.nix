@@ -1,9 +1,13 @@
-{ lib, port, ... }:
+{ lib, pkgs, port, ... }:
 {
   containers.mediawiki= {
     autoStart = true;
     ephemeral = true;
     bindMounts = {
+      "/var/www/html/images" = {
+        hostPath = "/tank/local/mediawiki/images";
+        isReadOnly = false;
+      };
       "/var/lib/mediawiki" = {
         hostPath = "/tank/local/mediawiki";
         isReadOnly = false;
@@ -32,6 +36,13 @@
             "pm.max_spare_servers" = 2;
             "pm.min_spare_servers" = 1;
             "pm.start_servers" = 1;
+        };
+
+        extensions = {
+          InputBox = pkgs.fetchzip {
+            url = "https://extdist.wmflabs.org/dist/extensions/InputBox-REL1_36-aa70764.tar.gz";
+            sha256 = "0rqvn6rf7jswv02s8ajh31hd5ksvxq84sjpapda0083drxbwj96f";
+          };
         };
 
         extraConfig = ''

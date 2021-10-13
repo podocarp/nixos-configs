@@ -38,7 +38,7 @@ in
       ((import ./containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ./containers/mealie/default.nix) { port = mealiePort; })
       ((import ./containers/mediawiki/default.nix) {
-        lib = lib; port = mediawikiPort;
+        lib = lib; pkgs = pkgs; port = mediawikiPort;
       })
 
       # ((import ./services/acme/default.nix) {dir = webroot;})

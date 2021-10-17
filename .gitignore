@@ -1,6 +1,8 @@
 hardware-configuration.nix
+wireless.nix
 *.crt
 *.csr
 *.key
 *.cert
 tinode.conf
+home.nix

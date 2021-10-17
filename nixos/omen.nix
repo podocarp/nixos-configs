@@ -3,7 +3,10 @@
 {
   boot.loader.grub = {
     useOSProber = true;
+    efiSupport = true;
+    device = "nodev";
   };
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.extraModprobeConfig = ''
   '';
 

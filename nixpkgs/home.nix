@@ -43,7 +43,7 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    ./programs/zathura/default.nix
+    # ./programs/zathura/default.nix
 
     # ((import ./services/dunst/default.nix) {
     #   pkgs = pkgs; config = config; homeDir = homeDir;
@@ -55,11 +55,11 @@ in
   ];
 
   nixpkgs.overlays = [
-    # (self: super: {
-    #   gajim = super.gajim.override {
-    #     extraPythonPackages = ps: with ps; [ pygments ];
-    #   };
-    # })
+    (self: super: {
+    # gajim = super.gajim.override {
+    #   extraPythonPackages = ps: with ps; [ pygments ];
+    # };
+    })
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -89,7 +89,6 @@ in
     nmap
     nodePackages.firebase-tools
     nomacs
-    octaveFull
     okular
     openvpn
     poppler_utils
@@ -111,15 +110,18 @@ in
     yt-dlp
     zip
 
+    (octaveFull.withPackages(p: with p; [
+      symbolic
+    ]))
+
     (python3.withPackages(p: with p; [
-        jupyterlab
-        matplotlib
-        numpy
-        pandas
-        pip
-        scipy
-      ]
-    ))
+      jupyterlab
+      matplotlib
+      numpy
+      pandas
+      pip
+      scipy
+    ]))
 
     ### Fonts
     source-han-mono

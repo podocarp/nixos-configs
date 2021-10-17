@@ -91,11 +91,10 @@ noremap <F1> :ALEFix<CR>
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
 let g:vimtex_compiler_progname='nvr'
-let g:vimtex_view_method='zathura'
-let g:vimtex_view_zathura_check_libsynctex=0
-" let g:vimtex_view_general_viewer='okular'
-" let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
-" let g:vimtex_view_general_options_latexmk=''
+" let g:vimtex_view_method='zathura'
+" let g:vimtex_view_zathura_check_libsynctex=0
+let g:vimtex_view_general_viewer='okular'
+let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
 let g:vimtex_syntax_conceal = {
     \ 'math_bounds' : 0,
     \ 'math_fracs' : 0,

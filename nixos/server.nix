@@ -70,8 +70,10 @@ in
     extraPools = [ "tank" ];
   };
   boot.loader.grub = {
-      efiSupport = true;
-      device = "nodev";
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+    efiSupport = true;
+    device = "nodev";
   };
 
   time.timeZone = "Asia/Singapore";

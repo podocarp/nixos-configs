@@ -2,14 +2,13 @@
 
 {
   boot.loader = {
-    timeout = 30;
+    timeout = 5;
     grub = {
       enable = true;
       version = 2;
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
       configurationLimit = 3;
-      efiInstallAsRemovable = true;
     };
   };
 

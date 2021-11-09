@@ -95,6 +95,7 @@ let g:vimtex_compiler_progname='nvr'
 " let g:vimtex_view_zathura_check_libsynctex=0
 let g:vimtex_view_general_viewer='okular'
 let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
 let g:vimtex_syntax_conceal = {
     \ 'math_bounds' : 0,
     \ 'math_fracs' : 0,
@@ -103,19 +104,16 @@ set conceallevel=2
 let g:tex_conceal="abdgm"
 
 let g:vimtex_compiler_latexmk = {
-    \ 'backend' : 'nvim',
-    \ 'background' : 1,
     \ 'build_dir' : "_latexmk",
     \ 'callback' : 1,
     \ 'continuous' : 1,
     \ 'executable' : 'latexmk',
     \ 'hooks' : [],
     \ 'options' : [
-    \   '-pdf',
     \   '-verbose',
     \   '-file-line-error',
-    \   '-interaction=nonstopmode',
     \   '-synctex=1',
+    \   '-interaction=nonstopmode',
     \   '-shell-escape',
     \ ],
 \}

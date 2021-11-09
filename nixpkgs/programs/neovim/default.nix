@@ -8,10 +8,11 @@
       coc-css
       coc-html
       coc-json
+      coc-pyright
       coc-snippets
       coc-tsserver
-      # coc-vimtex
-      # coc-nvim
+      coc-vimtex
+      coc-nvim
       command-t
       nerdtree
       papercolor-theme
@@ -25,11 +26,11 @@
     ];
 
     extraPython3Packages = p: with p; [
+      autopep8
       black
-      inotify-simple
-      jedi
-      pyflakes
-      unidecode
+      flake8
+      inotify-simple # ultisnips needs this
+      unidecode # ultisnips needs this
     ];
 
     extraPackages = with pkgs; [
@@ -59,13 +60,16 @@
     coc.enable = true;
     coc.settings = {
       "coc.source.around.enable" = false;
-      "diagnostic.displayByAle" = true;
+      "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave"= true;
       "suggest.maxCompleteItemCount" = 10;
       "codeLens" = {
         "enable" = true;
         "separator" = "▸";
         "subseparator" = "▹";
+      };
+      "python" = {
+          "linting.flake8Enabled" = true;
       };
       "languageserver"= {
         "haskell"= {

@@ -228,7 +228,9 @@ filextype *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
         \ sxiv -t %d &,
 
 fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif
-        \ show-sixel %c %pw %ph %pd
+        \ show-sixel img %c %pw %ph %pd
+        \ %pc
+        \ show-sixel clear
 
 " MD5
 filetype *.md5
@@ -437,9 +439,6 @@ nnoremap t tj
 
 " Sets wallpapers and theme
 nnoremap bw :!wal -i %c<CR>
-
-" Clears the image preview when it bugs out
-nnoremap <c-l> :!vifmimg clear<cr>
 
 command! q :execute '!echo %d > /tmp/lastdir' | quit
 " ------------------------------------------------------------------------------

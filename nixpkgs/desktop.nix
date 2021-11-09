@@ -23,9 +23,6 @@ in
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
-    ((import ./programs/vifm/default.nix) {
-      myTerm = myTerm;
-    })
     ((import ./programs/password-store/default.nix) {
       homeDir = homeDir;
     })
@@ -92,6 +89,7 @@ in
     okular
     openvpn
     poppler_utils
+    ranger
     scrot
     stress
     syncthing
@@ -101,7 +99,6 @@ in
     unzip
     usbutils # for lsusb
     veracrypt
-    vifm
     xdotool # vimtex needs this
     xorg.xev
     xorg.xprop
@@ -115,11 +112,9 @@ in
     ]))
 
     (python3.withPackages(p: with p; [
-      jupyterlab
       matplotlib
       numpy
-      pandas
-      pip
+      pygments
       scipy
     ]))
 
@@ -169,7 +164,7 @@ in
     #   name = "Vanilla-DMZ";
     #   size = 64;
     # };
-    # scriptPath = ".xsession-hm";
+    scriptPath = ".xsession-hm";
   };
 
   xresources.extraConfig =

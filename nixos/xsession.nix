@@ -18,7 +18,7 @@
     ];
 
     useGlamor = true;
-    wacom.enable = true;
+    # wacom.enable = true;
   };
 
   console.useXkbConfig = true;

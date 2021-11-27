@@ -138,5 +138,7 @@ syn match texMathSymbol '\\Z\%(scr\|cal\)' contained conceal cchar=𝓩
 syn match texMathSymbol '\\qquad' contained conceal cchar=┉
 syn match texMathSymbol '\\llt' contained conceal cchar=≪
 syn match texMathSymbol '\\ggt' contained conceal cchar=≫
+syn match texMathSymbol '\\up' contained conceal cchar=↑
+syn match texMathSymbol '\\down' contained conceal cchar=↓
 
 syn match texSpecialChar '\\#' contained conceal cchar=#

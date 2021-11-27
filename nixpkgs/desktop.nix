@@ -119,6 +119,7 @@ in
     ]))
 
     ### Fonts
+    source-han-sans
     source-han-mono
     julia-mono
   ];
@@ -147,9 +148,12 @@ in
     # };
   };
 
+  # xdg.configFile."plasma-workspace/env/set_window_manager.sh" = {
+  #     text = "export KDEWM=${pkgs.xmonad-with-packages}/bin/xmonad";
+  # };
   xsession = {
     enable = true;
-    windowManager.command = "exec startplasma-x11";
+    windowManager.command = lib.mkForce "exec startplasma-x11";
     initExtra = ''
       # export XMODIFIERS = "@im=fcitx"
       # export XMODIFIER = "@im=fcitx"

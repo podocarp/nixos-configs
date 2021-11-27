@@ -37,6 +37,7 @@
         pgf
         pgfplots
         physics
+        placeins
         prftree
         relsize
         rsfs

@@ -28,7 +28,6 @@ set signcolumn=yes
 set smartcase
 set smartindent
 set smarttab
-set splitright
 set termguicolors
 set title
 set undofile
@@ -49,44 +48,6 @@ let g:UltiSnipsEditSplit="vertical"
 nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
 nmap <silent> co <Plug>(coc-codelens-action)
 
-"Plug 'w0rp/ale'
-" let g:ale_disable_lsp = 1
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_insert_leave = 0
-" let g:ale_linters = {
-"     \'c': ['clang'],
-"     \'cpp': ['clang'],
-"     \'haskell': ['hlint'],
-"     \'javascript': ['eslint'],
-"     \'python': ['pylint'],
-"     \'typescript': ['eslint', 'tsserver'],
-"     \'tex': ['chktex']
-"     \}
-" let g:ale_fixers = {
-"     \'*': ['remove_trailing_lines', 'trim_whitespace'],
-"     \'c': ['clang-format'],
-"     \'cpp': ['clang-format'],
-"     \'haskell': ['hlint'],
-"     \'java': ['prettier'],
-"     \'javascript': ['eslint'],
-"     \'python': ['black'],
-"     \'typescript': ['prettier']
-"     \}
-" let g:ale_c_clang_options='-std=c11 -Wall -pthread'
-" let g:ale_c_gcc_options='-std=c11 -Wall -lpthread'
-" let g:ale_echo_msg_error_str='E'
-" let g:ale_echo_msg_warning_str='W'
-" let g:ale_echo_msg_info_str='I'
-" let g:ale_echo_msg_format='[%linter%][%severity%] %s'
-" let g:ale_max_signs=20
-
-nmap <silent> zk <Plug>(ale_previous_wrap)zz
-nmap <silent> zj <Plug>(ale_next_wrap)zz
-nmap <silent> <leader>* <Plug>(ale_find_references)
-nmap <silent> <leader>? <Plug>(ale_go_to_definition)
-nmap <silent> <leader>/ <Plug>(ale_detail)
-noremap <F1> :ALEFix<CR>
-
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
@@ -94,15 +55,15 @@ let g:vimtex_compiler_progname='nvr'
 " let g:vimtex_view_method='zathura'
 " let g:vimtex_view_zathura_check_libsynctex=0
 let g:vimtex_view_general_viewer='okular'
-let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
-let g:vimtex_view_general_options_latexmk = '--unique'
+let g:vimtex_view_general_options='--noraise file:@pdf\#src:@line@tex'
 let g:vimtex_syntax_conceal = {
     \ 'math_bounds' : 0,
+    \ 'math_delimiters' : 0,
     \ 'math_fracs' : 0,
 \}
-set conceallevel=2
-let g:tex_conceal="abdgm"
-
+" set conceallevel=2
+" let g:tex_conceal="abdgm"
+let g:vimtex_quickfix_method = 'pplatex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",
     \ 'callback' : 1,
@@ -111,7 +72,6 @@ let g:vimtex_compiler_latexmk = {
     \ 'hooks' : [],
     \ 'options' : [
     \   '-verbose',
-    \   '-file-line-error',
     \   '-synctex=1',
     \   '-interaction=nonstopmode',
     \   '-shell-escape',

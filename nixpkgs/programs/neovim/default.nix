@@ -11,7 +11,7 @@
       coc-pyright
       coc-snippets
       coc-tsserver
-      coc-vimtex
+      coc-texlab
       coc-nvim
       command-t
       nerdtree
@@ -34,11 +34,16 @@
     ];
 
     extraPackages = with pkgs; [
+      haskell-language-server
       haskellPackages.hlint
 
       nodePackages.eslint
       nodePackages.prettier
       nodePackages.typescript
+
+      pplatex
+      texlab
+      xclip
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -71,13 +76,19 @@
       "python" = {
           "linting.flake8Enabled" = true;
       };
-      "languageserver"= {
-        "haskell"= {
-          "command"= "haskell-language-server-wrapper";
-          "args"= ["--lsp"];
-          "rootPatterns"= ["*.cabal" "stack.yaml" "cabal.project"
+      "languageserver" = {
+        "haskell" = {
+          "command" = "haskell-language-server-wrapper";
+          "args" = ["--lsp"];
+          "rootPatterns" = ["*.cabal" "stack.yaml" "cabal.project"
             "package.yaml" "hie.yaml"];
           "filetypes"= ["haskell" "lhaskell"];
+          "initializationOptions" = {
+            "languageServerHaskell" = {
+              "hlintOn" = true;
+              "completionSnippetsOn" = true;
+            };
+          };
         };
       };
       "typescript.disableAutomaticTypeAcquisition" = true;

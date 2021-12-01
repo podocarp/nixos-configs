@@ -23,7 +23,7 @@
         settings = {
           server = {
             START_SSH_SERVER = true;
-            SSH_DOMAIN = "ssh.%(DOMAIN)s";
+            SSH_DOMAIN = "%(DOMAIN)s";
             LANDING_PAGE = "login";
           };
         };

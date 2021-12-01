@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
+  in
 {
   imports =
     [
@@ -36,25 +39,19 @@
 
   users.users.pengu = {
     isNormalUser = true;
+    openssh.authorizedKeys.keys = [ jxdkey ];
     uid = 1000;
   };
 
-  users.users.git = {
-    isNormalUser = true;
-    home = "/tank/git/";
-  };
-
-  # This is a public user made available to NFS and Samba
-  users.users.fileshare = {
-    isSystemUser = true;
-    # createHome = false;
-    # shell = "/run/current-system/sw/bin/nologin";
-    # uid = 42069;
-    group = "users";
-  };
-
   users.groups."users".gid = 100;
-  # users.groups."fileshare".gid = 42069;
+
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = false;
+    challengeResponseAuthentication = false;
+    ports = [ 69 ];
+  };
 
   environment.systemPackages = with pkgs; [
     git

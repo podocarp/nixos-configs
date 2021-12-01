@@ -49,6 +49,9 @@ in
     neofetch
     nmap
     openvpn
+    (python3.withPackages(p: with p; [
+      pip
+    ]))
     stress
     sysstat
     telnet
@@ -60,14 +63,6 @@ in
   ];
 
   xresources.extraConfig =
-  # builtins.readFile (
-  #   pkgs.fetchFromGitHub {
-  #     owner = "morhetz";
-  #     repo = "gruvbox-contrib";
-  #     rev = "master";
-  #     sha256 = "181irx5jas3iqqdlc6v34673p2s6bsr8l0nqbs8gsv88r8q066l6";
-  #   } + "/xresources/gruvbox-light.xresources"
-  #   ) +
   ''
       ! PaperColor Theme
       *.foreground: #4D4D4C
@@ -96,33 +91,6 @@ in
       ! white
       *.color7: #F5F5F5
       *.color15: #2D2D2C
-      XTerm*faceName: xft:JuliaMono
-      XTerm*faceSize: 10
-      xterm*renderFont: true
-      xterm*faceSize1: 10
-      xterm*faceSize2: 12
-      xterm*faceSize3: 15
-      xterm*faceSize4: 18
-      xterm*faceSize5: 21
-      xterm*faceSize6: 25
-      xterm*forceBoxChars: false
-      xterm*scaleHeight: 1.0
-      XTerm.vt100.translations: #override \n\
-        Ctrl <Key> minus: smaller-vt-font() \n\
-        Ctrl <Key> plus: larger-vt-font() \n\
-        Ctrl <Key> 0: set-vt-font(d) \n\
-        Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
-        Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
-        Ctrl <Key> 0: set-vt-font(d)
-      XTerm*backarrowKey: false
-      XTerm.ttyModes: erase ^?
-      XTerm*ptyInitialErase: true
-      XTerm*decTerminalID: vt340
-      XTerm*numColorRegisters: 256
-      XTerm*bellIsUrgent: true
-      XTerm*selectToClipboard: true
-      XTerm*trimSelection: true
-      XTerm.termName: st-256color
   '';
 }
 

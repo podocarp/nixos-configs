@@ -1,6 +1,8 @@
 { pkgs, lib, ... }:
 
 {
+  imports = [ <home-manager/nixos> ];
+
   boot.loader.grub = {
     useOSProber = true;
     efiSupport = true;
@@ -52,6 +54,7 @@
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
+  home-manager.users.pengu = import ./home-manager/desktop.nix;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;

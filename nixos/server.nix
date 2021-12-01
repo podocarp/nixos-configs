@@ -23,6 +23,7 @@ in
   imports =
     [
       ./hardware-configuration.nix
+      <home-manager/nixos>
 
       ((import ./containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
@@ -32,21 +33,26 @@ in
       ((import ./containers/stashapp/default.nix) { port = stashPort; })
       ((import ./containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
-      ((import ./containers/transmission/private.nix) {
-        config = config; lib = lib; port = trans2RpcPort;
-      })
+      # ((import ./containers/transmission/private.nix) {
+      #   config = config; lib = lib; port = trans2RpcPort;
+      # })
       ((import ./containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ./containers/mealie/default.nix) { port = mealiePort; })
-      ((import ./containers/mediawiki/default.nix) {
-        lib = lib; pkgs = pkgs; port = mediawikiPort;
-      })
+      # ((import ./containers/mediawiki/default.nix) {
+      #   lib = lib; pkgs = pkgs; port = mediawikiPort;
+      # })
 
       # ((import ./services/acme/default.nix) {dir = webroot;})
       ./services/fail2ban/default.nix
       # ((import ./services/grafana/default.nix) { port = grafanaPort;})
+      ./services/samba/default.nix
+      # ((import ./services/syncthing/default.nix) {lib = lib;
+      #  port = syncthingPort;})
+
       ((import ./services/nginx/default.nix) {
           portMap = [
             ["gitea" giteaPort]
+            ["ssh.gitea" giteaSshPort]
             ["grafana" grafanaPort]
             ["jellyfin" jellyfinPort]
             ["mealie" mealiePort]
@@ -58,9 +64,6 @@ in
             # ["wiki" gollumPort]
           ];
       })
-      ./services/samba/default.nix
-      ((import ./services/syncthing/default.nix) {lib = lib;
-        port = syncthingPort;})
     ];
 
   # Use the GRUB 2 boot loader.
@@ -70,7 +73,6 @@ in
     extraPools = [ "tank" ];
   };
   boot.loader.grub = {
-    efiSupport = true;
     efiInstallAsRemovable = true;
     efiSupport = true;
     device = "nodev";
@@ -172,15 +174,13 @@ in
   };
 
   users.users.pengu = {
-    isNormalUser = true;
     openssh.authorizedKeys.keys = [ jxdkey ];
-    uid = 1000;
   };
 
-  users.users.git = {
-    isNormalUser = true;
-    home = "/tank/git/";
-    openssh.authorizedKeys.keys = [ jxdkey ];
+  home-manager = {
+    useUserPackages = true;
+    useGlobalPkgs = true;
+    users.pengu = import ./home-manager/server.nix;
   };
 
   # This is a public user made available to NFS and Samba
@@ -234,10 +234,12 @@ in
     };
   };
 
-  nix.extraOptions = ''
-    plugin-files = ${pkgs.nix-plugins}/lib/nix/plugins
-    extra-builtins-file = ${toString ./misc/extra-builtins.nix}
-  '';
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
 
   # 250 is 5 hours. Visit man hdparm for details.
   powerManagement.powerUpCommands = ''

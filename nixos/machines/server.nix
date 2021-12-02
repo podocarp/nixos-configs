@@ -28,31 +28,30 @@ in
       ((import ../containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
       })
-      ((import ../containers/gollum/default.nix) { port = gollumPort; })
-      ((import ../containers/prosody/default.nix) { pkgs = pkgs; })
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
-      # ((import ../containers/transmission/private.nix) {
-      #   config = config; lib = lib; port = trans2RpcPort;
-      # })
+      ((import ../containers/transmission/private.nix) {
+        config = config; lib = lib; port = trans2RpcPort;
+      })
       ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      # ((import ../containers/mediawiki/default.nix) {
-      #   lib = lib; pkgs = pkgs; port = mediawikiPort;
-      # })
+      ((import ../containers/mediawiki/default.nix) {
+        config = config; pkgs = pkgs; port = mediawikiPort;
+      })
 
       # ((import ../services/acme/default.nix) {dir = webroot;})
       ../services/fail2ban/default.nix
       ../services/samba/default.nix
-      # ((import ../services/syncthing/default.nix) {lib = lib;
-      #  port = syncthingPort;})
+      ((import ../services/syncthing/default.nix) {
+        config = config; lib = lib; port = syncthingPort;
+      })
 
       ((import ../services/nginx/default.nix) {
+          config = config;
           portMap = [
             ["gitea" giteaPort]
             ["ssh.gitea" giteaSshPort]
-            ["grafana" grafanaPort]
             ["jellyfin" jellyfinPort]
             ["mealie" mealiePort]
             ["stash" stashPort]
@@ -60,10 +59,14 @@ in
             ["transmission" transRpcPort]
             ["torrent" trans2RpcPort]
             ["wiki" mediawikiPort]
-            # ["wiki" gollumPort]
           ];
       })
     ];
+
+  sops = {
+    defaultSopsFile = ../secrets/secrets.yaml;
+    age.keyFile = "/home/pengu/.config/sops/age/keys.txt";
+  };
 
   # Use the GRUB 2 boot loader.
   boot.supportedFilesystems = [ "zfs" ];
@@ -76,8 +79,6 @@ in
     efiSupport = true;
     device = "nodev";
   };
-
-  time.timeZone = "Asia/Singapore";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future.
@@ -157,10 +158,10 @@ in
       enable = true;
       checkReversePath = "loose";
       allowedTCPPorts = [
-        69 80 443 giteaSshPort
+        69 80 443
       ];
       allowedUDPPorts = [
-        wireguardPort
+        # wireguardPort
       ];
     };
   };
@@ -174,6 +175,7 @@ in
 
   users.users.pengu = {
     openssh.authorizedKeys.keys = [ jxdkey ];
+    extraGroups = [ config.users.groups.keys.name ];
   };
 
   home-manager = {
@@ -249,6 +251,8 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
+
+  time.timeZone = "Asia/Singapore";
 
   system.stateVersion = "20.09";
 }

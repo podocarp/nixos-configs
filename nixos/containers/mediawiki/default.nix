@@ -1,4 +1,7 @@
-{ lib, pkgs, port, ... }:
+{ config, pkgs, port, ... }:
+let
+    pwdfilePath = "/tmp/password";
+in
 {
   containers.mediawiki= {
     autoStart = true;
@@ -16,6 +19,10 @@
         hostPath = "/tank/local/mediawiki/mysql";
         isReadOnly = false;
       };
+      "${pwdfilePath}" = {
+        hostPath = config.sops.secrets.mediawiki.path;
+        isReadOnly = true;
+      };
     };
 
     config = {
@@ -23,11 +30,7 @@
         enable = true;
         name = "My Wiki";
 
-        passwordFile = builtins.toFile "temp"
-          (builtins.elemAt
-            (lib.strings.splitString "\n"
-              (builtins.extraBuiltins.getSecret "server/mediawiki"))
-            2);
+        passwordFile = pwdfilePath;
 
         poolConfig = {
             "pm" = "dynamic";
@@ -64,4 +67,6 @@
       };
     };
   };
+
+  sops.secrets."mediawiki" = {};
 }

@@ -5,30 +5,21 @@ in
 {
   virtualisation.oci-containers.containers."transmission_private" = {
     autoStart = true;
-    image = "haugene/transmission-openvpn";
+    image = "haugene/transmission-openvpn:latest";
     volumes = [
       "/tank/local/transmission_priv:${dir}"
       "/tank/private/Downloads:/Downloads"
+      "${config.sops.secrets.openvpn-credentials.path}:/config/openvpn-credentials.txt"
     ];
     ports = [ "${toString port}:9091" ];
-    extraOptions = ["--cap-add=NET_ADMIN"];
+    extraOptions = [ "--cap-add=NET_ADMIN" ];
     environment =
-    # file format:
-    # <pass>
-    # ---
-    # user: <user>
-    let
-      creds =
-        lib.strings.splitString "\n"
-          (builtins.extraBuiltins.getSecret "nordvpn");
-    in
     {
       PUID = builtins.toString config.users.users."pengu".uid;
       PGID = builtins.toString config.users.groups."users".gid;
       OPENVPN_PROVIDER = "NORDVPN";
-      OPENVPN_USERNAME =
-        lib.strings.removePrefix "user: " (builtins.elemAt creds 2);
-      OPENVPN_PASSWORD = builtins.elemAt creds 0;
+      OPENVPN_USERNAME = "**None**";
+      OPENVPN_PASSWORD = "**None**";
       NORDVPN_COUNTRY = "CH";
       NORDVPN_CATEGORY = "standard";
       NORDVPN_PROTOCOL = "UDP";
@@ -51,4 +42,6 @@ in
       TRANSMISSION_RATIO_LIMIT = "1";
     };
   };
+
+  sops.secrets."openvpn-credentials" = {};
 }

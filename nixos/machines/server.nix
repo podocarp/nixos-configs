@@ -1,11 +1,5 @@
 { config, pkgs, lib, ... }:
-
 let
-  jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
-  # This path is used by Let's encrypt and all services that use it to generate
-  # and withdraw certs
-  webroot = "/var/www/hs";
-
   giteaPort = 3001;
   giteaSshPort = 3002;
   gollumPort = 4000;
@@ -40,12 +34,13 @@ in
         config = config; pkgs = pkgs; port = mediawikiPort;
       })
 
-      # ((import ../services/acme/default.nix) {dir = webroot;})
       ../services/fail2ban/default.nix
+      ../services/openssh/default.nix
       ../services/samba/default.nix
       ((import ../services/syncthing/default.nix) {
         config = config; lib = lib; port = syncthingPort;
       })
+      ../services/zfs/default.nix
 
       ((import ../services/nginx/default.nix) {
           config = config;
@@ -114,39 +109,6 @@ in
       ];
     };
 
-    # wireguard = {
-    #   enable = true;
-    #   interfaces = {
-    #     wg0 = {
-    #       ips = [ "192.168.1.109/24" ];
-    #       listenPort = wireguardPort;
-
-    #       # This allows the wireguard server to route traffic to the
-    #       # internet
-    #       postSetup = ''
-#${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
-    #       '';
-
-    #       postShutdown = ''
-#${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.100.0.0/24 -o eth0 -j MASQUERADE
-    #       '';
-
-    #       privateKey =
-    #         builtins.elemAt
-    #           (lib.strings.splitString "\n"
-    #             (builtins.extraBuiltins.getSecret "nix/wireguard"))
-    #           0;
-
-    #       peers = [
-    #         {
-    #           publicKey = "EnNBgGNhYPEWP+eb/uy4Ye4/YCxFCgy1kMQtb+H/yw4=";
-    #           allowedIPs = [ "192.168.1.110/32" ];
-    #         }
-    #       ];
-    #     };
-    #   };
-    # };
-
     nat = {
       # Remap container traffic to use external IP address
       enable = true;
@@ -158,11 +120,9 @@ in
       enable = true;
       checkReversePath = "loose";
       allowedTCPPorts = [
-        69 80 443
+        69 80 443 giteaSshPort
       ];
-      allowedUDPPorts = [
-        # wireguardPort
-      ];
+      allowedUDPPorts = [ ];
     };
   };
 
@@ -174,7 +134,6 @@ in
   };
 
   users.users.pengu = {
-    openssh.authorizedKeys.keys = [ jxdkey ];
     extraGroups = [ config.users.groups.keys.name ];
   };
 
@@ -211,29 +170,6 @@ in
     tcpdump
     wget
   ];
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = false;
-    challengeResponseAuthentication = false;
-    ports = [ 69 ];
-  };
-
-  services.zfs = {
-    autoSnapshot = {
-      enable = true;
-      frequent = 0;
-      hourly = 0;
-      daily = 7;
-      weekly = 4;
-      monthly = 0;
-    };
-    autoScrub = {
-      enable = true;
-      interval = "monthly";
-    };
-  };
 
   nix = {
     package = pkgs.nixFlakes;

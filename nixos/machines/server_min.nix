@@ -1,12 +1,11 @@
-{ config, pkgs, lib, ... }:
+# This is a minimal config to get things started.
 
-let
-  jxdkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo9zWNi53WN8NRWNm2ZwMAVy3YPK7IS9nbKo0hHhy+HYjwwuNx0PJg1XaUuJpbN1nKiHh2UJCRO/OsZNFtLz23abMd41jjiNT5+u2NWYjZYC2uZnqirJXr2VbJDHKWndyrC3EZhDdx6MZ44zDC9LirTZETgHgc75I24HvLLlkSfSVjOlMUe1SP38+gpypruzIEA9olLoQ81UjxWarr1w7E5BWKfzvjuzNVKzf3Yl4t6hxpvvHU4Gg8Yuu7fyf0dmNpC6r+HC4qGNS/3MkZwFiExg+k2ACXS0yBPA+40ANQYsPiEGhTLvpusK4BvstV7AnbRLFdrGLTs6E+2XZCaAK5 openpgp:0x79E90D11";
-  in
+{ config, pkgs, lib, ... }:
 {
   imports =
     [
       ./hardware-configuration.nix
+      ../services/openssh/default.nix
     ];
 
   boot.initrd.supportedFilesystems = [ "zfs" ];
@@ -21,9 +20,6 @@ let
 
   time.timeZone = "Asia/Singapore";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future.
-  # networking.useDHCP = false;
   networking = {
     hostName = "obsidian";
     # Random 8 digit hex string for ZFS to work
@@ -35,22 +31,6 @@ let
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-  };
-
-  users.users.pengu = {
-    isNormalUser = true;
-    openssh.authorizedKeys.keys = [ jxdkey ];
-    uid = 1000;
-  };
-
-  users.groups."users".gid = 100;
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    passwordAuthentication = false;
-    challengeResponseAuthentication = false;
-    ports = [ 69 ];
   };
 
   environment.systemPackages = with pkgs; [

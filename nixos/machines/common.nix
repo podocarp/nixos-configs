@@ -95,10 +95,6 @@
     };
   };
 
-  # Installs fcitx for CJK input. Remove if not needed.
-  i18n.inputMethod.enabled = "fcitx";
-  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];
-
   # Kills hanging services faster.
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=30s

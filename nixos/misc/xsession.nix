@@ -27,4 +27,9 @@
   programs.dconf.enable = true;
   services.dbus.packages = with pkgs; [ gnome3.dconf ];
   fonts.fontconfig.enable = true;
+
+  # Installs fcitx for CJK input. Remove if not needed.
+  i18n.inputMethod.enabled = "fcitx";
+  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];
+
 }

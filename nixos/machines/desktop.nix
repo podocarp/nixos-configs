@@ -28,8 +28,8 @@
   };
 
   programs.ssh.extraConfig = ''
-    HostKeyAlgorithms ssh-rsa
-    PubkeyAcceptedKeyTypes ssh-rsa
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedKeyTypes +ssh-rsa
   '';
 
   virtualisation.virtualbox.host.enable = true;

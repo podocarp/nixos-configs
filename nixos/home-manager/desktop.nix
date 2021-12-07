@@ -30,7 +30,6 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
-    # ./programs/firefox/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
@@ -40,13 +39,10 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    # ./programs/zathura/default.nix
+    ./programs/zathura/default.nix
 
-    # ((import ./services/dunst/default.nix) {
-    #   pkgs = pkgs; config = config; homeDir = homeDir;
-    # })
     ./services/gpg-agent/default.nix
-    # ./services/random-background/default.nix
+    ./services/syncthing/default.nix
 
     ./scripts/default.nix
   ];

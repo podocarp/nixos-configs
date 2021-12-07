@@ -11,10 +11,10 @@
       { crxPath = pkgs.fetchFromGitHub {
           owner = "NeverDecaf";
           repo = "chromium-web-store";
-          rev = "master";
+          rev = "v1.4.0";
           sha256 = "1xxqg61g9mvxja8kp8g01dmdrd51sidfsk62jwzaazawkpdv3624";
         } + "/Chromium Web Store.crx";
-        version = "1.3.0";
+        version = "1.4.0";
         id = "ocaahdebbfolfmndjeplogmgcagdmblk";
       }
     ];

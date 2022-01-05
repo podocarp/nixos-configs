@@ -7,5 +7,8 @@
     keyMode = "vi";
     terminal = "screen-256color";
     extraConfig = builtins.readFile ./tmux.conf;
+    plugins = with pkgs; [
+      tmuxPlugins.yank
+    ];
   };
 }

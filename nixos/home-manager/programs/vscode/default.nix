@@ -19,6 +19,17 @@
       "editor.lineNumbers" = "relative";
       "editor.acceptSuggestionOnCommitCharacter" = false;
       "workbench.activityBar.visible" = false;
+      "workbench.colorTheme" = "Default Light+";
     };
+    keybindings = [
+      {
+        key = "ctrl+tab";
+        command = "workbench.action.nextEditor";
+      }
+      {
+        key = "ctrl+shift+tab";
+        command = "workbench.action.previousEditor";
+      }
+    ];
   };
 }

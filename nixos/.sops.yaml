@@ -7,4 +7,3 @@ creation_rules:
     key_groups:
     - age:
       - *jxd_age
-      - *server_age

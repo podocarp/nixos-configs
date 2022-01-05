@@ -59,7 +59,7 @@ in
     ];
 
   sops = {
-    defaultSopsFile = ../secrets/test2.yaml;
+    defaultSopsFile = ../secrets/secrets.yaml;
     gnupg.sshKeyPaths = [];
     age.keyFile = "/var/lib/sops/age/keys.txt";
   };

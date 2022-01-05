@@ -59,8 +59,9 @@ in
     ];
 
   sops = {
-    defaultSopsFile = ../secrets/secrets.yaml;
-    age.keyFile = "/home/pengu/.config/sops/age/keys.txt";
+    defaultSopsFile = ../secrets/test2.yaml;
+    gnupg.sshKeyPaths = [];
+    age.keyFile = "/var/lib/sops/age/keys.txt";
   };
 
   # Use the GRUB 2 boot loader.
@@ -75,12 +76,9 @@ in
     device = "nodev";
   };
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future.
-  # networking.useDHCP = false;
   networking = {
     hostName = "obsidian";
-    # Random 8 digit hex string for ZFS to work
+    # Random 8 digit hex string for ZFS
     hostId = "492A28F4";
 
     # Internet facing

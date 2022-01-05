@@ -30,7 +30,6 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
-    # ./programs/firefox/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
@@ -40,13 +39,10 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    # ./programs/zathura/default.nix
+    ./programs/zathura/default.nix
 
-    # ((import ./services/dunst/default.nix) {
-    #   pkgs = pkgs; config = config; homeDir = homeDir;
-    # })
     ./services/gpg-agent/default.nix
-    # ./services/random-background/default.nix
+    ./services/syncthing/default.nix
 
     ./scripts/default.nix
   ];
@@ -138,14 +134,12 @@ in
   };
 
   # This must be enabled for fonts to be installed through packages.
-  fonts.fontconfig.enable = true;
+  # fonts.fontconfig.enable = true;
+
+  i18n.inputMethod.enabled = "fcitx";
+  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];
 
   nixpkgs.config.packageOverrides = pkgs : {
-    # nur = import
-    #   (builtins.fetchTarball
-    #     "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-    #   inherit pkgs;
-    # };
   };
 
   # xdg.configFile."plasma-workspace/env/set_window_manager.sh" = {
@@ -155,31 +149,18 @@ in
     enable = true;
     windowManager.command = lib.mkForce "exec startplasma-x11";
     initExtra = ''
-      # export XMODIFIERS = "@im=fcitx"
-      # export XMODIFIER = "@im=fcitx"
-      # export GTK_IM_MODULE = "@im=fcitx"
-      # export QT_IM_MODULE = "@im=fcitx"
+      export XMODIFIERS = "@im=fcitx"
+      export XMODIFIER = "@im=fcitx"
+      export GTK_IM_MODULE = "@im=fcitx"
+      export QT_IM_MODULE = "@im=fcitx"
     '';
     profileExtra = ''
      autorandr -c
     '';
-    # pointerCursor = {
-    #   package = pkgs.vanilla-dmz;
-    #   name = "Vanilla-DMZ";
-    #   size = 64;
-    # };
     scriptPath = ".xsession-hm";
   };
 
   xresources.extraConfig =
-  # builtins.readFile (
-  #   pkgs.fetchFromGitHub {
-  #     owner = "morhetz";
-  #     repo = "gruvbox-contrib";
-  #     rev = "master";
-  #     sha256 = "181irx5jas3iqqdlc6v34673p2s6bsr8l0nqbs8gsv88r8q066l6";
-  #   } + "/xresources/gruvbox-light.xresources"
-  #   ) +
   ''
       ! PaperColor Theme
       *.foreground: #4D4D4C

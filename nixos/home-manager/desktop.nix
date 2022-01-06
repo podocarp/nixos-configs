@@ -134,7 +134,7 @@ in
   };
 
   # This must be enabled for fonts to be installed through packages.
-  # fonts.fontconfig.enable = true;
+  fonts.fontconfig.enable = lib.mkForce true;
 
   i18n.inputMethod.enabled = "fcitx";
   i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin ];

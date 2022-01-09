@@ -2,8 +2,6 @@
 let
   giteaPort = 3001;
   giteaSshPort = 3002;
-  gollumPort = 4000;
-  grafanaPort = 3000;
   jellyfinPort = 8096;
   mealiePort = 9925;
   mediawikiPort = 4001;
@@ -22,16 +20,16 @@ in
       ((import ../containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
       })
+      ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
+      ((import ../containers/mealie/default.nix) { port = mealiePort; })
+      ((import ../containers/mediawiki/default.nix) {
+        config = config; pkgs = pkgs; port = mediawikiPort;
+      })
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
       ((import ../containers/transmission/private.nix) {
         config = config; lib = lib; port = trans2RpcPort;
-      })
-      ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
-      ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      ((import ../containers/mediawiki/default.nix) {
-        config = config; pkgs = pkgs; port = mediawikiPort;
       })
 
       ../services/fail2ban/default.nix

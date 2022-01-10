@@ -9,7 +9,6 @@ set dictionary+=/usr/share/dict/words
 set expandtab
 set incsearch
 set lazyredraw
-set linebreak
 set list
 set mouse=a
 set nobackup

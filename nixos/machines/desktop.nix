@@ -32,6 +32,15 @@
     PubkeyAcceptedKeyTypes +ssh-rsa
   '';
 
+  systemd.services.fix_acpi_wakeup = {
+    serviceConfig.Type = "oneshot";
+    description = "Prevents USB from waking the system up so the system can sleep properly.";
+    script = ''
+      ${pkgs.bash}/bin/bash -c 'echo PTXH > /proc/acpi/wakeup; echo XHC0 > /proc/acpi/wakeup;'
+    '';
+    wantedBy = [ "multi-user.target" ];
+  };
+
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
   home-manager.users.pengu = import ../home-manager/desktop.nix;

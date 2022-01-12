@@ -62,7 +62,6 @@ in
     ffmpeg
     gcc
     gdb
-    glxinfo
     gnumake
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
@@ -74,7 +73,6 @@ in
     imagemagick
     inkscape
     iotop
-    jmtpfs
     kfind
     lm_sensors
     neofetch
@@ -95,7 +93,8 @@ in
     unzip
     usbutils # for lsusb
     veracrypt
-    xdotool # vimtex needs this
+    xdotool
+    xclip
     xorg.xev
     xorg.xprop
     xterm
@@ -193,12 +192,12 @@ in
     XTerm*faceName: xft:JuliaMono
     XTerm*faceSize: 10
     XTerm*forceBoxChars: false
-    XTerm.VT100.Translations: #override \n\
+    XTerm.vt100.translations: #override \n\
       Ctrl <Key> minus: smaller-vt-font() \n\
       Ctrl <Key> plus: larger-vt-font() \n\
       Ctrl <Key> 0: set-vt-font(d) \n\
       Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
-      Ctrl Shift <Key> V: insert-selection(CLIPBOARD) \n\
+      Ctrl Shift <Key> V: insert-selection(CLIPBOARD)
     XTerm*backarrowKey: false
     XTerm*ttyModes: erase ^?
     XTerm*ptyInitialErase: true

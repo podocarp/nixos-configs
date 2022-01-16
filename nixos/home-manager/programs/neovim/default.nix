@@ -102,5 +102,15 @@
     };
   };
 
-  xdg.configFile."nvim/after/syntax/tex.vim".source = ./syntax/tex.vim;
+  # Used for a snippet.
+  xdg.configFile.inkscapeTemplate = {
+    source = builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/podocarp/riceDumpling/master/.config/inkscape/templates/default1024.svg";
+      sha256 = "1kyasmdv02ylk6qz3kxv46rp3czxv5ss07cs91dacadpy4l1dfrq";
+    };
+    target = "inkscape/templates/default1024.svg";
+  };
+
+  # custom tex conceal
+  # xdg.configFile."nvim/after/syntax/tex.vim".source = ./syntax/tex.vim;
 }

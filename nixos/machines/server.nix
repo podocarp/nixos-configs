@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+args@{ config, pkgs, lib, ... }:
 let
   giteaPort = 3001;
   giteaSshPort = 3002;
@@ -22,26 +22,25 @@ in
       })
       ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      ((import ../containers/mediawiki/default.nix) {
-        config = config; pkgs = pkgs; port = mediawikiPort;
+      ((import ../containers/mediawiki/default.nix) args // {
+        port = mediawikiPort;
       })
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
-      ((import ../containers/transmission/private.nix) {
-        config = config; lib = lib; port = trans2RpcPort;
+      ((import ../containers/transmission/private.nix) args // {
+        port = trans2RpcPort;
       })
 
       ../services/fail2ban/default.nix
       ../services/openssh/default.nix
       ../services/samba/default.nix
-      ((import ../services/syncthing/default.nix) {
-        config = config; lib = lib; port = syncthingPort;
+      ((import ../services/syncthing/default.nix) args // {
+        port = syncthingPort;
       })
       ../services/zfs/default.nix
 
-      ((import ../services/nginx/default.nix) {
-          config = config;
+      ((import ../services/nginx/default.nix) args // {
           portMap = [
             ["gitea" giteaPort]
             ["ssh.gitea" giteaSshPort]

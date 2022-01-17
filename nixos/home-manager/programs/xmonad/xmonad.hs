@@ -37,6 +37,7 @@ myKeys =
   , ("M-o", scratchpadSpawnActionTerminal myTerm)
   , ("M-g", goToSelected def)
   , ("M-d", spawn "rofi -show combi") -- launch dmenu
+  , ("M-f", spawn "rofi-pass") -- launch dmenu
   , ("M-<Tab>", toggleWS) -- exclude those on other screens
   ]
   ++

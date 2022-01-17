@@ -5,7 +5,8 @@
     [
       ''${builtins.fetchGit {
           url = "https://github.com/NixOS/nixos-hardware.git";
-	} }/lenovo/thinkpad/x1-extreme''
+      }}/lenovo/thinkpad/x1-extreme''
+      <home-manager/nixos>
     ];
 
   boot.loader.grub.device = "nodev";
@@ -25,7 +26,6 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
-    # this is useless, fuck nvidia
     sync.enable = true;
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
@@ -42,10 +42,10 @@
     ];
   };
 
+  home-manager.users.pengu = import ../home-manager/laptop.nix;
+
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  fonts.fontconfig.subpixel.rgba = "none";
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {
@@ -65,11 +65,6 @@
     [7     67     76]
     [127   70     32767]
   ];
-
-  services.xsession.libinput = {
-    enable = true;
-    touchpad.scrollButton = 2;
-  };
 
   system.stateVersion = "20.09";
 }

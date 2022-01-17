@@ -10,7 +10,7 @@
             owner = "NeverDecaf";
             repo = "chromium-web-store";
             rev = "v1.4.3";
-            sha256 = "1xxqg61g9mvxja8kp8g01dmdrd51sidfsk62jwzaazawkpdv3624";
+            sha256 = "sha256-xKjtW3O0TMtzxMeekssD/4QTd7pe3c1H5Dep31g+OBY=";
           } + "/Chromium Web Store.crx";
           version = "1.4.3";
           id = "ocaahdebbfolfmndjeplogmgcagdmblk";

@@ -13,5 +13,9 @@
         ''
       );
   };
-  xdg.configFile."xmobar/xmobarrc".source = ./xmobarrc;
+
+  programs.xmobar = {
+    enable = true;
+    extraConfig = builtins.readFile ./xmobarrc;
+  };
 }

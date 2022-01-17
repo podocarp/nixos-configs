@@ -9,6 +9,7 @@
     extraConfig = {
         modi = "combi,window";
         combi-modi = "drun,run";
+        monitor = "-1";
     };
     pass = {
       enable = true;

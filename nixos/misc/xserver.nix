@@ -1,12 +1,8 @@
 # This file includes things related to X and stuff on X.
 { pkgs, ... }:
 
-{
-  services.xserver = {
+{ services.xserver = {
     enable = true;
-    xkbOptions = "caps:escape,keypad:pointerkeys"; # this maps caps to escape.
-
-    desktopManager.plasma5.enable = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager.session = [
@@ -20,6 +16,4 @@
     useGlamor = true;
     # wacom.enable = true;
   };
-
-  console.useXkbConfig = true;
 }

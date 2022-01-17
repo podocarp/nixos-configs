@@ -44,6 +44,7 @@
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
   home-manager.users.pengu = import ../home-manager/desktop.nix;
+  services.xserver.desktopManager.plasma5.enable = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;

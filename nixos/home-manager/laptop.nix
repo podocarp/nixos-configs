@@ -35,6 +35,7 @@ in
     ./programs/vscode/default.nix
     ./programs/zathura/default.nix
 
+    ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
     ./services/syncthing/default.nix
     ./services/random-background/default.nix
@@ -48,7 +49,9 @@ in
   ];
 
   home.packages = with pkgs; [
+    arandr
     brightnessctl
+    wpa_supplicant
   ];
 
   xsession = {

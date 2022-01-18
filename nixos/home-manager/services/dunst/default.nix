@@ -15,7 +15,7 @@ in
     executable = true;
   };
 
-  config.home.packages = [ libnotify ];
+  home.packages = [ pkgs.libnotify ];
 
   services.dunst = {
     enable = true;

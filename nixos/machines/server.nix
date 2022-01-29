@@ -22,25 +22,25 @@ in
       })
       ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      ((import ../containers/mediawiki/default.nix) args // {
+      ((import ../containers/mediawiki/default.nix) (args // {
         port = mediawikiPort;
-      })
+      }))
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
-      ((import ../containers/transmission/private.nix) args // {
+      ((import ../containers/transmission/private.nix) (args // {
         port = trans2RpcPort;
-      })
+      }))
 
       ../services/fail2ban/default.nix
       ../services/openssh/default.nix
       ../services/samba/default.nix
-      ((import ../services/syncthing/default.nix) args // {
+      ((import ../services/syncthing/default.nix) (args // {
         port = syncthingPort;
-      })
+      }))
       ../services/zfs/default.nix
 
-      ((import ../services/nginx/default.nix) args // {
+      ((import ../services/nginx/default.nix) (args // {
           portMap = [
             ["gitea" giteaPort]
             ["ssh.gitea" giteaSshPort]
@@ -52,7 +52,7 @@ in
             ["torrent" trans2RpcPort]
             ["wiki" mediawikiPort]
           ];
-      })
+      }))
     ];
 
   sops = {
@@ -73,7 +73,6 @@ in
       efiSupport = true;
       device = "nodev";
     };
-    kernelPackages = pkgs.linuxPackages_5_15_hardened
   };
 
   networking = {

@@ -4,7 +4,7 @@
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
-    challengeResponseAuthentication = false;
+    kbdInteractiveAuthentication = false;
     ports = [ 69 ];
   };
 

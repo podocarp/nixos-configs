@@ -62,15 +62,18 @@ in
   };
 
   # Use the GRUB 2 boot loader.
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs = {
-    requestEncryptionCredentials = true;
-    extraPools = [ "tank" ];
-  };
-  boot.loader.grub = {
-    efiInstallAsRemovable = true;
-    efiSupport = true;
-    device = "nodev";
+  boot = {
+    supportedFilesystems = [ "zfs" ];
+    zfs = {
+      requestEncryptionCredentials = true;
+      extraPools = [ "tank" ];
+    };
+    loader.grub = {
+      efiInstallAsRemovable = true;
+      efiSupport = true;
+      device = "nodev";
+    };
+    kernelPackages = pkgs.linuxPackages_5_15_hardened
   };
 
   networking = {

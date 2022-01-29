@@ -3,7 +3,7 @@
   boot.kernelPackages = pkgs.linuxCustom;
   nixpkgs.overlays = [
     (self: super: {
-     linuxCustom = pkgs.linuxPackagesFor (pkgs.linux.override {
+     linuxCustom = pkgs.linuxPackagesFor (pkgs.linux_5_15.override {
          structuredExtraConfig = with lib.kernel; {
          MACINTOSH_DRIVERS = no;
          NET_VENDOR_3COM = no;

@@ -43,6 +43,10 @@ in
     ./misc/xresources/default.nix
   ];
 
+  home.packages = with pkgs; [
+    libreoffice
+  ];
+
   xsession = {
     enable = true;
     windowManager.command = lib.mkForce "exec startplasma-x11";

@@ -54,38 +54,56 @@ snippet beg "Begin" w
 \end{$1}
 endsnippet
 
-snippet def "Definition" b
-\begin{definition}[${1:Title}]
-    $2
-\end{definition}
-endsnippet
-
 snippet ex "Example" b
 \begin{example}
     $1
 \end{example}
 endsnippet
 
+snippet aln "Align" b
+\begin{align}
+    $1
+\end{align}
+endsnippet
+
+snippet alnn "Align unnumbered" b
+\begin{align*}
+    $1
+\end{align*}
+endsnippet
+
+snippet eqn "Equation" b
+\begin{equation}
+    $1
+\end{equation}
+endsnippet
+
+snippet eqnn "Equation unnumbered" b
+\begin{equation*}
+    $1
+\end{equation*}
+endsnippet
+
 snippet thm "Theorem" b
-\begin{thm}[${1:Title}]
+\begin{thm}[${1:}]
     $2
 \end{thm}
 endsnippet
 
-snippet thm* "Theorem unnumbered" b
-\begin{thm*}[${1:Title}]
+snippet thmm "Theorem unnumbered" b
+\begin{thm*}[${1:}]
     $2
 \end{thm*}
 endsnippet
 
 snippet lem "Lemma" b
-\begin{lem}[${1:Title}]
+\begin{lem}[${1:}]
     $2
 \end{lem}
 endsnippet
 
 snippet cor "Corollary" b
-\begin{cor}[${1:Title}]
+\begin{cor}[${1:}]
     $2
 \end{cor}
 endsnippet
@@ -102,39 +120,6 @@ snippet no "Note" b
 }
 endsnippet
 
-snippet item "Itemize" b
-\begin{itemize}[${1:<+->}]
-    \item $0
-\end{itemize}
-endsnippet
-
-snippet enum "Enumerate" b
-\begin{enumerate}[${1:i.}]
-    \item $0
-\end{enumerate}
-endsnippet
-
-snippet tabx "Tabularx" b
-\begin{table}[ht]
-\centering
-\begin{tabularx}{.9\textwidth}{${3:X}}\hline
-    $4
-\end{tabularx}
-\caption{$1}%
-\label{tab:$2}
-\end{table}
-endsnippet
-
-snippet tab "Table" b
-\begin{table}[ht]
-\centering
-\begin{tabular}{${3:c}}\hline
-    $4
-\end{tabular}
-\caption{$1}%
-\label{tab:$2}
-\end{table}
-endsnippet
 
 snippet em "Emph" w
 \emph{$1}$2
@@ -158,18 +143,6 @@ endsnippet
 
 snippet inf "Infimum" w
 \inf\qty{$1}$2
-endsnippet
-
-snippet () "Bracket" i
-\qty($1)$2
-endsnippet
-
-snippet [] "Bracket" i
-\qty[$1]$2
-endsnippet
-
-snippet {} "Bracket" i
-\qty{$1}$2
 endsnippet
 
 snippet <> "Angle" i
@@ -235,23 +208,6 @@ snippet "\|([^\$\|]+?)\>\>" "Ket" rA
 \ket{`!p snip.rv = match.group(1)`}
 endsnippet
 
-priority 1
-
-context "math()"
-snippet "\<([^\$\|]+?)\|([^\|\$]+?)\>\>" "Braket" rA
-`!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
-endsnippet
-
-context "math()"
-snippet "\|([^\$\|]+?)\>\<([^\|\$]+?)\|\|" "Ketbra" rA
-`!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
-endsnippet
-
-context "math()"
-snippet "\<([^\$\|]+?)\|(.+?)\|([^\|\$]+?)\>\>" "Braket" rA
-`!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
-    match.group(1), match.group(2), match.group(3))`
-endsnippet
 
 snippet arr "Array" b
 \begin{array}{${1:ccc}}
@@ -266,19 +222,6 @@ snippet algo "Algorithm block" b
 }
 \caption{${1:caption}}\label{alg:${2:label}}
 \end{algorithm}
-endsnippet
-
-priority 10
-snippet "mint(\S+)?" "Minted code typeset" br
-\begin{minted}[fontsize=\\${2:footnotesize}]{${1:`!p
-snip.rv = match.group(1) if match.group(1) is not None else "lang"`}}
-${3:remember to fragile}
-\end{minted}
-endsnippet
-
-priority 100
-snippet "mintin" "Minted code inline" b
-\mintinline{${1:lang}}|$2|$3
 endsnippet
 
 snippet subfigure "Fig with subfigs" w
@@ -340,12 +283,89 @@ snippet cas "Case" w
 \end{cases}
 endsnippet
 
-priority 1000
+priority 1
+
+snippet () "Bracket" i
+\qty($1)$2
+endsnippet
+
+snippet [] "Bracket" i
+\qty[$1]$2
+endsnippet
+
+snippet {} "Bracket" i
+\qty{$1}$2
+endsnippet
+
+
+snippet enum "Enumerate" b
+\begin{enumerate}[${1:(i)}]
+\item $2
+\end{enumerate}
+endsnippet
+
+snippet item "Itemize" b
+\begin{itemize}[${1:<+->}]
+\item $2
+\end{itemize}
+endsnippet
+
+snippet tabx "Tabularx" b
+\begin{table}[ht]
+\centering
+\begin{tabularx}{.9\textwidth}{${3:X}}\hline
+    $4
+\end{tabularx}
+\caption{$1}%
+\label{tab:$2}
+\end{table}
+endsnippet
+
+snippet tab "Table" b
+\begin{table}[ht]
+\centering
+\begin{tabular}{${3:c}}\hline
+    $4
+\end{tabular}
+\caption{$1}%
+\label{tab:$2}
+\end{table}
+endsnippet
+
+context "math()"
+snippet "\<([^\$\|]+?)\|([^\|\$]+?)\>\>" "Braket" rA
+`!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+context "math()"
+snippet "\|([^\$\|]+?)\>\<([^\|\$]+?)\|\|" "Ketbra" rA
+`!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+context "math()"
+snippet "\<([^\$\|]+?)\|(.+?)\|([^\|\$]+?)\>\>" "Braket" rA
+`!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
+    match.group(1), match.group(2), match.group(3))`
+endsnippet
+
+snippet "mint(\S+)?" "Minted code typeset" br
+\begin{minted}[fontsize=\\${2:footnotesize}]{${1:`!p
+snip.rv = match.group(1) if match.group(1) is not None else "lang"`}}
+${3:remember to fragile}
+\end{minted}
+endsnippet
+
+priority 2
+snippet "mintin" "Minted code inline" b
+\mintinline{${1:lang}}|$2|$3
+endsnippet
+
+priority 10
 snippet ink "Inkscape preparation" w
 fig $1 fig$0
 endsnippet
 
-priority 10000
+priority 20
 snippet "fig (.*) fig" "Insert inkscape figure" wr
 \begin{figure}[ht]
 \centering

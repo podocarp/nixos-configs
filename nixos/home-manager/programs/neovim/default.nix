@@ -8,11 +8,11 @@
       coc-css
       coc-html
       coc-json
+      coc-nvim
       coc-pyright
       coc-snippets
       coc-tsserver
-      coc-texlab
-      coc-nvim
+      coc-vimtex
       command-t
       nerdtree
       papercolor-theme

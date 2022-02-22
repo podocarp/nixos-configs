@@ -1,10 +1,12 @@
-{ lib, port, ... }:
+{ config, lib, port, ... }:
 {
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;
-    group = "users";
+    group = "syncthing";
     guiAddress = "localhost:${toString port}";
+    overrideFolders = true;
+    overrideDevices = true;
 
     devices = {
       desktop = {
@@ -13,36 +15,33 @@
       x200 = {
         id = "65LWGSU-4PZP5YT-7MOTAGN-QILV4Q6-XXQ2UOG-DP24BML-TPS7YVS-YJJKHAF";
       };
+      x1 = {
+        id = "OX5NYH3-RHKF6DI-AREQDJV-QLX3W3Q-YIATG65-GCL7N7V-ECT2QMR-WBDCSA4";
+      };
     };
 
     folders = {
-      "/tank/public/School" = {
+      "/tank/public/Sync/School" = {
         id = "School";
         rescanInterval = 36000;
         versioning.type = "trashcan";
         versioning.params = { "cleanoutDays" = "7"; };
-        devices = [ "desktop" "x200" ];
+        devices = [ "desktop" "x200" "x1" ];
       };
-      "/tank/public/Books" = {
+      "/tank/public/Sync/Books" = {
         id = "Books";
         rescanInterval = 36000;
-        devices = [ "desktop" "x200" ];
+        devices = [ "desktop" "x200" "x1" ];
       };
     };
 
     extraOptions = {
       gui = {
         insecureSkipHostcheck = true;
-      } //
-      (# file has format: <pass>\n---\nbcrypt: <hash>\nuser: <user>\nblablabla
-      let
-        xs = lib.strings.splitString "\n"
-          (builtins.extraBuiltins.getSecret "nix/syncthing");
-      in
-      {
-        password = lib.strings.removePrefix "bcrypt: " (builtins.elemAt xs 2);
-        user = lib.strings.removePrefix "user: " (builtins.elemAt xs 3);
-      });
+        insecureAdminAccess = false;
+        user = "syncthing";
+        password = "$2a$12$EXP3SoCTKv.QwCd8pWwRK.n3oG0Rdv3KLEPgAsdpcgs0N2l/jmGjW";
+      };
 
       options = {
         urAccepted = -1;

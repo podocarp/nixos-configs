@@ -1,0 +1,13 @@
+w=$(($3*4))
+h=$(($4*8))
+
+case "$1" in
+    "clear")
+        printf '\33[s\33[5A\33[2K\33[u'
+        clear
+    ;;
+    "img")
+        convert "$2" -sample "${w}x${h}" sixel:-
+    ;;
+    *)
+esac

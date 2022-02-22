@@ -1,5 +1,5 @@
 hardware-configuration.nix
-*.key
-*.cert
+wireless.nix
+configuration.nix
 tinode.conf
 wireless.nix

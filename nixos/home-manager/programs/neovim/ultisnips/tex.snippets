@@ -1,0 +1,432 @@
+global !p
+def math():
+    return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+endglobal
+
+context "math()"
+snippet "([A-Za-z0-9\)\]\}][\_\^])([A-Za-z0-9\-\+\\]{2,}|\w[,]\w+)" "Auto Sub/Super (2)" wrA
+`!p snip.rv=match.group(1)`{`!p snip.rv=match.group(2)`$1}$2
+endsnippet
+
+snippet multirow "Multirow" w
+\multirow{${1:2}}{*}{${2:text}}$3
+endsnippet
+
+snippet multicol "Multicol" w
+\multicolumn{${1:2}}{c}{${2:text}}$3
+endsnippet
+
+snippet f "Fraction" w
+\frac{${1:n}}{${2:d}}$3
+endsnippet
+
+snippet pdv "Partial" w
+\pdv{${1:n}}{${2:d}}$3
+endsnippet
+
+snippet pdvv "Partial" w
+\pdv{${1:n}}$2
+endsnippet
+
+snippet dv "derivative" w
+\dv{${1:n}}{${2:d}}$3
+endsnippet
+
+snippet dvv "derivative" w
+\dv{${1:n}}$2
+endsnippet
+
+snippet dv2 "derivative" w
+\dv[2]{${1:n}}{${2:d}}$3
+endsnippet
+
+snippet sum "Sum" w
+\sum_{${1:n=1}}^{${2:\infty}}${0}
+endsnippet
+
+snippet prod "Product" w
+\prod_{${1:n=1}}^{${2:\infty}}${0}
+endsnippet
+
+snippet beg "Begin" w
+\begin{$1}
+    $2
+\end{$1}
+endsnippet
+
+snippet ex "Example" b
+\begin{example}
+    $1
+\end{example}
+endsnippet
+
+snippet aln "Align" b
+\begin{align}
+    $1
+\end{align}
+endsnippet
+
+snippet alnn "Align unnumbered" b
+\begin{align*}
+    $1
+\end{align*}
+endsnippet
+
+snippet eqn "Equation" b
+\begin{equation}
+    $1
+\end{equation}
+endsnippet
+
+snippet eqnn "Equation unnumbered" b
+\begin{equation*}
+    $1
+\end{equation*}
+endsnippet
+
+snippet thm "Theorem" b
+\begin{thm}[${1:}]
+    $2
+\end{thm}
+endsnippet
+
+snippet thmm "Theorem unnumbered" b
+\begin{thm*}[${1:}]
+    $2
+\end{thm*}
+endsnippet
+
+snippet lem "Lemma" b
+\begin{lem}[${1:}]
+    $2
+\end{lem}
+endsnippet
+
+snippet cor "Corollary" b
+\begin{cor}[${1:}]
+    $2
+\end{cor}
+endsnippet
+
+snippet pf "Proof" b
+\begin{proof}
+    $1
+\end{proof}
+endsnippet
+
+snippet no "Note" b
+\note{
+    $1
+}
+endsnippet
+
+
+snippet em "Emph" w
+\emph{$1}$2
+endsnippet
+
+snippet abs "Abs" w
+\abs{$1}$2
+endsnippet
+
+snippet norm "Norm" w
+\norm{$1}$2
+endsnippet
+
+snippet lim "Limit" w
+\lim_{$1}$2
+endsnippet
+
+snippet sup "Supremum" w
+\sup\qty{$1}$2
+endsnippet
+
+snippet inf "Infimum" w
+\inf\qty{$1}$2
+endsnippet
+
+snippet <> "Angle" i
+\langle $1 \rangle $2
+endsnippet
+
+snippet "dd" "Derivative" i
+\dd{$1}$2
+endsnippet
+
+context "math()"
+snippet "<-" "gets" rA
+\gets
+endsnippet
+
+context "math()"
+snippet "->" "to" rA
+\rightarrow
+endsnippet
+
+context "math()"
+snippet "=>" "implies" rA
+\implies
+endsnippet
+
+context "math()"
+snippet "<=" "leq" rA
+\leq
+endsnippet
+
+context "math()"
+snippet ">=" "geq" rA
+\geq
+endsnippet
+
+context "math()"
+snippet "!=" "neq" rA
+\neq
+endsnippet
+
+context "math()"
+snippet "\|([^\$\|]*?)\|\|" "Abs" rA
+\abs{`!p snip.rv = match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "\\abs{([^\$]*?)}\|" "Norm" rA
+\norm{`!p snip.rv = match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "\<([^\$\<]*?)\>\>" "Angle" rA
+\expval{`!p snip.rv = match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "\<([^\$\|]+?)\|\|" "Bra" rA
+\bra{`!p snip.rv = match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "\|([^\$\|]+?)\>\>" "Ket" rA
+\ket{`!p snip.rv = match.group(1)`}
+endsnippet
+
+
+snippet arr "Array" b
+\begin{array}{${1:ccc}}
+    ${2}
+\end{array}
+endsnippet
+
+snippet algo "Algorithm block" b
+\begin{algorithm}
+\SetKwFunction{${3:func}}{$4}
+\Fn{\\$3{$x$}}{
+}
+\caption{${1:caption}}\label{alg:${2:label}}
+\end{algorithm}
+endsnippet
+
+snippet subfigure "Fig with subfigs" w
+\begin{figure}[H]
+\centering
+    \begin{subfigure}[${1:t}]{${2:0.49}\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{${3:}}
+    \caption{${4:}}
+    \end{subfigure}%
+    \hspace{0.01\linewidth}%
+    \caption{${6:}}%
+    \label{fig:${7:}}
+\end{figure}
+endsnippet
+
+snippet subfig "Subfigure" w
+\begin{subfigure}[${1:t}]{${2:0.45}\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{${3:}}
+    \caption{${4:}}
+    \label{fig:${5:}}
+\end{subfigure}
+endsnippet
+
+snippet plot "pgfplot" w
+\begin{figure}[${1:htpb}]
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+	axis lines = middle,
+	xlabel = $x$,
+	ylabel = $y$,
+    ]
+        \addplot [
+	    domain=-pi:pi,
+	    samples=100,
+	    color=blue,
+	]
+        {${2:sin(deg(x))}};
+        \addlegendentry{$f(x)$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+\end{figure}
+endsnippet
+
+snippet mini "Minipage" w
+\begin{minipage}[${1:t}]{${2:0.45}\linewidth}
+    \setlength{\parskip}{1em}
+    ${3}
+\end{minipage}
+endsnippet
+
+snippet cas "Case" w
+\begin{cases}
+    ${1:case1} ,&\text{ if }${2} \\\\
+    ${3:case2} ,&\text{ ${4:otherwise} }${5}
+\end{cases}
+endsnippet
+
+priority 1
+
+snippet () "Bracket" i
+\qty($1)$2
+endsnippet
+
+snippet [] "Bracket" i
+\qty[$1]$2
+endsnippet
+
+snippet {} "Bracket" i
+\qty{$1}$2
+endsnippet
+
+
+snippet enum "Enumerate" b
+\begin{enumerate}[${1:(i)}]
+\item $2
+\end{enumerate}
+endsnippet
+
+snippet item "Itemize" b
+\begin{itemize}[${1:<+->}]
+\item $2
+\end{itemize}
+endsnippet
+
+snippet tabx "Tabularx" b
+\begin{table}[ht]
+\centering
+\begin{tabularx}{.9\textwidth}{${3:X}}\hline
+    $4
+\end{tabularx}
+\caption{$1}%
+\label{tab:$2}
+\end{table}
+endsnippet
+
+snippet tab "Table" b
+\begin{table}[ht]
+\centering
+\begin{tabular}{${3:c}}\hline
+    $4
+\end{tabular}
+\caption{$1}%
+\label{tab:$2}
+\end{table}
+endsnippet
+
+context "math()"
+snippet "\<([^\$\|]+?)\|([^\|\$]+?)\>\>" "Braket" rA
+`!p snip.rv = "\\braket{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+context "math()"
+snippet "\|([^\$\|]+?)\>\<([^\|\$]+?)\|\|" "Ketbra" rA
+`!p snip.rv = "\ketbra{{{}}}{{{}}}".format(match.group(1), match.group(2))`
+endsnippet
+
+context "math()"
+snippet "\<([^\$\|]+?)\|(.+?)\|([^\|\$]+?)\>\>" "Braket" rA
+`!p snip.rv = "\mel{{{}}}{{{}}}{{{}}}".format(
+    match.group(1), match.group(2), match.group(3))`
+endsnippet
+
+snippet "mint(\S+)?" "Minted code typeset" br
+\begin{minted}[fontsize=\\${2:footnotesize}]{${1:`!p
+snip.rv = match.group(1) if match.group(1) is not None else "lang"`}}
+${3:remember to fragile}
+\end{minted}
+endsnippet
+
+priority 2
+snippet "mintin" "Minted code inline" b
+\mintinline{${1:lang}}|$2|$3
+endsnippet
+
+priority 10
+snippet ink "Inkscape preparation" w
+fig $1 fig$0
+endsnippet
+
+priority 20
+snippet "fig (.*) fig" "Insert inkscape figure" wr
+\begin{figure}[ht]
+\centering
+\def\svgwidth{${3:.6}\linewidth}
+\import{./figures/}{${1:`!p
+if snip.c != "":
+    pass
+else:
+    import os
+    import re
+
+    figureDir = os.path.join(os.getcwd(), "figures/")
+    # regex to make into kebab case
+    figureName = "-".join([x.lower() for x in re.findall(r'\w+', match.group(1))])
+    figurePath = figureDir + figureName + '.svg'
+    pdfPath = figureDir + figureName + '.pdf'
+
+    if os.path.isfile(figurePath):
+        snip.rv = "File already exists!"
+    else:
+        import subprocess
+        templatePath = os.path.expanduser("~/.config/inkscape/templates/default1024.svg")
+        subprocess.call(['mkdir', '-p', figureDir])
+        subprocess.check_output(['cp', templatePath, figurePath])
+        subprocess.call(['inkscape', '--export-latex', '-o', pdfPath, figurePath])
+        snip.rv = figureName
+`}.pdf_tex}
+\caption{${2:caption}}
+\label{fig:$1}
+%edit $1 edit%$4
+\end{figure}$0
+endsnippet
+
+snippet "%edit (.*) edit%" "Edit svg" wr
+%edit `!p
+if snip.c != "":
+    pass
+else:
+    import subprocess
+    figureName = match.group(1)
+    figureStem = os.path.join(os.getcwd(), "figures/", figureName)
+    figurePath = figureStem + '.svg'
+    pdfPath = figureStem + '.pdf'
+    proc = subprocess.Popen(['inkscape', figurePath]) # open in bg
+
+    from inotify_simple import INotify, flags
+    inotify = INotify()
+    inotify.add_watch(figurePath, flags.MODIFY)
+
+    update = lambda : subprocess.call(['inkscape', '--export-latex',
+    '-o', pdfPath, figurePath])
+    while True:
+        if proc.poll() is not None:
+            update()
+            break # inkscape closed
+        else:
+            l = inotify.read(timeout=500) # block and wait for inotify
+            if (len(l) > 0):
+                update()
+
+    inotify.close()
+    snip.rv = match.group(1)
+` edit%$0
+endsnippet

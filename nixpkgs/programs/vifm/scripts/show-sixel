@@ -1,3 +1,0 @@
-w=$(($2*4))
-h=$(($3*8))
-convert "$1" -sample "${w}x${h}" sixel:-

@@ -71,11 +71,12 @@ scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
 myManageHook :: ManageHook
 myManageHook = composeAll $
   [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
-    , title =? "Volume Control" --> -- pavucontrol
-      doRectFloat (W.RationalRect (3/8) (3/8) (1/4) (1/4))
-    , (className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR") -->
-      doIgnore <+> hasBorder False
   ]
+  ++
+  [ title =? name --> doFloat | name <- [
+    "Volume Control"
+    , "Open Folder"
+  ]]
   ++
   [ className =? name --> doFloat | name <- [
      "About"

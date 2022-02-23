@@ -7,7 +7,7 @@ in
 {
   # Sound is taken from KDE repo.
   home.file."${soundpath}/boop.ogg".source = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/KDE/oxygen/master/sounds/Oxygen-Sys-App-Message.ogg";
+    url = "https://invent.kde.org/plasma/oxygen-sounds/-/raw/master/sounds/Oxygen-Sys-App-Message.ogg";
     sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
   };
   home.file."${soundpath}/boop.sh" = {

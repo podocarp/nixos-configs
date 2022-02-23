@@ -1,4 +1,4 @@
-{ myTerm, ... }:
+{ pkgs, myTerm, ... }:
 
 {
   xdg.configFile."vifm/colors".source = ./colors;
@@ -11,4 +11,5 @@
             \ {Open in vim}
             \ ${myTerm} -e vim %c &
   '';
+  home.packages = [ pkgs.vifm ];
 }

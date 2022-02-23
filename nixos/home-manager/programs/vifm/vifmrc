@@ -158,7 +158,7 @@ command! reload :write | restart
 " PDF, PS
 filextype *.pdf,*.ps
         \ {View in zathura}
-        \ zathura %f &,
+        \ zathura %f &> /dev/null &,
         \ {View in okular}
         \ okular %f &> /dev/null &,
 
@@ -168,14 +168,14 @@ fileviewer *.pdf
 " PostScript
 filextype *.ps,*.eps,*.ps.gz
         \ {View in zathura}
-        \ zathura %f &,
+        \ zathura %f &> /dev/null &,
         \ {View in okular}
         \ okular %f &> /dev/null &,
 
 " Djvu
 filextype *.djvu
         \ {View in zathura}
-        \ zathura %f &,
+        \ zathura %f &> /dev/null &,
         \ {View in okular}
         \ okular %f &> /dev/null &,
 

@@ -12,6 +12,7 @@
   boot.loader.grub.device = "nodev";
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
+  boot.loader.grub.useOSProber = true;
 
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1
@@ -46,6 +47,10 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
+  '';
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {

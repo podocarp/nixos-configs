@@ -53,10 +53,6 @@
     '';
   };
 
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
-  '';
-
   services.tlp = {
     enable = true;
     settings = {

@@ -36,7 +36,6 @@
     okular
     openvpn
     poppler_utils
-    ranger
     scrot
     stress
     syncthing

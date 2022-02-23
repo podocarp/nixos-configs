@@ -3,13 +3,13 @@ Config {
   font = "xft:Source Han Mono SC:size=10"
 , bgColor = "black"
 , fgColor = "white"
-, position = Top
+, position = TopP 0 60
 , border = NoBorder
 
   -- layout
 , sepChar = "%"
 , alignSep = "}{"
-, template = "%StdinReader% }{| %alsa:default:Master% | %battery% | %coretemp% | %date%"
+, template = "%StdinReader% }{| %alsa:default:Master% | %battery% | %coretemp% | %date% |"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.

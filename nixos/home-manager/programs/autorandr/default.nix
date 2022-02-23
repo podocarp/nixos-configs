@@ -8,7 +8,7 @@ let
       enable = true;
       primary = true;
       mode = "1920x1080";
-      dpi = 110;
+      dpi = 100;
       rate = "60.00";
     };
     settings4k = {

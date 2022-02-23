@@ -4,6 +4,9 @@
   imports =
     [
       ./common.nix
+      ../misc/xserver.nix
+      ../hardware-configuration.nix
+      ../wireless.nix
       <home-manager/nixos>
     ];
 
@@ -47,6 +50,9 @@
     analogioOffset = -100;
     uncoreOffset = -30;
   };
+
+  services.xserver.libinput.enable = true;
+  services.xserver.wacom.enable = true;
 
   services.thinkfan.enable = true;
   services.thinkfan.levels = [

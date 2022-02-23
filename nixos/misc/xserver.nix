@@ -14,6 +14,5 @@
     ];
 
     useGlamor = true;
-    # wacom.enable = true;
   };
 }

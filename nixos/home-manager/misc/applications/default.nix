@@ -1,20 +1,11 @@
 { pkgs, lib, ... }:
 {
-  nixpkgs.overlays = [
-    (self: super: {
-    # gajim = super.gajim.override {
-    #   extraPythonPackages = ps: with ps; [ pygments ];
-    # };
-    })
-  ];
-
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
+    clang
     ffmpeg
-    gcc
-    gdb
     gnumake
     haskellPackages.cabal-install
     haskellPackages.cabal2nix
@@ -26,7 +17,6 @@
     imagemagick
     inkscape
     iotop
-    kfind
     lm_sensors
     neofetch
     neovim-remote
@@ -50,8 +40,6 @@
     xorg.xev
     xorg.xprop
     xterm
-    yarn
-    yt-dlp
     zip
 
     (octaveFull.withPackages(p: with p; [
@@ -59,10 +47,8 @@
     ]))
 
     (python3.withPackages(p: with p; [
-      matplotlib
-      numpy
+      pip
       pygments
-      scipy
     ]))
 
     ### Fonts

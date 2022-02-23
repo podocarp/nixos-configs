@@ -2,3 +2,4 @@ hardware-configuration.nix
 wireless.nix
 configuration.nix
 tinode.conf
+wireless.nix

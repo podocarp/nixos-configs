@@ -33,7 +33,7 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    ((import ./programs/vifm/default.nix) (args // { myTerm = myTerm; }))
+    ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
     ./programs/zathura/default.nix
 
     ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))

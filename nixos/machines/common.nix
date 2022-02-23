@@ -109,5 +109,5 @@
     dates = [ "weekly" ];
   };
 
-  nix.allowedUsers = [ "@wheel" ];
+  nix.settings.allowed-users = [ "@wheel" ];
 }

@@ -3,7 +3,7 @@ Config {
   font = "xft:Source Han Mono SC:size=10"
 , bgColor = "black"
 , fgColor = "white"
-, position = TopP 0 60
+, position = Top
 , border = NoBorder
 
   -- layout

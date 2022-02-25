@@ -27,11 +27,6 @@
     ];
   };
 
-  programs.ssh.extraConfig = ''
-    HostKeyAlgorithms +ssh-rsa
-    PubkeyAcceptedKeyTypes +ssh-rsa
-  '';
-
   systemd.services.fix_acpi_wakeup = {
     serviceConfig.Type = "oneshot";
     description = "Prevents USB from waking the system up so the system can sleep properly.";

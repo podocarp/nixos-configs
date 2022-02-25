@@ -54,6 +54,8 @@
   services.xserver.libinput.enable = true;
   services.xserver.wacom.enable = true;
 
+  services.tlp.enable = true;
+
   services.thinkfan.enable = true;
   services.thinkfan.levels = [
     [0     0      55]

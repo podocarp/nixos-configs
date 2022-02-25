@@ -48,15 +48,9 @@
     extraConfig = ''
       Host *.home.com
         StrictHostKeyChecking no
+      HostKeyAlgorithms +ssh-rsa
+      PubkeyAcceptedKeyTypes +ssh-rsa
     '';
-  };
-
-  services.tlp = {
-    enable = true;
-    settings = {
-        "TLP_DEFAULT_MODE" = "AC";
-        "TLP_PERSISTENT_DEFAULT" = 1;
-    };
   };
 
   powerManagement.cpuFreqGovernor = "schedutil";

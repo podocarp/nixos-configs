@@ -17,7 +17,7 @@ in
 
   imports = [
     ((import ./programs/vifm/default.nix) {
-      myTerm = myTerm;
+      pkgs = pkgs; myTerm = myTerm;
     })
     ((import ./programs/password-store/default.nix) {
       homeDir = homeDir;
@@ -60,7 +60,6 @@ in
     unzip
     usbutils # for lsusb
     veracrypt
-    vifm
     zip
   ];
 }

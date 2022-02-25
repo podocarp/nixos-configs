@@ -14,6 +14,7 @@ in
 {
   imports =
     [
+      ./common.nix
       <home-manager/nixos>
       <sops-nix/modules/sops>
 

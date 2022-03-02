@@ -50,10 +50,8 @@ nmap <silent> co <Plug>(coc-codelens-action)
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
-let g:vimtex_compiler_progname='nvr'
-let g:vimtex_view_method='zathura'
-"let g:vimtex_view_general_viewer='okular'
-"let g:vimtex_view_general_options='--noraise file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_viewer='okular'
+let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
 let g:vimtex_syntax_conceal = {
     \ 'math_bounds' : 0,
     \ 'math_delimiters' : 0,

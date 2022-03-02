@@ -1,7 +1,11 @@
 { pkgs, lib, ... }:
 
 {
-  imports = [ <home-manager/nixos> ];
+  imports = [
+    <home-manager/nixos>
+    ./common.nix
+    ../misc/xserver.nix
+  ];
 
   boot.loader.grub = {
     useOSProber = true;

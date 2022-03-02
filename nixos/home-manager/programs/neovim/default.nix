@@ -20,7 +20,6 @@
       undotree
       vim-airline
       vim-airline-themes
-      vim-snippets
       vim-surround
       vimtex
     ];
@@ -57,9 +56,7 @@
 
     extraConfig = builtins.readFile (toString ./.vimrc) + ''
       " Unfortunately having the snippets file RO is too troublesome.
-      let g:UltiSnipsSnippetDirectories=[
-       \ '${toString ./ultisnips}',
-       \ '${pkgs.vimPlugins.vim-snippets}/UltiSnips']
+      let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
     '';
 
     coc.enable = true;

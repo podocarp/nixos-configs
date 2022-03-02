@@ -40,12 +40,20 @@ snippet dv2 "derivative" w
 \dv[2]{${1:n}}{${2:d}}$3
 endsnippet
 
+snippet ooo "infty" w
+\infty
+endsnippet
+
 snippet sum "Sum" w
-\sum_{${1:n=1}}^{${2:\infty}}${0}
+\sum_{${0:n=1}}^{${1:\infty}}${2}
 endsnippet
 
 snippet prod "Product" w
-\prod_{${1:n=1}}^{${2:\infty}}${0}
+\prod_{${0:n=1}}^{${1:\infty}}${2}
+endsnippet
+
+snippet lim "Limit" w
+\lim_{${0:n} \to ${1:\infty}}${2}
 endsnippet
 
 snippet beg "Begin" w
@@ -208,7 +216,6 @@ snippet "\|([^\$\|]+?)\>\>" "Ket" rA
 \ket{`!p snip.rv = match.group(1)`}
 endsnippet
 
-
 snippet arr "Array" b
 \begin{array}{${1:ccc}}
     ${2}
@@ -222,6 +229,15 @@ snippet algo "Algorithm block" b
 }
 \caption{${1:caption}}\label{alg:${2:label}}
 \end{algorithm}
+endsnippet
+
+snippet fig "Figure" bi
+\begin{figure}[${1:htpb}]
+    \centering
+    ${2:\includegraphics[width=0.8\textwidth]{$3}}
+    \caption{${4:$3}}
+    \label{fig:${5:${3/\W+/-/g}}}
+\end{figure}
 endsnippet
 
 snippet subfigure "Fig with subfigs" w
@@ -296,7 +312,6 @@ endsnippet
 snippet {} "Bracket" i
 \qty{$1}$2
 endsnippet
-
 
 snippet enum "Enumerate" b
 \begin{enumerate}[${1:(i)}]

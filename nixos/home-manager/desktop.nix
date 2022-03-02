@@ -30,7 +30,6 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    ./programs/zathura/default.nix
 
     ./services/gpg-agent/default.nix
     ./services/syncthing/default.nix
@@ -44,7 +43,7 @@ in
   ];
 
   home.packages = with pkgs; [
-    libreoffice
+    octaveWithSym
   ];
 
   xsession = {

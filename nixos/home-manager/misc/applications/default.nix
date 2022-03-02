@@ -1,16 +1,18 @@
 { pkgs, lib, ... }:
 {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (self: super: {
+      octaveWithSym = super.octaveFull.withPackages(p: with p; [
+        symbolic
+      ]);
+    })
+  ];
+
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
-    clang
     ffmpeg
-    gnumake
-    haskellPackages.cabal-install
-    haskellPackages.cabal2nix
-    haskellPackages.ghc
-    haskellPackages.haskell-language-server
     highlight
     hugo
     iftop
@@ -29,7 +31,7 @@
     scrot
     stress
     syncthing
-    sysstat
+    sysstat # iostat
     tdesktop # telegram desktop
     telnet
     unzip
@@ -41,10 +43,6 @@
     xorg.xprop
     xterm
     zip
-
-    (octaveFull.withPackages(p: with p; [
-      symbolic
-    ]))
 
     (python3.withPackages(p: with p; [
       pip

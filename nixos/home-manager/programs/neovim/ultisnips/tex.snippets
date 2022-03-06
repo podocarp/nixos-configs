@@ -92,28 +92,52 @@ snippet eqnn "Equation unnumbered" b
 \end{equation*}
 endsnippet
 
-snippet thm "Theorem" b
-\begin{thm}[${1:}]
+snippet def "Definition" b
+\begin{definition}[${1:}]
     $2
-\end{thm}
+\end{definition}
+endsnippet
+
+snippet thm "Theorem" b
+\begin{theorem}[${1:}]
+    $2
+\end{theorem}
 endsnippet
 
 snippet thmm "Theorem unnumbered" b
-\begin{thm*}[${1:}]
+\begin{theorem*}[${1:}]
     $2
-\end{thm*}
+\end{theorem*}
 endsnippet
 
 snippet lem "Lemma" b
-\begin{lem}[${1:}]
+\begin{lemma}[${1:}]
     $2
-\end{lem}
+\end{lemma}
 endsnippet
 
 snippet cor "Corollary" b
-\begin{cor}[${1:}]
+\begin{corollary}[${1:}]
     $2
-\end{cor}
+\end{corollary}
+endsnippet
+
+snippet prop "Proposition" b
+\begin{proposition}[${1:}]
+    $2
+\end{proposition}
+endsnippet
+
+snippet ex "Exercise" b
+\begin{exercise}[${1:}]
+    $2
+\end{exercise}
+endsnippet
+
+snippet sol "Solution" b
+\begin{solution}[${1:}]
+    $2
+\end{solution}
 endsnippet
 
 snippet pf "Proof" b
@@ -128,6 +152,31 @@ snippet no "Note" b
 }
 endsnippet
 
+snippet mat "Matrix" b
+\begin{${1:pbvVBsmall}matrix}
+    $2
+\end{matrix}
+endsnippet
+
+snippet mqty "Matrix quantity" w
+\mqty($1)$2
+endsnippet
+
+snippet mdet "(small) Matrix determinant" w
+\${1:s}mdet{$2}$3
+endsnippet
+
+snippet imat "Identity matrix" w
+\imat{$1}$2
+endsnippet
+
+snippet zmat "Zero matrix" w
+\zmat{$1}$2
+endsnippet
+
+snippet dmat "Diagonal matrix" w
+\mqty{\dmat[]{$1}}$2
+endsnippet
 
 snippet em "Emph" w
 \emph{$1}$2
@@ -141,23 +190,11 @@ snippet norm "Norm" w
 \norm{$1}$2
 endsnippet
 
-snippet lim "Limit" w
-\lim_{$1}$2
-endsnippet
-
-snippet sup "Supremum" w
-\sup\qty{$1}$2
-endsnippet
-
-snippet inf "Infimum" w
-\inf\qty{$1}$2
-endsnippet
-
 snippet <> "Angle" i
 \langle $1 \rangle $2
 endsnippet
 
-snippet "dd" "Derivative" i
+snippet dd "Differential" i
 \dd{$1}$2
 endsnippet
 
@@ -285,6 +322,33 @@ snippet plot "pgfplot" w
 \end{figure}
 endsnippet
 
+snippet tikz "Tikz" w
+\begin{figure}[${1:htpb}]
+    \centering
+    \begin{tikzpicture}[node distance=2cm,auto]
+    $2
+        \node[state, initial above](a){0};
+        \node[state, accepting](b)[below right of=a]{0};
+        \node[state](c)[below left of=b]{0};
+
+        \path[<->](a) [bend left] edge node {} (b)
+            (b) edge [loop above] node {} ();
+    \end{tikzpicture}
+\end{figure}
+endsnippet
+
+snippet node "Tikz node" w
+\node[$5] (${1/[^0-9a-zA-Z]//g}${2}) ${3:at (${4:0,0}) }{$${1}$};
+endsnippet
+
+snippet tikzcd "Tikzcd" w
+\begin{equation*}
+\begin{tikzcd}
+    $1
+\end{tikzcd}
+\end{equation*}
+endsnippet
+
 snippet mini "Minipage" w
 \begin{minipage}[${1:t}]{${2:0.45}\linewidth}
     \setlength{\parskip}{1em}
@@ -370,7 +434,6 @@ ${3:remember to fragile}
 \end{minted}
 endsnippet
 
-priority 2
 snippet "mintin" "Minted code inline" b
 \mintinline{${1:lang}}|$2|$3
 endsnippet

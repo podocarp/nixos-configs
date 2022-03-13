@@ -17,6 +17,7 @@
     hugo
     iftop
     imagemagick
+    inetutils # telnet
     inkscape
     iotop
     lm_sensors
@@ -33,7 +34,6 @@
     syncthing
     sysstat # iostat
     tdesktop # telegram desktop
-    telnet
     unzip
     usbutils # for lsusb
     veracrypt

@@ -5,8 +5,6 @@
     [
       ./common.nix
       ../misc/xserver.nix
-      ../hardware-configuration.nix
-      ../wireless.nix
       <home-manager/nixos>
     ];
 
@@ -22,6 +20,10 @@
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
+  '';
 
   services.xserver.videoDrivers = [ "intel" ];
   # Some hardware acceleration things.

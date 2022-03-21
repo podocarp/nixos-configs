@@ -44,16 +44,20 @@ snippet ooo "infty" w
 \infty
 endsnippet
 
+snippet int "Integral" w
+\int{${1:n=1}}^{${2:\infty}}${0}
+endsnippet
+
 snippet sum "Sum" w
-\sum_{${0:n=1}}^{${1:\infty}}${2}
+\sum_{${1:n=1}}^{${2:\infty}}${0}
 endsnippet
 
 snippet prod "Product" w
-\prod_{${0:n=1}}^{${1:\infty}}${2}
+\prod_{${1:n=1}}^{${2:\infty}}${0}
 endsnippet
 
 snippet lim "Limit" w
-\lim_{${0:n} \to ${1:\infty}}${2}
+\lim_{${1:n} \to ${2:\infty}}${0}
 endsnippet
 
 snippet beg "Begin" w
@@ -62,7 +66,7 @@ snippet beg "Begin" w
 \end{$1}
 endsnippet
 
-snippet ex "Example" b
+snippet eg "Example" b
 \begin{example}
     $1
 \end{example}

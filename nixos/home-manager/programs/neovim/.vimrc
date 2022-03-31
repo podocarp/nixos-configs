@@ -51,7 +51,7 @@ nmap <silent> co <Plug>(coc-codelens-action)
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
 let g:vimtex_view_general_viewer='okular'
-let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options='--unique --noraise file:@pdf\#src:@line@tex'
 let g:vimtex_syntax_conceal = {
     \ 'math_bounds' : 0,
     \ 'math_delimiters' : 0,
@@ -74,8 +74,9 @@ let g:vimtex_compiler_latexmk = {
     \ ],
 \}
 
-let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure']
-let g:vimtex_indent_tikz_enabled = 0
+let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure',
+    \ 'itemize', 'enumerate' ]
+let g:vimtex_indent_on_ampersands = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
@@ -85,15 +86,7 @@ nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 """"""Misc
 "Plug 'scrooloose/nerdtree'
 
-" Start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-
-map <C-n> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'

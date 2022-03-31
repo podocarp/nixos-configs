@@ -16,6 +16,7 @@
       command-t
       nerdtree
       papercolor-theme
+      Recover-vim
       ultisnips
       undotree
       vim-airline

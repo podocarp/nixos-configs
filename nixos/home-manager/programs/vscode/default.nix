@@ -5,8 +5,6 @@
     enable = true;
     extensions = with pkgs.vscode-extensions; [
       vscodevim.vim
-      ms-python.python
-      ms-vscode.cpptools
     ];
     userSettings = {
       "editor.minimap.enabled" = false;

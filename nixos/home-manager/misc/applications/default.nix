@@ -37,7 +37,6 @@
     unzip
     usbutils # for lsusb
     veracrypt
-    xdotool
     xclip
     xorg.xev
     xorg.xprop

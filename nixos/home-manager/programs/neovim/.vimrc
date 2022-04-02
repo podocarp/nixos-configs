@@ -52,13 +52,6 @@ nmap <silent> co <Plug>(coc-codelens-action)
 let g:tex_flavor = 'latex'
 let g:vimtex_view_general_viewer='okular'
 let g:vimtex_view_general_options='--unique --noraise file:@pdf\#src:@line@tex'
-let g:vimtex_syntax_conceal = {
-    \ 'math_bounds' : 0,
-    \ 'math_delimiters' : 0,
-    \ 'math_fracs' : 0,
-\}
-" set conceallevel=2
-" let g:tex_conceal="abdgm"
 let g:vimtex_quickfix_method = 'pplatex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",

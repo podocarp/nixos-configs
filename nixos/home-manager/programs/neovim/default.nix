@@ -4,7 +4,6 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
-      # ale
       coc-css
       coc-html
       coc-json
@@ -42,7 +41,6 @@
       nodePackages.typescript
 
       pplatex
-      texlab
       xclip
     ];
 

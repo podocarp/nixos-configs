@@ -41,7 +41,6 @@
       nodePackages.typescript
 
       pplatex
-      xclip
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

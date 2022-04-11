@@ -281,9 +281,9 @@ endsnippet
 snippet fig "Figure" bi
 \begin{figure}[${1:htpb}]
     \centering
-    ${2:\includegraphics[width=0.8\textwidth]{$3}}
-    \caption{${4:$3}}
-    \label{fig:${5:${3/\W+/-/g}}}
+    \includegraphics[width=0.8\textwidth]{$2}
+    \caption{${3:$2}}
+    \label{fig:${4:${2/\W+/-/g}}}
 \end{figure}
 endsnippet
 

@@ -1,4 +1,4 @@
-{ pkgs, myTerm, ... }:
+{ pkgs, myTerm, myBorderWidth ? 3, ... }:
 
 {
   xsession.windowManager.xmonad = {
@@ -10,6 +10,7 @@
         (builtins.readFile ./xmonad.hs) +
         ''
         myTerm = "${myTerm}"
+        myBorderWidth = ${toString myBorderWidth}
         ''
       );
   };

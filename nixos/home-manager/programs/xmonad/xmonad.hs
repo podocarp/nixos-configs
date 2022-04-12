@@ -3,7 +3,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop
 import XMonad.Core
-import XMonad.Hooks.DynamicBars
+import XMonad.Hooks.StatusBar
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -70,9 +70,6 @@ scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
 
 myManageHook :: ManageHook
 myManageHook = composeAll $
-  [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
-  ]
-  ++
   [ title =? name --> doFloat | name <- [
     "Volume Control"
     , "Open Folder"
@@ -80,18 +77,12 @@ myManageHook = composeAll $
   ++
   [ className =? name --> doFloat | name <- [
      "About"
-     , "Desktop — Plasma"
      , "Picture in picture"
      , "Picture-in-Picture"
-     , "Plasma"
-     , "Plasma-desktop"
-     , "Preferences"
      , "dialog"
-     , "krunner"
-     , "menu"
-     , "plasmashell"
+     , "dolphin"
+     , "nomacs"
      , "pop-up"
-     , "systemsettings"
   ]]
 
 -- This gives the hidden workspaces and the master window in those workspaces
@@ -145,18 +136,18 @@ myDynBar (S n) = spawnPipe $ "xmobar -x " ++ show n
 main :: IO()
 main = do
   bar <- spawnPipe "xmobar"
-  xmonad $ docks $ ewmh desktopConfig
+  xmonad $ docks $ ewmhFullscreen desktopConfig
     { terminal = myTerm
     , modMask = mod4Mask  -- meta key
     , normalBorderColor = "#AAAAAA"
     , focusedBorderColor = "#FF0000"
-    , borderWidth = 3
+    , borderWidth = myBorderWidth
     , manageHook = scratchpadHook <+> myManageHook
     , layoutHook = avoidStruts $
       Tall 1 (1/100) (1/2)
       ||| ThreeColMid 1 (1/100) (25/100)
       ||| Grid
-    , handleEventHook = handleEventHook def <+> fullscreenEventHook
+    , handleEventHook = handleEventHook def
     , logHook = dynamicLogWithPP $ myPP { ppOutput = hPutStrLn bar }
     }
     `additionalKeysP` myKeys

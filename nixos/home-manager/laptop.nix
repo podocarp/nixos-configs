@@ -55,14 +55,5 @@ in
     wpa_supplicant
   ];
 
-  xsession = {
-    enable = true;
-    windowManager.command = lib.mkForce "exec xmonad";
-    # profileExtra = ''
-    #  autorandr -c
-    # '';
-    scriptPath = ".xsession-hm";
-  };
-
   xresources.extraConfig = "XTerm*faceSize: 11";
 }

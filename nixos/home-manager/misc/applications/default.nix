@@ -12,6 +12,7 @@
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
+    dolphin
     ffmpeg
     highlight
     hugo
@@ -28,6 +29,7 @@
     nomacs
     okular
     openvpn
+    pavucontrol
     poppler_utils
     scrot
     stress

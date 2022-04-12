@@ -11,8 +11,8 @@
       WHEEL_DOWN = "seek -5";
       LEFT = "seek -5";
       RIGHT = "seek 5";
-      Shift+RIGHT = "seek 1 exact"
-      Shift+LEFT = "seek -1 exact"
+      "Shift+RIGHT" = "seek 1 exact";
+      "Shift+LEFT" = "seek -1 exact";
     };
   };
 }

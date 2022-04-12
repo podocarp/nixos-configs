@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -21,6 +21,9 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # to allow for gtk theme config
+  programs.dconf.enable = true;
+
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
@@ -37,8 +40,9 @@
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
+
   home-manager.users.pengu = import ../home-manager/desktop.nix;
-  services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;

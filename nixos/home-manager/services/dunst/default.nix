@@ -11,7 +11,7 @@ in
     sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
   };
   home.file."${soundpath}/boop.sh" = {
-    text = "${pkgs.mpv}/bin/mpv ${homeDir}/${soundpath}/boop.ogg";
+    text = "${pkgs.mpv}/bin/mpv --keep-open=no ${homeDir}/${soundpath}/boop.ogg";
     executable = true;
   };
 

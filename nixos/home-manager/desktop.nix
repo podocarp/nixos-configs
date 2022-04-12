@@ -11,11 +11,14 @@ in
 
   imports =
   [
+    ((import ./programs/password-store/default.nix) {
+      homeDir = homeDir;
+    })
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
+    ((import ./programs/xmonad/default.nix) {
+      pkgs = pkgs; myTerm = myTerm; myBorderWidth = 5;
     })
 
     ./programs/autorandr/default.nix
@@ -29,29 +32,22 @@ in
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
+    (import ./programs/vifm/default.nix args)
     ./programs/vscode/default.nix
 
+    (import ./services/dunst/default.nix (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
     ./services/syncthing/default.nix
 
     ./scripts/default.nix
 
-    ((import ./misc/fcitx/default.nix) args)
-    ((import ./misc/applications/default.nix) args)
+    (import ./misc/fcitx/default.nix args)
+    (import ./misc/applications/default.nix args)
     ./misc/keyboard/default.nix
-    ./misc/xresources/default.nix
+    ./misc/xsession/default.nix
   ];
 
   home.packages = with pkgs; [
     octaveWithSym
   ];
-
-  xsession = {
-    enable = true;
-    windowManager.command = lib.mkForce "exec startplasma-x11";
-    # profileExtra = ''
-    #  autorandr -c
-    # '';
-    scriptPath = ".xsession-hm";
-  };
 }

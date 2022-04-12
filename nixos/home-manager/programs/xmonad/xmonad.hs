@@ -36,9 +36,12 @@ myKeys =
   , ("M-S-<Return>", spawn myTerm) -- myTerm is appended by Nix
   , ("M-o", scratchpadSpawnActionTerminal myTerm)
   , ("M-g", goToSelected def)
-  , ("M-d", spawn "rofi -show combi") -- launch dmenu
-  , ("M-f", spawn "rofi-pass") -- launch dmenu
+  , ("M-d", spawn "rofi -show combi")
+  , ("M-f", spawn "rofi-pass")
+  , ("M-e", spawn "dolphin")
   , ("M-<Tab>", toggleWS) -- exclude those on other screens
+  -- screenshot and copies to clipboard
+  , ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
   ]
   ++
   -- M-Shift-[1-9] moves windows to workspaces
@@ -47,19 +50,13 @@ myKeys =
     | (key, i) <- zip [1..9] (workspaces def)
     , (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")] ]
   ++
-  [ ("<XF86AudioMute>", spawn muteCmd)
-  , ("<XF86AudioRaiseVolume>", spawn volDownCmd)
-  , ("<XF86AudioLowerVolume>", spawn volUpCmd)
+  [ ("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
+  , ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 1%+' | amixer -s")
+  , ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 1%-' | amixer -s")
   -- Brightness controls
   , ("<XF86MonBrightnessUp>", spawn "brightnessctl s 1%+")
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 1%-")
   ]
-  where
-    -- This might be needed on ALSA.
-    -- "echo -e 'sset Master toggle\nset Headphone toggle'
-    muteCmd = "echo -e 'sset Master toggle' | amixer -s"
-    volDownCmd = "echo -e 'sset Master 1%+' | amixer -s"
-    volUpCmd = "echo -e 'sset Master 1%-' | amixer -s"
 
 scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
   where
@@ -82,7 +79,7 @@ myManageHook = composeAll $
      , "dialog"
      , "dolphin"
      , "nomacs"
-     , "pop-up"
+     , "TelegramDesktop"
   ]]
 
 -- This gives the hidden workspaces and the master window in those workspaces

@@ -74,12 +74,13 @@ myManageHook = composeAll $
   ++
   [ className =? name --> doFloat | name <- [
      "About"
+     , "Image Lounge" -- nomacs
      , "Picture in picture"
      , "Picture-in-Picture"
+     , "TelegramDesktop"
      , "dialog"
      , "dolphin"
-     , "nomacs"
-     , "TelegramDesktop"
+     , "mpv"
   ]]
 
 -- This gives the hidden workspaces and the master window in those workspaces

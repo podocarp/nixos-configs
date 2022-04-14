@@ -1,12 +1,13 @@
 """""""""""""""""""""""""""""FLAGS""""""""""""""""""""""""""
-" set statusline+=%F\ %l:%c
 set autochdir
 set autoindent
 set autowriteall
 set colorcolumn=80
 set cursorline
 set dictionary+=/usr/share/dict/words
-set expandtab
+set guicursor=
+set hlsearch
+set ignorecase
 set incsearch
 set lazyredraw
 set list
@@ -20,16 +21,17 @@ set relativenumber
 set ruler
 set scrolloff=4
 set shada=:10,'10,%,n~/.local/share/nvim/shada/main.shada
-set shiftwidth=4
 set shortmess+=ac
 set showcmd
 set signcolumn=yes
 set smartcase
 set smartindent
 set smarttab
+set splitbelow
 set termguicolors
 set title
 set undofile
+set whichwrap+=<,>,h,l,[,]
 set wildmenu
 set wildmode=longest,list,full
 
@@ -73,9 +75,6 @@ let g:vimtex_indent_on_ampersands = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
-""""""Haskell
-"Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
-
 """"""Misc
 "Plug 'scrooloose/nerdtree'
 
@@ -100,17 +99,11 @@ let g:airline_section_z='%l:%c %p%%'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#whitespace#enabled = 0
+
 "Plug 'tpope/vim-surround'
 
-"Plug 'morhetz/gruvbox'
-" let g:gruvbox_contrast_dark='hard'
-" let g:gruvbox_contrast_light='hard'
-" let g:gruvbox_invert_indent_guides=1
-" let g:gruvbox_sign_column='bg0'
-" let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
-
-""""""
 "call plug#end()
+
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
 "Plug 'NLKNguyen/papercolor-theme'
@@ -129,18 +122,6 @@ let g:PaperColor_Theme_Options = {
     \ }
 \ }
 colorscheme PaperColor
-" hi CocCodeLens guibg=#333333 guifg=#999090
-" hi ALEErrorSign guibg=#202020
-" hi ALEWarningSign guibg=#202020
-
-" Disable neovim insert mode bar cursor
-set guicursor=
-
-" Highlight search
-set hlsearch
-
-" Scrolling past the line pops you below
-set whichwrap+=<,>,h,l,[,]
 
 " No line numbers in terminal (this breaks in vanilla vim)
 autocmd TermOpen * setlocal nonumber norelativenumber
@@ -152,39 +133,15 @@ let g:netrw_browse_split = 1
 let g:netrw_winsize = 20
 
 """""""File Extension defaults
-augroup MDProj
+augroup TextProj
     au!
-    autocmd BufRead,BufNewFile *.md setlocal tw=80
-    autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_gb
-    autocmd BufRead,BufNewFile *.md setlocal syntax=off
+    autocmd BufRead,BufNewFile *.md,*.tex setlocal tw=80
+    autocmd BufRead,BufNewFile *.md,*.tex setlocal spell spelllang=en_gb
 augroup END
 
-augroup TexProj
-    au!
-    autocmd BufRead,BufNewFile *.tex setlocal tw=80
-    autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=en_gb
-    autocmd BufRead,BufNewFile *.tex setlocal indentkeys-=o,O
-augroup END
-
-augroup CProj
-    au!
-    autocmd BufRead,BufNewFile *.c,*.cpp,*.h setlocal cindent shiftwidth=8
-augroup END
-
-augroup JSProj
-    au!
-    autocmd BufRead,BufNewFile *.js,*.jsx,*.ts,*.tsx setlocal softtabstop=2 shiftwidth=2
-augroup END
-
-augroup PyProj
-    au!
-    autocmd BufRead,BufNewFile *.py setlocal softtabstop=4 shiftwidth=4
-augroup END
 
 """"""""""""""""""""""""""GENERAL MAPS"""""""""""""""""""""
-" Scroll in wrapped lines
-map <Up> gk
-map <Down> gj
+
 """"""""""""""""""""""""INSERT MODE MAPS"""""""""""""""""""
 
 " paste
@@ -205,8 +162,6 @@ nnoremap <F3> :noh<CR>
 
 nnoremap <Esc> :w<CR>
 
-""""""""""""""""""""""SPLIT WINDOWS""""""""""""""""""""""""
-
 " For moving split windows
 nnoremap <C-W>h <C-W><S-H>
 nnoremap <C-W>j <C-W><S-J>
@@ -223,8 +178,8 @@ nnoremap <C-l> <C-W><C-l>
 vnoremap <leader>d "_d
 
 " Move selected blocks up and down
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+vnoremap <A-j> :m '>+1<CR>gv
+vnoremap <A-k> :m '<-2<CR>gv
 
 vnoremap <C-c> "+y
 vnoremap <C-x> "+d

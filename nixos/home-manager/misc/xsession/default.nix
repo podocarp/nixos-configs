@@ -48,15 +48,16 @@
       Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
       Ctrl Shift <Key> V: insert-selection(CLIPBOARD)
     XTerm*backarrowKey: false
-    XTerm*ttyModes: erase ^?
-    XTerm*ptyInitialErase: true
     XTerm*decTerminalID: vt340
+    XTerm*metaSendsEscape: true
     XTerm*numColorRegisters: 256
-    XTerm*trimSelection: true
-    XTerm*termName: st-256color
-    XTerm*pointerShape: left_ptr
     XTerm*pointerColor: black
     XTerm*pointerColorBackground: black
+    XTerm*pointerShape: left_ptr
+    XTerm*ptyInitialErase: true
+    XTerm*termName: st-256color
+    XTerm*trimSelection: true
+    XTerm*ttyModes: erase ^?
   '';
 
   gtk = {

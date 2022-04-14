@@ -19,14 +19,23 @@
   networking.hostName = "desktop"; # Define your hostname.
   networking.firewall.allowedUDPPorts = [ 50000 ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-
   # to allow for gtk theme config
   programs.dconf.enable = true;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+      vaapiVdpau
+    ];
+  };
+
+  environment.variables = {
+    "LIBVA_DRIVER_NAME" = "vdpau";
+    "VDPAU_DRIVER" = "nvidia";
   };
 
   systemd.services.fix_acpi_wakeup = {

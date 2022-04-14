@@ -18,7 +18,7 @@ in
       myTerm = myTerm;
     })
     ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm; myBorderWidth = 5;
+      pkgs = pkgs; myTerm = myTerm; myBorderWidth = 10;
     })
 
     ./programs/autorandr/default.nix
@@ -37,6 +37,7 @@ in
 
     (import ./services/dunst/default.nix (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
+    ./services/random-background/default.nix
     ./services/syncthing/default.nix
 
     ./scripts/default.nix

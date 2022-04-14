@@ -5,12 +5,10 @@
     enable = true;
     plugins = with pkgs.vimPlugins; [
       coc-css
-      coc-html
       coc-json
       coc-nvim
       coc-pyright
       coc-snippets
-      coc-tsserver
       coc-vimtex
       command-t
       nerdtree
@@ -20,7 +18,9 @@
       undotree
       vim-airline
       vim-airline-themes
+      vim-nix
       vim-surround
+      vim-sleuth
       vimtex
     ];
 

@@ -4,6 +4,7 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.GridSelect (goToSelected)
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Decoration
@@ -145,7 +146,7 @@ main = do
     , focusedBorderColor = "#FF0000"
     , borderWidth = 5
     , manageHook = scratchpadHook <+> myManageHook
-    , layoutHook = noBorders $ avoidStruts $ myDecorate3 $
+    , layoutHook = refocusLastLayoutHook $ noBorders $ avoidStruts $ myDecorate3 $
       ResizableTall 1 (1/100) (1/2) []
       ||| ResizableThreeColMid 1 (1/100) (30/100) []
     , handleEventHook = handleEventHook def

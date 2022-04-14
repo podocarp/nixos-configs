@@ -1,22 +1,21 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 import XMonad
-import XMonad.Actions.CycleWS
-import XMonad.Actions.GridSelect
-import XMonad.Config.Desktop
-import XMonad.Core
-import XMonad.Hooks.StatusBar
+import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Actions.GridSelect (goToSelected)
+import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
-import XMonad.Layout.Grid
+import XMonad.Layout.Decoration
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.NoBorders
-import XMonad.Layout.ThreeColumns
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeysP)
-import XMonad.Util.Scratchpad
-import XMonad.Util.WorkspaceCompare
+import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
+import XMonad.Util.WorkspaceCompare (getSortByIndex)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Text as T
@@ -25,15 +24,19 @@ import System.IO
 import System.Exit
 import Control.Monad
 
+myXPConfig :: XPConfig
 myXPConfig = def
   { font = "xft:DejaVu Sans Mono:size=12"
   , height = 40
   }
 
+myKeys :: [(String, X())]
 myKeys =
   [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess)
   , ("M-S-q", kill) -- close focused window
   , ("M-S-<Return>", spawn myTerm) -- myTerm is appended by Nix
+  , ("M-S-h", sendMessage MirrorShrink) -- shrink slave size
+  , ("M-S-l", sendMessage MirrorExpand) -- expand slave size
   , ("M-o", scratchpadSpawnActionTerminal myTerm)
   , ("M-g", goToSelected def)
   , ("M-d", spawn "rofi -show combi")
@@ -58,11 +61,48 @@ myKeys =
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 1%-")
   ]
 
+
+decoTheme :: Theme
+decoTheme = def
+  { activeColor = "#AA0000"
+  , activeBorderColor = "#AA0000"
+  , inactiveColor = "#999999"
+  , inactiveBorderColor = "#999999"
+  , decoWidth = 10
+  , decoHeight = 10
+  }
+
+newtype SideDecoration a = SideDecoration Direction2D deriving (Show, Read)
+instance Eq a => DecorationStyle SideDecoration a where
+  describeDeco _ = "Deco"
+
+  shrink b (Rectangle _ _ dw dh) (Rectangle x y w h)
+    | SideDecoration U <- b = Rectangle x (y + fi dh) w (h - dh)
+    | SideDecoration R <- b = Rectangle x y (w - dw) h
+    | SideDecoration D <- b = Rectangle x y w (h - dh)
+    | SideDecoration L <- b = Rectangle (x + fi dw) y (w - dw) h
+
+  pureDecoration b dw dh _ st _ (win, Rectangle x y w h) =
+    Just $ case b of
+      SideDecoration U -> Rectangle x y w dh
+      SideDecoration R -> Rectangle (x + fi (w - dw)) y dw h
+      SideDecoration D -> Rectangle x (y + fi (h - dh)) w dh
+      SideDecoration L -> Rectangle x y dw h
+
+instance Shrinker CustomShrink where
+  shrinkIt _ _ = [""]
+
+myDecorate = decoration CustomShrink decoTheme (SideDecoration L)
+myDecorate2 = decoration CustomShrink decoTheme (SideDecoration U)
+myDecorate3 = myDecorate . myDecorate2
+
+
+scratchpadHook :: ManageHook
 scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
   where
-    h = 0.4     -- height
-    w = 0.4     -- width
-    t = 1 - h   -- distance from top edge
+    h = 0.5     -- height
+    w = 0.3     -- width
+    t = 0.9 - h   -- distance from top edge
     l = 1 - w   -- distance from left edge
 
 myManageHook :: ManageHook
@@ -79,57 +119,21 @@ myManageHook = composeAll $
      , "Picture-in-Picture"
      , "TelegramDesktop"
      , "dialog"
-     , "dolphin"
      , "mpv"
   ]]
+  ++
+  [ className =? "scratchpad" --> hasBorder True ]
 
--- This gives the hidden workspaces and the master window in those workspaces
--- as a string.
-myExtras :: [X (Maybe String)]
-myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidden)] -- init takes out the last space
-  where
-    -- Gets the master window's (if any) name in the workspace
-    ripName (W.Workspace i _ (Just stack)) =
-      liftM2 (\x y -> T.concat [header, x, dash, y, footer]) c t
-        where
-          header = T.pack (i ++ ":(")
-          dash = T.pack " - "
-          footer = T.pack ") "
-          fshorten = fmap (T.pack . shorten 13)
-          t = fshorten (runQuery title (W.focus stack))
-          c = fshorten (runQuery className (W.focus stack))
-    ripName _ = return T.empty
-    -- Given a stack of workspaces, return a list of names as per above
-    getNames ws = foldl (liftM2 T.append) (return T.empty) (map ripName ws)
-    extraFormatting = fmap (\s -> front `T.append` s `T.append` back)
-      where
-        front = T.pack "<fc=lightgray>"
-        back = T.pack "</fc>"
-    -- Gets the Maybe String out.
-    safeUnpack s = if T.null s then Nothing else (Just . T.unpack) s
-
--- Coerces string to be length `n`.
--- If string is too long, cut and put ellipses, otherwise right pad with spaces.
-fitStr n s
-  | len < targetlen = take n (s ++ repeat ' ')
-  | len == targetlen = s ++ "..."
-  | otherwise = take targetlen s ++ "..."
-    where
-      len = length s
-      targetlen = n-3
-
+myPP :: PP
 myPP = xmobarPP {
     ppSep = " | "
   , ppCurrent = xmobarColor "green" "" . wrap "[" "]"
   , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
   , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
-  , ppTitle = xmobarColor "cyan" "" . shorten 50      -- window title format
+  , ppTitle = xmobarColor "cyan" "" -- window title format
   , ppSort = getSortByIndex
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
   }
-
-myDynBar :: MonadIO m => ScreenId -> m Handle
-myDynBar (S n) = spawnPipe $ "xmobar -x " ++ show n
 
 main :: IO()
 main = do
@@ -137,14 +141,13 @@ main = do
   xmonad $ docks $ ewmhFullscreen desktopConfig
     { terminal = myTerm
     , modMask = mod4Mask  -- meta key
-    , normalBorderColor = "#AAAAAA"
+    , normalBorderColor = "#999999"
     , focusedBorderColor = "#FF0000"
-    , borderWidth = myBorderWidth
+    , borderWidth = 5
     , manageHook = scratchpadHook <+> myManageHook
-    , layoutHook = avoidStruts $
-      Tall 1 (1/100) (1/2)
-      ||| ThreeColMid 1 (1/100) (25/100)
-      ||| Grid
+    , layoutHook = noBorders $ avoidStruts $ myDecorate3 $
+      ResizableTall 1 (1/100) (1/2) []
+      ||| ResizableThreeColMid 1 (1/100) (30/100) []
     , handleEventHook = handleEventHook def
     , logHook = dynamicLogWithPP $ myPP { ppOutput = hPutStrLn bar }
     }

@@ -21,7 +21,9 @@
     inetutils # telnet
     inkscape
     iotop
+    killall
     lm_sensors
+    lsof
     neofetch
     neovim-remote
     nmap
@@ -31,6 +33,7 @@
     openvpn
     pavucontrol
     poppler_utils
+    reptyr
     scrot
     stress
     syncthing
@@ -41,6 +44,7 @@
     veracrypt
     xclip
     xorg.xev
+    xorg.xkill
     xorg.xprop
     xterm
     zip

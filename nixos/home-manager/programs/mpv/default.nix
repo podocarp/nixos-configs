@@ -8,9 +8,9 @@
       "osd-font-size" = "25";
       "screenshot-format" = "png";
       "volume-max" = "150";
-      "hwdec" = "auto-safe";
-      "vo" = "gpu";
-      "profile" = "gpu-hq";
+      #"hwdec" = "auto-safe";
+      #"vo" = "gpu";
+      #"profile" = "gpu-hq";
     };
     bindings = {
       "WHEEL_UP" = "seek 5";

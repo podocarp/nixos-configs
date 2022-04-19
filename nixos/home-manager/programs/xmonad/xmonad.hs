@@ -4,13 +4,10 @@ import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.GridSelect (goToSelected)
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
-import XMonad.Layout.Decoration
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ResizableThreeColumns
-import XMonad.Layout.NoBorders
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
 import XMonad.Util.EZConfig (additionalKeysP)
@@ -62,42 +59,6 @@ myKeys =
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 1%-")
   ]
 
-
-decoTheme :: Theme
-decoTheme = def
-  { activeColor = "#AA0000"
-  , activeBorderColor = "#AA0000"
-  , inactiveColor = "#999999"
-  , inactiveBorderColor = "#999999"
-  , decoWidth = 10
-  , decoHeight = 10
-  }
-
-newtype SideDecoration a = SideDecoration Direction2D deriving (Show, Read)
-instance Eq a => DecorationStyle SideDecoration a where
-  describeDeco _ = "Deco"
-
-  shrink b (Rectangle _ _ dw dh) (Rectangle x y w h)
-    | SideDecoration U <- b = Rectangle x (y + fi dh) w (h - dh)
-    | SideDecoration R <- b = Rectangle x y (w - dw) h
-    | SideDecoration D <- b = Rectangle x y w (h - dh)
-    | SideDecoration L <- b = Rectangle (x + fi dw) y (w - dw) h
-
-  pureDecoration b dw dh _ st _ (win, Rectangle x y w h) =
-    Just $ case b of
-      SideDecoration U -> Rectangle x y w dh
-      SideDecoration R -> Rectangle (x + fi (w - dw)) y dw h
-      SideDecoration D -> Rectangle x (y + fi (h - dh)) w dh
-      SideDecoration L -> Rectangle x y dw h
-
-instance Shrinker CustomShrink where
-  shrinkIt _ _ = [""]
-
-myDecorate = decoration CustomShrink decoTheme (SideDecoration L)
-myDecorate2 = decoration CustomShrink decoTheme (SideDecoration U)
-myDecorate3 = myDecorate . myDecorate2
-
-
 scratchpadHook :: ManageHook
 scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
   where
@@ -122,8 +83,6 @@ myManageHook = composeAll $
      , "dialog"
      , "mpv"
   ]]
-  ++
-  [ className =? "scratchpad" --> hasBorder True ]
 
 myPP :: PP
 myPP = xmobarPP {
@@ -136,6 +95,12 @@ myPP = xmobarPP {
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
   }
 
+myHandleEventHook = handleEventHook def
+
+myLayoutHook = avoidStruts $
+  ResizableTall 1 (1/100) (1/2) []
+  ||| ResizableThreeColMid 1 (1/100) (30/100) []
+
 main :: IO()
 main = do
   bar <- spawnPipe "xmobar"
@@ -146,10 +111,8 @@ main = do
     , focusedBorderColor = "#FF0000"
     , borderWidth = 5
     , manageHook = scratchpadHook <+> myManageHook
-    , layoutHook = refocusLastLayoutHook $ noBorders $ avoidStruts $ myDecorate3 $
-      ResizableTall 1 (1/100) (1/2) []
-      ||| ResizableThreeColMid 1 (1/100) (30/100) []
-    , handleEventHook = handleEventHook def
+    , layoutHook = myLayoutHook
+    , handleEventHook = myHandleEventHook
     , logHook = dynamicLogWithPP $ myPP { ppOutput = hPutStrLn bar }
     }
     `additionalKeysP` myKeys

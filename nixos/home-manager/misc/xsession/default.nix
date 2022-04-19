@@ -61,7 +61,7 @@
   '';
 
   gtk = {
-    enable = true;
+    enable = false;
     iconTheme = {
       name = "Breeze";
       package = pkgs.breeze-icons;
@@ -72,7 +72,7 @@
     };
   };
   qt = {
-    enable = true;
+    enable = false;
     platformTheme = "gnome";
     style = {
       name = "Breeze";

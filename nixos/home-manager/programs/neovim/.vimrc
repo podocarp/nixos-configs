@@ -5,8 +5,8 @@ set autowriteall
 set colorcolumn=80
 set cursorline
 set dictionary+=/usr/share/dict/words
+set expandtab
 set guicursor=
-set hlsearch
 set ignorecase
 set incsearch
 set lazyredraw
@@ -22,7 +22,6 @@ set ruler
 set scrolloff=4
 set shada=:10,'10,%,n~/.local/share/nvim/shada/main.shada
 set shortmess+=ac
-set showcmd
 set signcolumn=yes
 set smartcase
 set smartindent
@@ -52,8 +51,8 @@ nmap <silent> co <Plug>(coc-codelens-action)
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
-let g:vimtex_view_general_viewer='okular'
-let g:vimtex_view_general_options='--unique --noraise file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_quickfix_method = 'pplatex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",

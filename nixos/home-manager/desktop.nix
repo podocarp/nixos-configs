@@ -17,9 +17,6 @@ in
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
-    ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm; myBorderWidth = 10;
-    })
 
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
@@ -30,14 +27,13 @@ in
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
     ./programs/readline/default.nix
+    # ./programs/sioyek/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     (import ./programs/vifm/default.nix args)
     ./programs/vscode/default.nix
 
-    (import ./services/dunst/default.nix (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
-    ./services/random-background/default.nix
     ./services/syncthing/default.nix
 
     ./scripts/default.nix

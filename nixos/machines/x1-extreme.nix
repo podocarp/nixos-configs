@@ -1,11 +1,8 @@
- config, pkgs, libs, ... }:
+ { config, pkgs, libs, ... }:
 
 {
   imports =
     [
-      ''${builtins.fetchGit {
-          url = "https://github.com/NixOS/nixos-hardware.git";
-      }}/lenovo/thinkpad/x1-extreme''
       <home-manager/nixos>
       ./common.nix
       ../misc/xserver.nix
@@ -30,13 +27,12 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
     sync.enable = true;
-    intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
+    intelBusId = "PCI:0:2:0";
   };
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
@@ -61,8 +57,6 @@
     analogioOffset = -100;
     uncoreOffset = -30;
   };
-
-  services.xserver.dpi = 100;
 
   services.thinkfan.enable = true;
   services.thinkfan.levels = [

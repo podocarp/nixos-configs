@@ -24,6 +24,7 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
+    ((import ./programs/firefox/default.nix) args)
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
@@ -32,7 +33,7 @@ in
     ./programs/readline/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
-    ./programs/vscode/default.nix
+    # ./programs/vscode/default.nix
     ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
     ./programs/zathura/default.nix
 
@@ -48,6 +49,12 @@ in
     ./misc/keyboard/default.nix
     ./misc/xresources/default.nix
   ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
 
   home.packages = with pkgs; [
     arandr

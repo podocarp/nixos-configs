@@ -39,8 +39,6 @@
       nodePackages.eslint
       nodePackages.prettier
       nodePackages.typescript
-
-      pplatex
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

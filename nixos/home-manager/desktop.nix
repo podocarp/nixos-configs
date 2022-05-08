@@ -32,6 +32,7 @@ in
     ./programs/tmux/default.nix
     (import ./programs/vifm/default.nix args)
     ./programs/vscode/default.nix
+    ./programs/zathura/default.nix
 
     ./services/gpg-agent/default.nix
     ./services/syncthing/default.nix

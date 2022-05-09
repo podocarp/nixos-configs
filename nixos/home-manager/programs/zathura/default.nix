@@ -5,8 +5,8 @@
     options = {
       "guioptions" = "";
       "scroll-step" = 200;
-      "window-title-basename" = true;
-      "window-title-page" = true;
+      "synctex" = true;
+      "synctex-editor-command" = "nvr --remote-silent +%{line} %{input}";
     };
   };
 }

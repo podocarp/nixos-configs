@@ -46,6 +46,7 @@ in
     gnumake
     highlight
     iftop
+    inetutils # telnet
     iotop
     lm_sensors
     neofetch
@@ -56,7 +57,6 @@ in
     ]))
     stress
     sysstat
-    telnet
     unzip
     usbutils # for lsusb
     veracrypt

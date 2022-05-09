@@ -51,9 +51,8 @@ nmap <silent> co <Plug>(coc-codelens-action)
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
-let g:vimtex_view_general_viewer = 'okular'
-let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-let g:vimtex_quickfix_method = 'pplatex'
+let g:vimtex_view_general_viewer = 'zathura'
+" let g:vimtex_view_general_options = '--noraise --unique file:@pdf\#src:@line@tex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",
     \ 'callback' : 1,
@@ -139,27 +138,24 @@ augroup TextProj
 augroup END
 
 
-""""""""""""""""""""""""""GENERAL MAPS"""""""""""""""""""""
-
 """"""""""""""""""""""""INSERT MODE MAPS"""""""""""""""""""
-
 " paste
 inoremap <C-v> <ESC>"+pa
 " dictionary completion
 inoremap <C-k> <C-x><C-x><C-k>
 
 """"""""""""""""""""""""NORMAL MODE MAPS"""""""""""""""""""
-
 " Sends things away without overwriting the register
 nnoremap <leader>d "_d
+
+" Write
+nnoremap <Esc> <Esc>:w<Enter>
 
 " Open shell (this breaks in vanilla vim)
 nnoremap <C-S> :sp<CR>:term<CR>A
 
 " Remove search highlights
 nnoremap <F3> :noh<CR>
-
-nnoremap <Esc> :w<CR>
 
 " For moving split windows
 nnoremap <C-W>h <C-W><S-H>

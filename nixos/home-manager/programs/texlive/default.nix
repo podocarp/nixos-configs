@@ -8,8 +8,6 @@
         algorithm2e
         amsmath
         beamer
-        # biber
-        # biblatex
         calrsfs
         cancel
         caption
@@ -28,10 +26,12 @@
         ifoddpage
         import
         latexmk
+        lualatex-math
+        libertinus-otf
+        libertinus-fonts
         lineno
         mathdots
         mathtools
-        microtype
         minted
         multirow
         pgf
@@ -47,6 +47,7 @@
         siunitx
         stmaryrd
         tikz-cd
+        unicode-math
         upquote
         wrapfig
         xkeyval

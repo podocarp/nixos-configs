@@ -47,7 +47,7 @@ in
     ((import ./misc/fcitx/default.nix) args)
     ((import ./misc/applications/default.nix) args)
     ./misc/keyboard/default.nix
-    ./misc/xresources/default.nix
+    ./misc/xsession/default.nix
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {

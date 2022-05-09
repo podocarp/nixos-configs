@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -19,16 +19,27 @@
   networking.hostName = "desktop"; # Define your hostname.
   networking.firewall.allowedUDPPorts = [ 50000 ];
 
+  # to allow for gtk theme config
+  programs.dconf.enable = true;
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; [
+      nvidia-vaapi-driver
       vaapiVdpau
-      libvdpau-va-gl
     ];
+  };
+
+  hardware.nvidia = {
+    powerManagement.enable = true;
+  };
+
+  environment.variables = {
+    "LIBVA_DRIVER_NAME" = "vdpau";
+    "VDPAU_DRIVER" = "nvidia";
   };
 
   systemd.services.fix_acpi_wakeup = {
@@ -42,6 +53,7 @@
 
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
+
   home-manager.users.pengu = import ../home-manager/desktop.nix;
   services.xserver.desktopManager.plasma5.enable = true;
 

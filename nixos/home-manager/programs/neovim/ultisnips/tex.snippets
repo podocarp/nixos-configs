@@ -78,6 +78,12 @@ snippet aln "Align" b
 \end{align}
 endsnippet
 
+snippet gat "Gather unnumbered" b
+\begin{gather*}
+    $1
+\end{gather*}
+endsnippet
+
 snippet alnn "Align unnumbered" b
 \begin{align*}
     $1
@@ -159,7 +165,7 @@ endsnippet
 snippet mat "Matrix" b
 \begin{${1:pbvVBsmall}matrix}
     $2
-\end{matrix}
+\end{$1matrix}
 endsnippet
 
 snippet mqty "Matrix quantity" w
@@ -263,6 +269,14 @@ snippet arr "Array" b
 \end{array}
 endsnippet
 
+snippet frame "frame environment" b
+\begin{frame}[${1:t}]
+    \frametitle{${2:title}}
+    \framesubtitle{${3:subtitle}}
+    $0
+\end{frame}
+endsnippet
+
 snippet algo "Algorithm block" b
 \begin{algorithm}
 \SetKwFunction{${3:func}}{$4}
@@ -275,9 +289,9 @@ endsnippet
 snippet fig "Figure" bi
 \begin{figure}[${1:htpb}]
     \centering
-    ${2:\includegraphics[width=0.8\textwidth]{$3}}
-    \caption{${4:$3}}
-    \label{fig:${5:${3/\W+/-/g}}}
+    \includegraphics[width=0.8\textwidth]{$2}
+    \caption{${3:$2}}
+    \label{fig:${4:${2/\W+/-/g}}}
 \end{figure}
 endsnippet
 

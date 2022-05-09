@@ -1,6 +1,4 @@
-# This file includes things related to X and stuff on X.
 { pkgs, ... }:
-
 {
   services.xserver = {
     enable = true;
@@ -14,7 +12,5 @@
         manage = "window";
       }
     ];
-
-    useGlamor = true;
   };
 }

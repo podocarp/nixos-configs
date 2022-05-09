@@ -1,22 +1,19 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 import XMonad
-import XMonad.Actions.CycleWS
-import XMonad.Actions.GridSelect
-import XMonad.Config.Desktop
-import XMonad.Core
-import XMonad.Hooks.DynamicBars
+import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Actions.GridSelect (goToSelected)
+import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
-import XMonad.Layout.Grid
-import XMonad.Layout.NoBorders
-import XMonad.Layout.ThreeColumns
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.ResizableThreeColumns
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig(additionalKeysP)
-import XMonad.Util.Scratchpad
-import XMonad.Util.WorkspaceCompare
+import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
+import XMonad.Util.WorkspaceCompare (getSortByIndex)
 
 import qualified XMonad.StackSet as W
 import qualified Data.Text as T
@@ -25,20 +22,27 @@ import System.IO
 import System.Exit
 import Control.Monad
 
+myXPConfig :: XPConfig
 myXPConfig = def
   { font = "xft:DejaVu Sans Mono:size=12"
   , height = 40
   }
 
+myKeys :: [(String, X())]
 myKeys =
   [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess)
   , ("M-S-q", kill) -- close focused window
   , ("M-S-<Return>", spawn myTerm) -- myTerm is appended by Nix
+  , ("M-S-h", sendMessage MirrorShrink) -- shrink slave size
+  , ("M-S-l", sendMessage MirrorExpand) -- expand slave size
   , ("M-o", scratchpadSpawnActionTerminal myTerm)
   , ("M-g", goToSelected def)
-  , ("M-d", spawn "rofi -show combi") -- launch dmenu
-  , ("M-f", spawn "rofi-pass") -- launch dmenu
+  , ("M-d", spawn "rofi -show combi")
+  , ("M-f", spawn "rofi-pass")
+  , ("M-e", spawn "dolphin")
   , ("M-<Tab>", toggleWS) -- exclude those on other screens
+  -- screenshot and copies to clipboard
+  , ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
   ]
   ++
   -- M-Shift-[1-9] moves windows to workspaces
@@ -47,32 +51,24 @@ myKeys =
     | (key, i) <- zip [1..9] (workspaces def)
     , (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")] ]
   ++
-  [ ("<XF86AudioMute>", spawn muteCmd)
-  , ("<XF86AudioRaiseVolume>", spawn volDownCmd)
-  , ("<XF86AudioLowerVolume>", spawn volUpCmd)
+  [ ("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
+  , ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 1%+' | amixer -s")
+  , ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 1%-' | amixer -s")
   -- Brightness controls
   , ("<XF86MonBrightnessUp>", spawn "brightnessctl s 1%+")
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 1%-")
   ]
-  where
-    -- This might be needed on ALSA.
-    -- "echo -e 'sset Master toggle\nset Headphone toggle'
-    muteCmd = "echo -e 'sset Master toggle' | amixer -s"
-    volDownCmd = "echo -e 'sset Master 1%+' | amixer -s"
-    volUpCmd = "echo -e 'sset Master 1%-' | amixer -s"
 
+scratchpadHook :: ManageHook
 scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
   where
-    h = 0.4     -- height
-    w = 0.4     -- width
-    t = 1 - h   -- distance from top edge
+    h = 0.5     -- height
+    w = 0.3     -- width
+    t = 0.9 - h   -- distance from top edge
     l = 1 - w   -- distance from left edge
 
 myManageHook :: ManageHook
 myManageHook = composeAll $
-  [ className =? "TelegramDesktop" --> doFloat <+> doShift "0_5"
-  ]
-  ++
   [ title =? name --> doFloat | name <- [
     "Volume Control"
     , "Open Folder"
@@ -80,83 +76,43 @@ myManageHook = composeAll $
   ++
   [ className =? name --> doFloat | name <- [
      "About"
-     , "Desktop — Plasma"
+     , "Image Lounge" -- nomacs
      , "Picture in picture"
      , "Picture-in-Picture"
-     , "Plasma"
-     , "Plasma-desktop"
-     , "Preferences"
+     , "TelegramDesktop"
      , "dialog"
-     , "krunner"
-     , "menu"
-     , "plasmashell"
-     , "pop-up"
-     , "systemsettings"
+     , "mpv"
   ]]
 
--- This gives the hidden workspaces and the master window in those workspaces
--- as a string.
-myExtras :: [X (Maybe String)]
-myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidden)] -- init takes out the last space
-  where
-    -- Gets the master window's (if any) name in the workspace
-    ripName (W.Workspace i _ (Just stack)) =
-      liftM2 (\x y -> T.concat [header, x, dash, y, footer]) c t
-        where
-          header = T.pack (i ++ ":(")
-          dash = T.pack " - "
-          footer = T.pack ") "
-          fshorten = fmap (T.pack . shorten 13)
-          t = fshorten (runQuery title (W.focus stack))
-          c = fshorten (runQuery className (W.focus stack))
-    ripName _ = return T.empty
-    -- Given a stack of workspaces, return a list of names as per above
-    getNames ws = foldl (liftM2 T.append) (return T.empty) (map ripName ws)
-    extraFormatting = fmap (\s -> front `T.append` s `T.append` back)
-      where
-        front = T.pack "<fc=lightgray>"
-        back = T.pack "</fc>"
-    -- Gets the Maybe String out.
-    safeUnpack s = if T.null s then Nothing else (Just . T.unpack) s
-
--- Coerces string to be length `n`.
--- If string is too long, cut and put ellipses, otherwise right pad with spaces.
-fitStr n s
-  | len < targetlen = take n (s ++ repeat ' ')
-  | len == targetlen = s ++ "..."
-  | otherwise = take targetlen s ++ "..."
-    where
-      len = length s
-      targetlen = n-3
-
+myPP :: PP
 myPP = xmobarPP {
     ppSep = " | "
   , ppCurrent = xmobarColor "green" "" . wrap "[" "]"
   , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
   , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
-  , ppTitle = xmobarColor "cyan" "" . shorten 50      -- window title format
+  , ppTitle = xmobarColor "cyan" "" -- window title format
   , ppSort = getSortByIndex
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
   }
 
-myDynBar :: MonadIO m => ScreenId -> m Handle
-myDynBar (S n) = spawnPipe $ "xmobar -x " ++ show n
+myHandleEventHook = handleEventHook def
+
+myLayoutHook = avoidStruts $
+  ResizableTall 1 (1/100) (1/2) []
+  ||| ResizableThreeColMid 1 (1/100) (30/100) []
 
 main :: IO()
 main = do
   bar <- spawnPipe "xmobar"
-  xmonad $ docks $ ewmh desktopConfig
+  xmonad $ docks $ ewmhFullscreen desktopConfig
     { terminal = myTerm
     , modMask = mod4Mask  -- meta key
-    , normalBorderColor = "#AAAAAA"
+    , normalBorderColor = "#999999"
     , focusedBorderColor = "#FF0000"
-    , borderWidth = 3
+    , borderWidth = 5
     , manageHook = scratchpadHook <+> myManageHook
-    , layoutHook = avoidStruts $
-      Tall 1 (1/100) (1/2)
-      ||| ThreeColMid 1 (1/100) (25/100)
-      ||| Grid
-    , handleEventHook = handleEventHook def <+> fullscreenEventHook
+    , layoutHook = myLayoutHook
+    , handleEventHook = myHandleEventHook
     , logHook = dynamicLogWithPP $ myPP { ppOutput = hPutStrLn bar }
     }
     `additionalKeysP` myKeys

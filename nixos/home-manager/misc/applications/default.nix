@@ -12,6 +12,7 @@
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
+    dolphin
     ffmpeg
     highlight
     hugo
@@ -20,7 +21,9 @@
     inetutils # telnet
     inkscape
     iotop
+    killall
     lm_sensors
+    lsof
     neofetch
     neovim-remote
     nmap
@@ -28,7 +31,9 @@
     nomacs
     okular
     openvpn
+    pavucontrol
     poppler_utils
+    reptyr
     scrot
     stress
     syncthing
@@ -37,9 +42,9 @@
     unzip
     usbutils # for lsusb
     veracrypt
-    xdotool
     xclip
     xorg.xev
+    xorg.xkill
     xorg.xprop
     xterm
     zip

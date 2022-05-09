@@ -1,0 +1,44 @@
+[ -d "/tmp/vifm" ] || mkdir "/tmp/vifm"
+
+# $1 action
+# $2 panel width
+# $3 panel height
+# $4 image path
+width=$(($2*8))
+height=$(($3*14))
+
+PCACHE="/tmp/vifm/$(stat --terse -- "$(readlink -f "$4")" | md5sum | cut -d' ' -f1)"
+
+cleanup() {
+    printf '\33[s\33[5A\33[2K\33[u'
+    clear
+    exit 0
+}
+
+image() {
+    if [ -n "$TMUX" ];
+    then
+        convert "$1" -geometry "${2}x${3}>" sixel:- | sed -e $'s:^:\u1bPtmux;:' -e 's:\x1b:\x1b\x1b:g' -e $'s/$/\u1b\\\\/'
+    else
+        convert "$1" -geometry "${2}x${3}>" sixel:-
+    fi
+}
+
+case "$1" in
+  "clear")
+    cleanup
+    ;;
+  "draw")
+    [ ! -f "${PCACHE}.jpg" ] && convert -quality 50 -filter Lanczos -thumbnail "512x512" "$4" "${PCACHE}.jpg"
+    image "${PCACHE}.jpg" "$width" "$height"
+    ;;
+  "video")
+    [ ! -f "${PCACHE}.jpg" ] && ffmpegthumbnailer -i "$4" -o "${PCACHE}.jpg" -s 0 -q 5
+    image "${PCACHE}.jpg" "$width" "$height"
+    ;;
+  "pdf")
+    [ ! -f "${PCACHE}.jpg" ] && pdftoppm -jpeg -f 1 -singlefile "$4" "$PCACHE"
+    image "${PCACHE}.jpg" "$width" "$height"
+    ;;
+  *)
+esac

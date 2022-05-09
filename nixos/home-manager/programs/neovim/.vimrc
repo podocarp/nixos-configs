@@ -1,5 +1,4 @@
 """""""""""""""""""""""""""""FLAGS""""""""""""""""""""""""""
-" set statusline+=%F\ %l:%c
 set autochdir
 set autoindent
 set autowriteall
@@ -7,6 +6,8 @@ set colorcolumn=80
 set cursorline
 set dictionary+=/usr/share/dict/words
 set expandtab
+set guicursor=
+set ignorecase
 set incsearch
 set lazyredraw
 set list
@@ -20,16 +21,16 @@ set relativenumber
 set ruler
 set scrolloff=4
 set shada=:10,'10,%,n~/.local/share/nvim/shada/main.shada
-set shiftwidth=4
 set shortmess+=ac
-set showcmd
 set signcolumn=yes
 set smartcase
 set smartindent
 set smarttab
+set splitbelow
 set termguicolors
 set title
 set undofile
+set whichwrap+=<,>,h,l,[,]
 set wildmenu
 set wildmode=longest,list,full
 
@@ -50,15 +51,8 @@ nmap <silent> co <Plug>(coc-codelens-action)
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:tex_flavor = 'latex'
-let g:vimtex_view_general_viewer='okular'
-let g:vimtex_view_general_options='--unique file:@pdf\#src:@line@tex'
-let g:vimtex_syntax_conceal = {
-    \ 'math_bounds' : 0,
-    \ 'math_delimiters' : 0,
-    \ 'math_fracs' : 0,
-\}
-" set conceallevel=2
-" let g:tex_conceal="abdgm"
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_quickfix_method = 'pplatex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",
@@ -74,26 +68,16 @@ let g:vimtex_compiler_latexmk = {
     \ ],
 \}
 
-let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure']
-let g:vimtex_indent_tikz_enabled = 0
+let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure',
+    \ 'itemize', 'enumerate' ]
+let g:vimtex_indent_on_ampersands = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
-
-""""""Haskell
-"Plug 'neovimhaskell/haskell-vim', {'for': 'haskell'}
 
 """"""Misc
 "Plug 'scrooloose/nerdtree'
 
-" Start NERDTree, unless a file or session is specified, eg. vim -S session_file.vim.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') && v:this_session == '' | NERDTree | endif
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-
-map <C-n> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
@@ -114,17 +98,11 @@ let g:airline_section_z='%l:%c %p%%'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline#extensions#whitespace#enabled = 0
+
 "Plug 'tpope/vim-surround'
 
-"Plug 'morhetz/gruvbox'
-" let g:gruvbox_contrast_dark='hard'
-" let g:gruvbox_contrast_light='hard'
-" let g:gruvbox_invert_indent_guides=1
-" let g:gruvbox_sign_column='bg0'
-" let g:gruvbox_colors = { 'bg0': ['#000000', 0] }
-
-""""""
 "call plug#end()
+
 """""""""""""""""""""""""""AESTHETICS""""""""""""""""""""""
 " Colorscheme
 "Plug 'NLKNguyen/papercolor-theme'
@@ -143,18 +121,6 @@ let g:PaperColor_Theme_Options = {
     \ }
 \ }
 colorscheme PaperColor
-" hi CocCodeLens guibg=#333333 guifg=#999090
-" hi ALEErrorSign guibg=#202020
-" hi ALEWarningSign guibg=#202020
-
-" Disable neovim insert mode bar cursor
-set guicursor=
-
-" Highlight search
-set hlsearch
-
-" Scrolling past the line pops you below
-set whichwrap+=<,>,h,l,[,]
 
 " No line numbers in terminal (this breaks in vanilla vim)
 autocmd TermOpen * setlocal nonumber norelativenumber
@@ -166,39 +132,15 @@ let g:netrw_browse_split = 1
 let g:netrw_winsize = 20
 
 """""""File Extension defaults
-augroup MDProj
+augroup TextProj
     au!
-    autocmd BufRead,BufNewFile *.md setlocal tw=80
-    autocmd BufRead,BufNewFile *.md setlocal spell spelllang=en_gb
-    autocmd BufRead,BufNewFile *.md setlocal syntax=off
+    autocmd BufRead,BufNewFile *.md,*.tex setlocal tw=80
+    autocmd BufRead,BufNewFile *.md,*.tex setlocal spell spelllang=en_gb
 augroup END
 
-augroup TexProj
-    au!
-    autocmd BufRead,BufNewFile *.tex setlocal tw=80
-    autocmd BufRead,BufNewFile *.tex setlocal spell spelllang=en_gb
-    autocmd BufRead,BufNewFile *.tex setlocal indentkeys-=o,O
-augroup END
-
-augroup CProj
-    au!
-    autocmd BufRead,BufNewFile *.c,*.cpp,*.h setlocal cindent shiftwidth=8
-augroup END
-
-augroup JSProj
-    au!
-    autocmd BufRead,BufNewFile *.js,*.jsx,*.ts,*.tsx setlocal softtabstop=2 shiftwidth=2
-augroup END
-
-augroup PyProj
-    au!
-    autocmd BufRead,BufNewFile *.py setlocal softtabstop=4 shiftwidth=4
-augroup END
 
 """"""""""""""""""""""""""GENERAL MAPS"""""""""""""""""""""
-" Scroll in wrapped lines
-map <Up> gk
-map <Down> gj
+
 """"""""""""""""""""""""INSERT MODE MAPS"""""""""""""""""""
 
 " paste
@@ -219,8 +161,6 @@ nnoremap <F3> :noh<CR>
 
 nnoremap <Esc> :w<CR>
 
-""""""""""""""""""""""SPLIT WINDOWS""""""""""""""""""""""""
-
 " For moving split windows
 nnoremap <C-W>h <C-W><S-H>
 nnoremap <C-W>j <C-W><S-J>
@@ -237,8 +177,8 @@ nnoremap <C-l> <C-W><C-l>
 vnoremap <leader>d "_d
 
 " Move selected blocks up and down
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+vnoremap <A-j> :m '>+1<CR>gv
+vnoremap <A-k> :m '<-2<CR>gv
 
 vnoremap <C-c> "+y
 vnoremap <C-x> "+d

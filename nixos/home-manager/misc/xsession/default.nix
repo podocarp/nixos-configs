@@ -1,5 +1,13 @@
-{ ... }:
+{ pkgs, ... }:
 {
+  xsession = {
+    enable = true;
+    profileExtra = ''
+      xset r rate 200 30
+    '';
+    scriptPath = ".xsession-hm";
+  };
+
   xresources.extraConfig =
   ''
     ! PaperColor Theme
@@ -40,13 +48,35 @@
       Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
       Ctrl Shift <Key> V: insert-selection(CLIPBOARD)
     XTerm*backarrowKey: false
-    XTerm*ttyModes: erase ^?
-    XTerm*ptyInitialErase: true
     XTerm*decTerminalID: vt340
-    XTerm*trimSelection: true
-    XTerm*termName: st-256color
-    XTerm*pointerShape: left_ptr
+    XTerm*metaSendsEscape: true
+    XTerm*numColorRegisters: 256
     XTerm*pointerColor: black
     XTerm*pointerColorBackground: black
+    XTerm*pointerShape: left_ptr
+    XTerm*ptyInitialErase: true
+    XTerm*termName: st-256color
+    XTerm*trimSelection: true
+    XTerm*ttyModes: erase ^?
   '';
+
+  gtk = {
+    enable = false;
+    iconTheme = {
+      name = "Breeze";
+      package = pkgs.breeze-icons;
+    };
+    theme = {
+      name = "Breeze";
+      package = pkgs.breeze-gtk;
+    };
+  };
+  qt = {
+    enable = false;
+    platformTheme = "gnome";
+    style = {
+      name = "Breeze";
+      package = pkgs.breeze-qt5;
+    };
+  };
 }

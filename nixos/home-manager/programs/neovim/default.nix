@@ -10,10 +10,8 @@
       coc-pyright
       coc-snippets
       coc-vimtex
-      command-t
       nerdtree
       papercolor-theme
-      Recover-vim
       ultisnips
       undotree
       vim-airline
@@ -35,10 +33,10 @@
     extraPackages = with pkgs; [
       haskell-language-server
       haskellPackages.hlint
-
       nodePackages.eslint
       nodePackages.prettier
       nodePackages.typescript
+      xdotool
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -48,10 +46,10 @@
 
     withNodeJs = true;
     withPython3 = true;
-    withRuby = true;
+    withRuby = false;
 
+    # Unfortunately having the snippets file RO is too troublesome.
     extraConfig = builtins.readFile (toString ./.vimrc) + ''
-      " Unfortunately having the snippets file RO is too troublesome.
       let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
     '';
 

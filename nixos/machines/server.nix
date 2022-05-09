@@ -163,7 +163,7 @@ in
     neovim
     openssl
     pciutils # for lspci
-    smbclient
+    samba
     tmux
     tcpdump
     wget

@@ -8,6 +8,7 @@ in
   programs.home-manager.enable = true;
   home.username = "pengu";
   home.homeDirectory = homeDir;
+  home.stateVersion = "22.11";
 
   imports =
   [

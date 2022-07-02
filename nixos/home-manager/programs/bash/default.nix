@@ -5,7 +5,7 @@
     enable = true;
     sessionVariables = {
       EDITOR = "nvim";
-      PATH = "$PATH:~/Scripts";
+      PATH = "$PATH:~/Scripts:~/go/bin";
       GPG_TTY = "$(tty)";
       SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
     };

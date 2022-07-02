@@ -10,7 +10,7 @@ Config {
   -- layout
 , sepChar = "%"
 , alignSep = "}{"
-, template = "%StdinReader% }{| %alsa:default:Master% | %battery% | %date%"
+, template = "%XMonadLog% }{| %alsa:default:Master% | %battery% | %date%"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.
@@ -38,6 +38,6 @@ Config {
     , "-O", "音"
     , "-o", "静"
     ]
-  , Run StdinReader
+  , Run XMonadLog
   ]
 }

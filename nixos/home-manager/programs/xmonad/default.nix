@@ -15,8 +15,10 @@
       );
   };
 
+  xdg.configFile."xmobar/xmobarrc".source = ./xmobarrc;
+  xdg.configFile."xmobar/xmobarrc_unfocused".source = ./xmobarrc_unfocused;
+
   programs.xmobar = {
     enable = true;
-    extraConfig = builtins.readFile ./xmobarrc;
   };
 }

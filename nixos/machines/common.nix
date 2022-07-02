@@ -48,8 +48,10 @@
     extraConfig = ''
       Host *.home.com
         StrictHostKeyChecking no
-      HostKeyAlgorithms +ssh-rsa
-      PubkeyAcceptedKeyTypes +ssh-rsa
+
+      Host *
+        HostKeyAlgorithms +ssh-rsa
+        PubkeyAcceptedKeyTypes +ssh-rsa
     '';
   };
 

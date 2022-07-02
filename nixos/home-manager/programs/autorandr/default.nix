@@ -1,89 +1,58 @@
 { ... }:
 
 let
-    screen4k = "00ffffffffffff005a63348c15010101*";
-    screen1080left = "00ffffffffffff004c2d2c0d47385030*";
-    laptopscreen = "0*";
-    settingslaptop = {
-      enable = true;
-      primary = true;
-      mode = "1920x1080";
-      dpi = 100;
-      rate = "60.00";
-    };
-    settings4k = {
-      enable = true;
-      primary = true;
-      crtc = 0;
-      dpi = 140;
-      mode = "3840x2160";
-      rate = "60.00";
-    };
-    settings4koffset = {
-      enable = true;
-      primary = true;
-      crtc = 2;
-      dpi = 140;
-      mode = "3840x2160";
-      position = "1920x0";
-      rate = "60.00";
-    };
-    settings1080left = {
-      enable = true;
-      crtc = 0;
-      mode = "1920x1080";
-      position = "0x0";
-      rate = "60.00";
-      rotate = "left";
-    };
-in
-{
-  programs.autorandr = {
+  screen4k = "00ffffffffffff005a63348c*";
+  officeScreen = "00ffffffffffff0010ac*";
+  laptopscreen = "0*";
+  settingslaptop = {
     enable = true;
-
-    profiles."solo-4k" = {
-      fingerprint = {
-        "DP-1.3" = screen4k;
-        "eDP-1-1" = laptopscreen;
-      };
-      config = {
-        "DP-0".enable = false;
-        "DP-1".enable = false;
-        "HDMI-0".enable = false;
-        "eDP-1-1".enable = false;
-        "DP-1.3" = settings4k;
-      };
-    };
-
-    profiles."4k-1080left" = {
-      fingerprint = {
-        "DP-1.1" = screen1080left;
-        "DP-1.3" = screen4k;
-        "eDP-1-1" = laptopscreen;
-      };
-      config = {
-        "DP-0".enable = false;
-        "DP-1".enable = false;
-        "eDP-1-1".enable = false;
-        "HDMI-0".enable = false;
-        "DP-1.1" = settings1080left;
-        "DP-1.3" = settings4koffset;
-      };
-      # Autorandr insists on setting fb which xrandr does not like since our
-      # monitors are rotated.
-      hooks.postswitch = ''
-        xrandr --output DP-1.3 --pos 1080x0
-      '';
-    };
-
-    # Single laptop display on hybrid graphics
-    profiles."laptop-only" = {
-      fingerprint = {
-        "eDP-1-1" = laptopscreen;
-      };
-      config = {
-        "eDP-1-1" = settingslaptop;
-      };
-    };
+    primary = true;
+    mode = "1920x1080";
+    rate = "60.00";
   };
+  settingsOffice = {
+    enable = true;
+    primary = false;
+    mode = "1920x1080";
+    dpi = 100;
+    rate = "60.00";
+    position = "0x1080";
+  };
+  settings4k = {
+    enable = true;
+    primary = false;
+    mode = "3840x2160";
+    dpi = 120;
+    rate = "60.00";
+    position = "0x0";
+  };
+in
+  {
+    programs.autorandr = {
+      enable = true;
+
+      profiles = {
+        "work-from-home" = {
+          fingerprint = {
+            "eDP-1" = laptopscreen;
+            "HDMI-1" = screen4k;
+          };
+          config = {
+            "eDP-1" = settingslaptop // {position = "960x2160";};
+            "HDMI-1" = settings4k;
+          };
+        };
+
+        "office" = {
+          fingerprint = {
+            "eDP-1" = laptopscreen;
+            "DP-2" = officeScreen;
+          };
+          config = {
+            "eDP-1" = settingslaptop;
+            "DP-2" = settingsOffice;
+          };
+        };
+  };
+};
 }

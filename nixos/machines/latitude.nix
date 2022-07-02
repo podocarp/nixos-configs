@@ -3,15 +3,23 @@
 {
   imports =
     [
-      <home-manager/nixos>
       ./common.nix
       ../misc/xserver.nix
+      <home-manager/nixos>
+      <sops-nix/modules/sops>
     ];
 
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.grub.useOSProber = true;
+  boot.loader.grub = {
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+    device = "nodev";
+  };
+
+  sops = {
+    defaultSopsFile = ../secrets/work_secrets.yaml;
+    gnupg.sshKeyPaths = [];
+    age.keyFile = "/var/lib/sops/age/keys.txt";
+  };
 
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1
@@ -36,20 +44,16 @@
     ];
   };
 
-  home-manager.users.pengu = import ../home-manager/laptop.nix;
+  home-manager.users.pengu = import ../home-manager/work_laptop.nix;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # WARNING: Machine specific settings. May crash your machine.
-  services.undervolt = {
-    enable = true;
-    coreOffset = -100;
-    analogioOffset = -100;
-    uncoreOffset = -30;
-  };
-
   services.xserver.dpi = 100;
+  services.xserver.libinput = {
+    enable = true;
+    touchpad.accelSpeed = "0.3";
+  };
 
   system.stateVersion = "22.05";
 }

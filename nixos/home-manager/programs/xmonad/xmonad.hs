@@ -94,6 +94,10 @@ myManageHook = composeAll $
      , "dialog"
      , "mpv"
   ]]
+  ++
+  [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat | name <- [
+    "pop-up"
+  ]]
 
 -- This gives the hidden workspaces and the master window in those workspaces
 -- as a string.

@@ -31,6 +31,7 @@
     nomacs
     okular
     openvpn
+    p7zip
     pavucontrol
     poppler_utils
     reptyr

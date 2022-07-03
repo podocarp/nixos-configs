@@ -16,7 +16,7 @@
   virtualisation.oci-containers.containers."tinode-srv" = {
     autoStart = true;
     image = "tinode/tinode-mysql:latest";
-    ports = [ "6060:6060" ];
+    pouts = [ "6060:6060" ];
     volumes = let
         conf = ./tinode.conf;
       in

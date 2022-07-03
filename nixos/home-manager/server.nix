@@ -14,6 +14,7 @@ in
   # paths it should manage.
   home.username = "pengu";
   home.homeDirectory = homeDir;
+  home.stateVersion = "22.11";
 
   imports = [
     ((import ./programs/vifm/default.nix) {

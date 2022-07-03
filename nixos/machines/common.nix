@@ -104,4 +104,6 @@
   };
 
   nix.settings.allowed-users = [ "@wheel" ];
+
+  system.stateVersion = "22.11";
 }

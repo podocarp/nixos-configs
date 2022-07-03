@@ -33,8 +33,6 @@ in
     ./services/gpg-agent/default.nix
 
     ./scripts/default.nix
-
-    ./misc/xresources/default.nix
   ];
 
   nixpkgs.config.allowUnfree = true;

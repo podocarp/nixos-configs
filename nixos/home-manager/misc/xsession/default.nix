@@ -3,6 +3,7 @@
   xsession = {
     enable = true;
     profileExtra = ''
+      autorandr -c
       xset r rate 200 30
     '';
     scriptPath = ".xsession-hm";
@@ -61,6 +62,7 @@
   '';
 
   gtk = {
+    # Note: this requires programs.dconf.enable = true.
     enable = true;
     iconTheme = {
       name = "Breeze";

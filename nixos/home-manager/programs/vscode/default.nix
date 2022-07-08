@@ -3,8 +3,15 @@
 {
   programs.vscode = {
     enable = true;
-    extensions = with pkgs.vscode-extensions; [
+    extensions = (with pkgs.vscode-extensions; [
       vscodevim.vim
+    ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+      {
+        name = "activitusbar";
+        publisher = "Gruntfuggly";
+        version = "0.0.46";
+        sha256 = "sha256-sJEB9IJKIfBlSuhtecMHXlCeJFqh4+fWtOKJlzJ1t+A=";
+      }
     ];
     userSettings = {
       "editor.minimap.enabled" = false;

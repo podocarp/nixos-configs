@@ -130,14 +130,13 @@ myLogHook = xmobarPP
   , ppCurrent = xmobarColor "green" "" . wrap "[" "]"
   , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
   , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
-  , ppTitle = xmobarColor "cyan" "" . shorten 50      -- window title format
+  , ppTitle = xmobarColor "cyan" "" . shorten 100      -- window title format
   , ppSort = getSortByXineramaPhysicalRule horizontalScreenOrderer
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
   }
 
 myLogHookSecondary = myLogHook
-  { ppTitle = xmobarColor "lightblue" "" . shorten 25
-  , ppExtras = myExtras
+  { ppTitle = xmobarColor "lightblue" "" . shorten 100
   }
 
 xmobarMain = statusBarPropTo "_XMONAD_LOG"

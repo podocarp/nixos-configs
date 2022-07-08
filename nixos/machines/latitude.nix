@@ -54,6 +54,4 @@
     enable = true;
     touchpad.accelSpeed = "0.3";
   };
-
-  system.stateVersion = "22.05";
 }

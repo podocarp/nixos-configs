@@ -23,6 +23,8 @@
 
       "C_Cpp.default.cppStandard" = "c++17";
 
+      "python.analysis.typeCheckingMode" = "basic";
+
       "vim.normalModeKeyBindings" = [
         {
           "before" = ["<Esc>"];

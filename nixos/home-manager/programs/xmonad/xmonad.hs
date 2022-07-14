@@ -18,6 +18,8 @@ import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
 import XMonad.Util.WorkspaceCompare
 
+import Text.Regex.Posix
+
 import qualified XMonad.StackSet as W
 import qualified Data.Text as T
 
@@ -46,15 +48,14 @@ myKeys =
   , ("M-g", goToSelected def)
   , ("M-d", spawn "rofi -show combi")
   , ("M-f", spawn "rofi-pass")
-  , ("M-e", spawn "dolphin")
   , ("M-<Tab>", toggleWS) -- exclude those on other screens
   -- screenshot and copies to clipboard
   , ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
   ]
   ++
   [("M-" ++ mask ++ key, f scr)
-    | (key, scr) <- zip ["n", "m"] [0, 1]
-    , (f, mask) <- [(viewScreen def, ""), (sendToScreen def, "S-")]]
+    | (key, scr) <- zip ["w", "e", "r"] [0..]
+    , (f, mask) <- [(viewScreen horizontalScreenOrderer, ""), (sendToScreen horizontalScreenOrderer, "S-")]]
   ++
   -- M-Shift-[1-9] moves windows to workspaces
   -- M-[1-9] greedyviews workspaces
@@ -78,11 +79,23 @@ scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
     t = 0.9 - h   -- distance from top edge
     l = 1 - w   -- distance from left edge
 
+-- | @q =~ x@. matches @q@ using the regex @x@, return 'True' if it matches
+(=?~) :: Query String -> String -> Query Bool
+q =?~ x = fmap (matchRegex x) q
+  where
+    matchRegex :: String -> String -> Bool
+    matchRegex x p = x =~ p
+
+
 myManageHook :: ManageHook
 myManageHook = composeAll $
   [ title =? name --> doFloat | name <- [
     "Volume Control"
     , "Open Folder"
+  ]]
+  ++
+  [ title =?~ name --> doFloat | name <- [
+    "join\\?action.*"
   ]]
   ++
   [ className =? name --> doFloat | name <- [

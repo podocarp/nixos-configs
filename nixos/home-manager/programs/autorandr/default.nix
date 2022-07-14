@@ -49,7 +49,6 @@ in
         fingerprint = {
           "DP-1-1" = officeScreenH;
           "DP-1-3" = officeScreenV;
-          "eDP-1" = laptopscreen;
         };
         config = {
           "DP-1-1" = {

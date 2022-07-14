@@ -81,10 +81,10 @@ scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
 
 -- | @q =~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
-q =?~ x = fmap (matchRegex x) q
+q =?~ regex = fmap (matchRegex regex) q
   where
     matchRegex :: String -> String -> Bool
-    matchRegex x p = x =~ p
+    matchRegex pattern string = string =~ pattern
 
 
 myManageHook :: ManageHook
@@ -95,7 +95,7 @@ myManageHook = composeAll $
   ]]
   ++
   [ title =?~ name --> doFloat | name <- [
-    "join\\?action.*"
+    "join.action.*" -- zoom modals
   ]]
   ++
   [ className =? name --> doFloat | name <- [

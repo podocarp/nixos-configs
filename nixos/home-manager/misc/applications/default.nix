@@ -51,8 +51,8 @@
     zip
 
     (python3.withPackages(p: with p; [
-      pip
       pygments
+      autopep8
     ]))
 
     ### Fonts

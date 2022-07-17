@@ -1,0 +1,21 @@
+{ lib, pkgs, fetchurl, ... }:
+
+pkgs.python3.pkgs.buildPythonPackage rec {
+  pname = "smc";
+  version = "1.0.7";
+
+  src = fetchurl {
+    url = "https://pypi.shopee.io/packages/shopee_mesos_cli-1.0.77-py2.py3-none-linux_x86_64.whl";
+    hash = "sha256-V8F99tWTCbTkZToLhFrx4M9Tqa67Ro8QzUX9QRLDPe0=";
+  };
+
+  format = "wheel";
+  doCheck = false;
+
+  nativeBuildInputs = [ ];
+  propagatedBuildInputs = [ ];
+
+  meta = with lib; {
+    description = "Shopee mesos thing";
+  };
+}

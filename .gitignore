@@ -3,3 +3,4 @@ wireless.nix
 configuration.nix
 tinode.conf
 wireless.nix
+work_secrets.yaml

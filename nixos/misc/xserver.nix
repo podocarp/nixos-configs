@@ -2,7 +2,7 @@
 {
   services.xserver = {
     enable = true;
-    libinput.enable = true;
+    useGlamor = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager.session = [
@@ -13,4 +13,7 @@
       }
     ];
   };
+
+  # Allows HM gnome configs.
+  programs.dconf.enable = true;
 }

@@ -1,0 +1,17 @@
+Config {
+  -- appearance
+  font = "xft:Source Han Mono SC:size=12"
+, bgColor = "black"
+, fgColor = "white"
+, position = Bottom
+, border = NoBorder
+, persistent = False
+, sepChar = "%"
+, alignSep = "}{"
+, template = "%_XMONAD_LOG_1% }{ %date%"
+, commands =
+  [
+  Run Date "%a %d/%m %H:%M" "date" 600,
+  Run XPropertyLog "_XMONAD_LOG_1"
+  ]
+}

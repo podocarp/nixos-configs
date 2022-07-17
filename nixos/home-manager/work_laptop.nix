@@ -25,7 +25,6 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
-    ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
     ./programs/mpv/default.nix
@@ -50,11 +49,57 @@ in
     ./misc/xsession/default.nix
   ];
 
-  home.packages = with pkgs; [
+  home.packages =
+    let
+      mypkgs = with pkgs; {
+        smc = callPackage ../derivations/smc.drv args;
+      };
+    in
+    with pkgs; [
     arandr
     brightnessctl
     wpa_supplicant
+    jetbrains.goland
+    jetbrains.pycharm-professional
+    zoom-us
+    gcc
   ];
+
+  programs.bash = {
+    sessionVariables = {
+      GOPROXY = "https://nexus.shopee.io/,direct";
+      GOPATH = "$HOME/go";
+      GOPRIVATE = "*.garena.com";
+    };
+  };
+
+  programs.go = {
+    enable = true;
+    goPrivate = [ "*.garena.com" ];
+  };
+
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      user = {
+        name = "Jia Xiaodong";
+        email = "xiaodong.jia@shopee.com";
+      };
+      url = {
+        "ssh://gitlab@git.garena.com:2222" = { insteadOf = "https://git.garena.com"; };
+      };
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      Host *
+        HostKeyAlgorithms +ssh-rsa
+        PubkeyAcceptedKeyTypes +ssh-rsa
+        PubkeyAcceptedAlgorithms +ssh-rsa
+    '';
+  };
 
   xresources.extraConfig = "XTerm*faceSize: 11";
 }

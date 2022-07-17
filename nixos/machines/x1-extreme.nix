@@ -2,6 +2,9 @@
 {
   imports =
     [
+      ''${builtins.fetchGit {
+          url = "https://github.com/NixOS/nixos-hardware.git";
+      }}/lenovo/thinkpad/x1-extreme''
       <home-manager/nixos>
       ./common.nix
       ../misc/xserver.nix
@@ -56,6 +59,8 @@
     analogioOffset = -100;
     uncoreOffset = -30;
   };
+
+  services.xserver.dpi = 100;
 
   services.thinkfan.enable = true;
   services.thinkfan.levels = [

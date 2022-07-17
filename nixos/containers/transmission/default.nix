@@ -55,7 +55,9 @@ in
           ratio-limit = 1;
         };
       };
+
       networking.firewall.enable = false;
+      system.stateVersion = "22.11";
     };
   };
 }

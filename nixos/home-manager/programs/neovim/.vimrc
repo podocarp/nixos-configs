@@ -50,8 +50,7 @@ nmap <silent> co <Plug>(coc-codelens-action)
 
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
-let g:tex_flavor = 'latex'
-let g:vimtex_view_general_viewer = 'zathura'
+let g:vimtex_view_method = 'zathura'
 " let g:vimtex_view_general_options = '--noraise --unique file:@pdf\#src:@line@tex'
 let g:vimtex_compiler_latexmk = {
     \ 'build_dir' : "_latexmk",
@@ -60,13 +59,13 @@ let g:vimtex_compiler_latexmk = {
     \ 'executable' : 'latexmk',
     \ 'hooks' : [],
     \ 'options' : [
-    \   '-verbose',
-    \   '-synctex=1',
+    \   '-file-line-error',
     \   '-interaction=nonstopmode',
     \   '-shell-escape',
+    \   '-synctex=1',
+    \   '-verbose',
     \ ],
 \}
-
 let g:vimtex_indent_ignored_envs = ['frame', 'document', 'center', 'figure',
     \ 'itemize', 'enumerate' ]
 let g:vimtex_indent_on_ampersands = 0

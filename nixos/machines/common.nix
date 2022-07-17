@@ -48,8 +48,10 @@
     extraConfig = ''
       Host *.home.com
         StrictHostKeyChecking no
-      HostKeyAlgorithms +ssh-rsa
-      PubkeyAcceptedKeyTypes +ssh-rsa
+
+      Host *
+        HostKeyAlgorithms +ssh-rsa
+        PubkeyAcceptedKeyTypes +ssh-rsa
     '';
   };
 
@@ -102,4 +104,6 @@
   };
 
   nix.settings.allowed-users = [ "@wheel" ];
+
+  system.stateVersion = "22.11";
 }

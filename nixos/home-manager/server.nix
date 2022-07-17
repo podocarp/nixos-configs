@@ -14,6 +14,7 @@ in
   # paths it should manage.
   home.username = "pengu";
   home.homeDirectory = homeDir;
+  home.stateVersion = "22.11";
 
   imports = [
     ((import ./programs/vifm/default.nix) {
@@ -46,6 +47,7 @@ in
     gnumake
     highlight
     iftop
+    inetutils # telnet
     iotop
     lm_sensors
     neofetch
@@ -56,7 +58,6 @@ in
     ]))
     stress
     sysstat
-    telnet
     unzip
     usbutils # for lsusb
     veracrypt

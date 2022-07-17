@@ -1,5 +1,6 @@
 args@{ config, pkgs, lib, ... }:
 let
+  fireflyPort = 5001;
   giteaPort = 3001;
   giteaSshPort = 3002;
   jellyfinPort = 8096;
@@ -18,6 +19,9 @@ in
       <home-manager/nixos>
       <sops-nix/modules/sops>
 
+      ((import ../containers/firefly/default.nix) (args // {
+        port = fireflyPort;
+      }))
       ((import ../containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
       })
@@ -43,6 +47,7 @@ in
 
       ((import ../services/nginx/default.nix) (args // {
           portMap = [
+            ["firefly" fireflyPort]
             ["gitea" giteaPort]
             ["ssh.gitea" giteaSshPort]
             ["jellyfin" jellyfinPort]
@@ -61,6 +66,8 @@ in
     gnupg.sshKeyPaths = [];
     age.keyFile = "/var/lib/sops/age/keys.txt";
   };
+
+  virtualisation.oci-containers.backend = "docker";
 
   # Use the GRUB 2 boot loader.
   boot = {
@@ -163,7 +170,7 @@ in
     neovim
     openssl
     pciutils # for lspci
-    smbclient
+    samba
     tmux
     tcpdump
     wget
@@ -185,8 +192,7 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
-
   time.timeZone = "Asia/Singapore";
 
-  system.stateVersion = "20.09";
+  system.stateVersion = "22.11";
 }

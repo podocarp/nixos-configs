@@ -31,6 +31,7 @@
     nomacs
     okular
     openvpn
+    p7zip
     pavucontrol
     poppler_utils
     reptyr
@@ -50,8 +51,8 @@
     zip
 
     (python3.withPackages(p: with p; [
-      pip
       pygments
+      autopep8
     ]))
 
     ### Fonts

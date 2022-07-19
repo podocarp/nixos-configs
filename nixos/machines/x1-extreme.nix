@@ -1,5 +1,4 @@
 { config, pkgs, libs, ... }:
-
 {
   imports =
     [
@@ -30,13 +29,12 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
     sync.enable = true;
-    intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:1:0:0";
+    intelBusId = "PCI:0:2:0";
   };
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
-    driSupport32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)

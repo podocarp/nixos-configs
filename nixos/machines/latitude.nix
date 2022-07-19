@@ -23,6 +23,7 @@
 
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1
+    options hid_apple fnmode=0
   '';
 
   networking.hostName = "work"; # Define your hostname.
@@ -54,6 +55,4 @@
     enable = true;
     touchpad.accelSpeed = "0.3";
   };
-
-  system.stateVersion = "22.05";
 }

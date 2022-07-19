@@ -13,12 +13,9 @@ in
     enable = true;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       clearurls
-      darkreader
       decentraleyes
       ecosia
-      https-everywhere
       privacy-badger
-      tree-style-tab
       ublock-origin
       unpaywall
       vimium
@@ -27,7 +24,7 @@ in
       custom = {
         id = 0;
         userChrome = builtins.readFile "${equilux-firefox}/userChrome.css" + ''
-          #TabsToolbar { visibility: collapse !important; }
+          // #TabsToolbar { visibility: collapse !important; }
           #contentAreaContextMenu{ margin: 20px 0 0 20px }
         '';
         userContent = builtins.readFile "${equilux-firefox}/userContent.css";

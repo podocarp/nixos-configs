@@ -60,6 +60,7 @@ in
     brightnessctl
     wpa_supplicant
     jetbrains.goland
+    jetbrains.pycharm-professional
     zoom-us
     gcc
   ];

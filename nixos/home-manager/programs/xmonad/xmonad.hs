@@ -33,7 +33,7 @@ myXPConfig = def
   , height = 40
   }
 
--- List of workspace names, bound to keys 1 to 9 respectively.
+-- |List of workspace names, bound to keys 1 to 9 respectively.
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1..9]
 
@@ -79,7 +79,7 @@ scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
     t = 0.9 - h   -- distance from top edge
     l = 1 - w   -- distance from left edge
 
--- | @q =~ x@. matches @q@ using the regex @x@, return 'True' if it matches
+-- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
 q =?~ regex = fmap (matchRegex regex) q
   where
@@ -144,7 +144,7 @@ myLogHook = xmobarPP
   , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
   , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
   , ppTitle = xmobarColor "cyan" "" . shorten 100      -- window title format
-  , ppSort = getSortByXineramaPhysicalRule horizontalScreenOrderer
+  , ppSort = getSortByTag
   , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
   }
 

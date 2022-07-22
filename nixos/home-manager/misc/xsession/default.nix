@@ -2,8 +2,10 @@
 {
   xsession = {
     enable = true;
-    profileExtra = ''
+    initExtra = ''
       autorandr -c
+    '';
+    profileExtra = ''
       xset r rate 200 30
     '';
     scriptPath = ".xsession-hm";

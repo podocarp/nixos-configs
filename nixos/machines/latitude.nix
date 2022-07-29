@@ -57,5 +57,7 @@
     touchpad.accelSpeed = "0.3";
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "pengu" ];
   virtualisation.docker.enable = true;
 }

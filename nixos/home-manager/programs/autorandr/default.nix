@@ -15,11 +15,11 @@ let
     enable = true;
     primary = false;
     mode = "3840x2160";
-    dpi = 120;
+    dpi = 130;
     rate = "60.00";
     position = "0x0";
   };
-  officeConfig = {
+  officeConfigDocked = {
     "DP-1-1" = {
       enable = true;
       primary = true;
@@ -38,6 +38,11 @@ let
       rotate = "right";
     };
     "eDP-1" = { enable = false; };
+  };
+  officeConfig = {
+    "DP-2" = officeConfigDocked."DP-1-1";
+    "HDMI-1" = officeConfigDocked."DP-1-3";
+    "eDP-1" = officeConfigDocked."eDP-1";
   };
 in
 {
@@ -60,15 +65,34 @@ in
           "HDMI-1" = screen4k;
         };
         config = {
-          "eDP-1" = settingslaptop // {position = "960x2160";};
+          "eDP-1" = settingslaptop // {
+            position = "960x2160";
+          };
           "HDMI-1" = settings4k;
         };
       };
 
-      "office" = {
+      "office_dock" = {
         fingerprint = {
           "DP-1-1" = officeScreenH;
           "DP-1-3" = officeScreenV;
+          "eDP-1" = laptopscreen;
+        };
+        config = officeConfigDocked;
+      };
+
+      "office_dock_post" = {
+        fingerprint = {
+          "DP-1-1" = officeScreenH;
+          "DP-1-3" = officeScreenV;
+        };
+        config = officeConfigDocked;
+      };
+
+      "office" = {
+        fingerprint = {
+          "DP-2" = officeScreenH;
+          "HDMI-1" = officeScreenV;
           "eDP-1" = laptopscreen;
         };
         config = officeConfig;
@@ -76,8 +100,8 @@ in
 
       "office_post" = {
         fingerprint = {
-          "DP-1-1" = officeScreenH;
-          "DP-1-3" = officeScreenV;
+          "DP-2" = officeScreenH;
+          "HDMI-1" = officeScreenV;
         };
         config = officeConfig;
       };

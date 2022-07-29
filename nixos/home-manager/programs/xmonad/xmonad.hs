@@ -95,7 +95,7 @@ myManageHook = composeAll $
   ]]
   ++
   [ title =?~ name --> doFloat | name <- [
-    "join.action.*" -- zoom modals
+    "\\.zoom.*" -- zoom modals
   ]]
   ++
   [ className =? name --> doFloat | name <- [

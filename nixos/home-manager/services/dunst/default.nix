@@ -25,7 +25,7 @@ in
       global = {
         font = "DejaVu Sans";
         markup = true;
-        format = "<b>%s</b>\\n%b%p";
+        format = "<u>%a</u>\\n<b>%s</b>\\n%b%p";
         sort = false;
         indicate_hidden = true;
         alignment = "center";
@@ -40,7 +40,7 @@ in
         history_length = 10;
         frame_width = 1;
         frame_color = "#8ECC7C";
-        browser = "${pkgs.firefox}/bin/firefox";
+        browser = "${pkgs.chromium}/bin/chromium";
       };
       shortcuts = {
         close = "ctrl+space";
@@ -65,8 +65,8 @@ in
         foreground = "#B7472A";
         background = "#191311";
         timeout = 10;
-      };
-      play_sound = {
+        };
+        play_sound = {
         summary = "*";
         script = "${homeDir}/${soundpath}/boop.sh";
       };

@@ -7,7 +7,6 @@
     display = "fill";
     # systemd path format. %h is home dir.
     imageDirectory = "%h/Pictures/wallpapers";
-    # only set once on login.
-    interval = null;
+    interval = "1h";
   };
 }

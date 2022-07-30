@@ -5,6 +5,7 @@
     [
       ./common.nix
       ../misc/xserver.nix
+      ../containers/elasticsearch/default.nix
       <home-manager/nixos>
       <sops-nix/modules/sops>
     ];
@@ -23,6 +24,7 @@
 
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1
+    options hid_apple fnmode=0
   '';
 
   networking.hostName = "work"; # Define your hostname.
@@ -55,5 +57,7 @@
     touchpad.accelSpeed = "0.3";
   };
 
-  system.stateVersion = "22.05";
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "pengu" ];
+  virtualisation.docker.enable = true;
 }

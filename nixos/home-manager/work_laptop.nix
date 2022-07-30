@@ -25,6 +25,7 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
+    ((import ./programs/firefox/default.nix) args )
     ./programs/gpg/default.nix
     ./programs/java/default.nix
     ./programs/mpv/default.nix
@@ -43,7 +44,6 @@ in
 
     ./scripts/default.nix
 
-    ((import ./misc/fcitx/default.nix) args)
     ((import ./misc/applications/default.nix) args)
     ./misc/keyboard/default.nix
     ./misc/xsession/default.nix
@@ -60,6 +60,7 @@ in
     brightnessctl
     wpa_supplicant
     jetbrains.goland
+    jetbrains.pycharm-professional
     zoom-us
     gcc
   ];

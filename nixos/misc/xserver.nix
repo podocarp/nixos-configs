@@ -1,5 +1,9 @@
 { pkgs, ... }:
 {
+  imports = [
+    ./fcitx.nix
+  ];
+
   services.xserver = {
     enable = true;
     useGlamor = true;
@@ -13,4 +17,7 @@
       }
     ];
   };
+
+  # Allows HM gnome configs.
+  programs.dconf.enable = true;
 }

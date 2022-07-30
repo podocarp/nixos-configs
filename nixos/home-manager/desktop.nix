@@ -40,7 +40,6 @@ in
 
     ./scripts/default.nix
 
-    (import ./misc/fcitx/default.nix args)
     (import ./misc/applications/default.nix args)
     ./misc/keyboard/default.nix
     ./misc/xsession/default.nix

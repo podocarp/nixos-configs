@@ -11,15 +11,6 @@ in
 {
   programs.firefox = {
     enable = true;
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      clearurls
-      decentraleyes
-      ecosia
-      privacy-badger
-      ublock-origin
-      unpaywall
-      vimium
-    ];
     profiles = {
       custom = {
         id = 0;

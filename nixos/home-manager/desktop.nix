@@ -12,6 +12,9 @@ in
 
   imports =
   [
+    ((import ./programs/xmonad/default.nix) {
+      pkgs = pkgs; myTerm = myTerm;
+    })
     ((import ./programs/password-store/default.nix) {
       homeDir = homeDir;
     })
@@ -35,12 +38,13 @@ in
     ./programs/vscode/default.nix
     ./programs/zathura/default.nix
 
+    ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
     ./services/syncthing/default.nix
+    ./services/random-background/default.nix
 
     ./scripts/default.nix
 
-    (import ./misc/fcitx/default.nix args)
     (import ./misc/applications/default.nix args)
     ./misc/keyboard/default.nix
     ./misc/xsession/default.nix

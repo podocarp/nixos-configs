@@ -1,5 +1,9 @@
 { pkgs, ... }:
 {
+  imports = [
+    ./fcitx.nix
+  ];
+
   services.xserver = {
     enable = true;
     useGlamor = true;

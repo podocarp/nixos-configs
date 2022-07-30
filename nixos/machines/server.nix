@@ -1,15 +1,16 @@
 args@{ config, pkgs, lib, ... }:
 let
-  fireflyPort = 5001;
+  fireflyPort = 2000;
   giteaPort = 3001;
   giteaSshPort = 3002;
-  jellyfinPort = 8096;
-  mealiePort = 9925;
-  mediawikiPort = 4001;
-  stashPort = 9999;
-  syncthingPort = 8384;
-  transRpcPort = 9001;
-  trans2RpcPort = 9002;
+  hydraPort = 4000;
+  jellyfinPort = 5000;
+  mealiePort = 6000;
+  mediawikiPort = 7000;
+  stashPort = 8000;
+  syncthingPort = 9000;
+  transRpcPort = 10000;
+  trans2RpcPort = 10100;
   wireguardPort = 50000;
 in
 {
@@ -38,6 +39,7 @@ in
       }))
 
       ../services/fail2ban/default.nix
+      ((import ../services/hydra/default.nix { port = hydraPort; }))
       ../services/openssh/default.nix
       ../services/samba/default.nix
       ((import ../services/syncthing/default.nix) (args // {

@@ -73,6 +73,7 @@ in
 
   # Use the GRUB 2 boot loader.
   boot = {
+    initrd.supportedFilesystems = [ "zfs" ];
     supportedFilesystems = [ "zfs" ];
     zfs = {
       requestEncryptionCredentials = true;

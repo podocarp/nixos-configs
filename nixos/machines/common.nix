@@ -8,7 +8,7 @@
       version = 2;
       gfxmodeEfi = "640x480";
       gfxmodeBios = "640x480";
-      configurationLimit = 3;
+      configurationLimit = 5;
     };
   };
 

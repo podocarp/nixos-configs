@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 import XMonad
 import XMonad.Actions.CycleWS (toggleWS)
-import XMonad.Actions.GridSelect (goToSelected)
+import XMonad.Actions.GridSelect
 import XMonad.Actions.PhysicalScreens
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.StatusBar
@@ -33,6 +33,13 @@ myXPConfig = def
   , height = 40
   }
 
+myGsConfig :: GSConfig Window
+myGsConfig = def {
+  gs_cellheight = 20
+  , gs_cellwidth = 300
+}
+
+
 -- |List of workspace names, bound to keys 1 to 9 respectively.
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1..9]
@@ -45,7 +52,7 @@ myKeys =
   , ("M-S-h", sendMessage MirrorShrink) -- shrink slave size
   , ("M-S-l", sendMessage MirrorExpand) -- expand slave size
   , ("M-o", scratchpadSpawnActionTerminal myTerm)
-  , ("M-g", goToSelected def)
+  , ("M-g", goToSelected myGsConfig)
   , ("M-d", spawn "rofi -show combi")
   , ("M-f", spawn "rofi-pass")
   , ("M-<Tab>", toggleWS) -- exclude those on other screens

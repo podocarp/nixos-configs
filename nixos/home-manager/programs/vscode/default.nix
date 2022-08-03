@@ -31,6 +31,9 @@
           "commands" = ["workbench.action.files.save"];
         }
       ];
+
+      "jupyter.widgetScriptSources" = [ "jsdelivr.com" "unpkg.com" ];
+      "jupyter.askForKernelRestart" = "false";
     };
     keybindings = [
       {

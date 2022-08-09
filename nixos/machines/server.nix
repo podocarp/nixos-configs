@@ -7,6 +7,7 @@ let
   jellyfinPort = 5000;
   mealiePort = 6000;
   mediawikiPort = 7000;
+  postgresPort = 7777;
   stashPort = 8000;
   syncthingPort = 9000;
   transRpcPort = 10000;
@@ -31,7 +32,7 @@ in
       ((import ../containers/mediawiki/default.nix) (args // {
         port = mediawikiPort;
       }))
-      ((import ../containers/stashapp/default.nix) { port = stashPort; })
+      # ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) {
         config = config; port = transRpcPort;})
       ((import ../containers/transmission/private.nix) (args // {
@@ -39,7 +40,11 @@ in
       }))
 
       ../services/fail2ban/default.nix
-      ((import ../services/hydra/default.nix { port = hydraPort; }))
+      ((import ../services/hydra/default.nix {
+        port = hydraPort;
+        dbPort = postgresPort;
+      }))
+      ((import ../services/postgresql/default.nix { port = postgresPort; }))
       ../services/openssh/default.nix
       ../services/samba/default.nix
       ((import ../services/syncthing/default.nix) (args // {
@@ -49,12 +54,14 @@ in
 
       ((import ../services/nginx/default.nix) (args // {
           portMap = [
+            ["error" 65535] # acts as a fallback and throws errors
             ["firefly" fireflyPort]
             ["gitea" giteaPort]
-            ["ssh.gitea" giteaSshPort]
+            ["ssh-gitea" giteaSshPort]
+            ["hydra" hydraPort]
             ["jellyfin" jellyfinPort]
             ["mealie" mealiePort]
-            ["stash" stashPort]
+            # ["stash" stashPort]
             ["sync" syncthingPort]
             ["transmission" transRpcPort]
             ["torrent" trans2RpcPort]
@@ -184,6 +191,12 @@ in
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    settings.allowed-users = [
+      "root" "@nixbld" "@wheel" "@hydra"
+    ];
+    settings.trusted-users = [
+      "root" "@nixbld" "@wheel"
+    ];
   };
 
   # 250 is 5 hours. Visit man hdparm for details.

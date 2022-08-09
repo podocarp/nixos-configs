@@ -9,7 +9,7 @@
       "/tank/local/jellyfin/log:/log"
       "/tank/public/Media:/media"
     ];
-    ports = [ "${toString port}:${toString port}" ];
+    ports = [ "${toString port}:8096" ];
     environment = {
       JELLYFIN_LOG_DIR = "/log";
     };

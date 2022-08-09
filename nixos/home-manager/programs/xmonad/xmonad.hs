@@ -112,7 +112,6 @@ myManageHook = composeAll $
      , "Picture-in-Picture"
      , "TelegramDesktop"
      , "dialog"
-     , "mpv"
   ]]
   ++
   [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat | name <- [

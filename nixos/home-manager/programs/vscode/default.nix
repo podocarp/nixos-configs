@@ -15,11 +15,13 @@
     ];
     userSettings = {
       "editor.minimap.enabled" = false;
+      "editor.mouseWheelZoom" = false;
       "keyboard.dispatch" = "keyCode";
       "editor.lineNumbers" = "relative";
       "editor.acceptSuggestionOnCommitCharacter" = false;
       "workbench.activityBar.visible" = false;
       "workbench.colorTheme" = "Default Light+";
+
 
       "C_Cpp.default.cppStandard" = "c++17";
 

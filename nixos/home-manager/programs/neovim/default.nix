@@ -5,6 +5,7 @@
     enable = true;
     plugins = with pkgs.vimPlugins; [
       coc-css
+      coc-go
       coc-json
       coc-nvim
       coc-pyright
@@ -56,6 +57,7 @@
     coc.enable = true;
     coc.settings = {
       "coc.source.around.enable" = false;
+      "coc.preferences.jumpCommand" = "tab drop";
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave"= true;
       "suggest.maxCompleteItemCount" = 10;

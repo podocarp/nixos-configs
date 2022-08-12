@@ -26,6 +26,7 @@ import qualified Data.Text as T
 import System.IO
 import System.Exit
 import Control.Monad
+import XMonad.Actions.UpdatePointer (updatePointer)
 
 myXPConfig :: XPConfig
 myXPConfig = def
@@ -93,7 +94,6 @@ q =?~ regex = fmap (matchRegex regex) q
     matchRegex :: String -> String -> Bool
     matchRegex pattern string = string =~ pattern
 
-
 myManageHook :: ManageHook
 myManageHook = composeAll $
   [ title =? name --> doFloat | name <- [
@@ -102,7 +102,7 @@ myManageHook = composeAll $
   ]]
   ++
   [ title =?~ name --> doFloat | name <- [
-    "\\.zoom.*" -- zoom modals
+    ".?zoom.?" -- zoom modals
   ]]
   ++
   [ className =? name --> doFloat | name <- [
@@ -182,5 +182,6 @@ main = xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
     , manageHook = scratchpadHook <+> myManageHook
     , layoutHook = myLayoutHook
     , workspaces = withScreens 2 myWorkspaces
+    , logHook = updatePointer (0.5, 0.5) (0, 0)
     }
     `additionalKeysP` myKeys

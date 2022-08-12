@@ -53,13 +53,11 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gD :call CocAction('jumpDefinition', 'edit')<CR>
-nnoremap <silent> K :call ShowDocumentation()<CR>
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gh :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
   endif
 endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -229,9 +227,9 @@ let g:netrw_winsize = 20
 
 """""""File Extension defaults
 augroup TextProj
-    au!
-    autocmd BufRead,BufNewFile *.md,*.tex setlocal tw=80
-    autocmd BufRead,BufNewFile *.md,*.tex setlocal spell spelllang=en_gb
+  au!
+  autocmd BufRead,BufNewFile *.md,*.tex setlocal tw=80
+  autocmd BufRead,BufNewFile *.md,*.tex setlocal spell spelllang=en_gb
 augroup END
 
 

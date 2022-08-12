@@ -15,6 +15,7 @@
       papercolor-theme
       ultisnips
       undotree
+      vifm-vim
       vim-airline
       vim-airline-themes
       vim-nix

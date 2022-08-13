@@ -191,12 +191,15 @@ in
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    settings.allowed-users = [
-      "root" "@nixbld" "@wheel" "@hydra"
-    ];
-    settings.trusted-users = [
-      "root" "@nixbld" "@wheel"
-    ];
+    settings = {
+      allowed-users = [
+        "root" "@nixbld" "@wheel" "@hydra"
+      ];
+      trusted-users = [
+        "root" "@nixbld" "@wheel"
+      ];
+      sandbox = "relaxed";
+    };
   };
 
   # 250 is 5 hours. Visit man hdparm for details.

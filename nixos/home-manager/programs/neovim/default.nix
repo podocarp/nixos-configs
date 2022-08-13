@@ -7,6 +7,7 @@
       coc-css
       coc-go
       coc-json
+      coc-metals # scala
       coc-nvim
       coc-pyright
       coc-snippets
@@ -35,10 +36,12 @@
     extraPackages = with pkgs; [
       haskell-language-server
       haskellPackages.hlint
+      metals # scala language server
+      gopls # go language server
       nodePackages.eslint
       nodePackages.prettier
       nodePackages.typescript
-      xdotool
+      xdotool # for synctex
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

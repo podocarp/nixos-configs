@@ -81,6 +81,9 @@ in
   # Use the GRUB 2 boot loader.
   boot = {
     initrd.supportedFilesystems = [ "zfs" ];
+    availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage"
+      "usbhid" "sd_mod" ];
+    kernelModules = [ "kvm-amd" ];
     supportedFilesystems = [ "zfs" ];
     zfs = {
       requestEncryptionCredentials = true;
@@ -212,6 +215,30 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
   time.timeZone = "Asia/Singapore";
+
+  fileSystems."/" =
+    { device = "zroot/local/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home" =
+    { device = "zroot/local/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    { device = "zroot/nix/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/nvme0n1p1";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/8064cf73-931b-4c5b-8d94-16b4f9272181"; }
+    ];
 
   system.stateVersion = "22.11";
 }

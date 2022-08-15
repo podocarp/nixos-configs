@@ -81,7 +81,7 @@ in
   # Use the GRUB 2 boot loader.
   boot = {
     initrd.supportedFilesystems = [ "zfs" ];
-    availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage"
+    initrd.kernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage"
       "usbhid" "sd_mod" ];
     kernelModules = [ "kvm-amd" ];
     supportedFilesystems = [ "zfs" ];

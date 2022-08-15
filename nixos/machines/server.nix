@@ -21,9 +21,9 @@ in
       <home-manager/nixos>
       <sops-nix/modules/sops>
 
-      ((import ../containers/firefly/default.nix) (args // {
-        port = fireflyPort;
-      }))
+      # ((import ../containers/firefly/default.nix) (args // {
+      #   port = fireflyPort;
+      # }))
       ((import ../containers/gitea/default.nix) {
         port = giteaPort; sshPort = giteaSshPort;
       })
@@ -55,7 +55,7 @@ in
       ((import ../services/nginx/default.nix) (args // {
           portMap = [
             ["error" 65535] # acts as a fallback and throws errors
-            ["firefly" fireflyPort]
+            # ["firefly" fireflyPort]
             ["gitea" giteaPort]
             ["ssh-gitea" giteaSshPort]
             ["hydra" hydraPort]

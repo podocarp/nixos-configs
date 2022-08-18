@@ -1,31 +1,70 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 import XMonad
+    ( mod4Mask,
+      io,
+      runQuery,
+      withWindowSet,
+      xfork,
+      (|||),
+      xmonad,
+      (-->),
+      (<+>),
+      (=?),
+      className,
+      composeAll,
+      doFloat,
+      stringProperty,
+      title,
+      kill,
+      sendMessage,
+      windows,
+      Window,
+      Default(def),
+      ManageHook,
+      Query,
+      ScreenId,
+      X,
+      XConfig(terminal, modMask, normalBorderColor, focusedBorderColor,
+              borderWidth, manageHook, layoutHook, workspaces, logHook) )
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.GridSelect
+    ( goToSelected, GSConfig(gs_cellheight, gs_cellwidth) )
 import XMonad.Actions.PhysicalScreens
+    ( horizontalScreenOrderer, sendToScreen, viewScreen )
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.StatusBar
+    ( dynamicEasySBs, statusBarPropTo, StatusBarConfig )
 import XMonad.Hooks.StatusBar.PP
+    ( PP(ppSep, ppCurrent, ppVisible, ppHidden, ppSort, ppOrder,
+         ppTitle),
+      shorten,
+      wrap,
+      xmobarColor,
+      xmobarPP )
 import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
-import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageDocks ()
 import XMonad.Layout.IndependentScreens
+    ( onCurrentScreen, withScreens, VirtualWorkspace )
 import XMonad.Layout.ResizableThreeColumns
-import XMonad.Layout.ResizableTile
-import XMonad.Prompt
+    ( ResizableThreeCol(ResizableThreeColMid),
+      MirrorResize(MirrorExpand, MirrorShrink) )
+import XMonad.Layout.ResizableTile ( ResizableTall(ResizableTall) )
+import XMonad.Prompt ( XPConfig(font, height) )
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
-import XMonad.Util.WorkspaceCompare
+import XMonad.Util.WorkspaceCompare ( getSortByTag )
+import System.Posix.Process (executeFile)
 
-import Text.Regex.Posix
+import Text.Regex.Posix ( (=~) )
 
 import qualified XMonad.StackSet as W
 import qualified Data.Text as T
 
-import System.IO
-import System.Exit
-import Control.Monad
+import System.IO ()
+import System.Exit ( exitSuccess )
+import Control.Monad ( void, liftM2 )
 import XMonad.Actions.UpdatePointer (updatePointer)
 
 myXPConfig :: XPConfig
@@ -44,6 +83,10 @@ myGsConfig = def {
 -- |List of workspace names, bound to keys 1 to 9 respectively.
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1..9]
+
+spawn x = void $ spawnPID x
+  where
+    spawnPID x = xfork $ executeFile "/usr/bin/env" False ["bash", "-c", x] Nothing
 
 myKeys :: [(String, X())]
 myKeys =
@@ -71,9 +114,13 @@ myKeys =
     | (key, i) <- zip [1..9] myWorkspaces
     , (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")] ]
   ++
-  [ ("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
-  , ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
-  , ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
+  [
+  ("<XF86AudioMute>", spawn "changevolume toggle")
+  , ("<XF86AudioRaiseVolume>", spawn "changevolume 5%+")
+  , ("<XF86AudioLowerVolume>", spawn "changevolume 5%-")
+  --("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
+  --, ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
+  --, ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
   -- Brightness controls
   , ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+")
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")

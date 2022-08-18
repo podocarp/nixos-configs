@@ -32,12 +32,6 @@ Config {
     , "-i", "充電"
     ] 600
   , Run Date "%a %d/%m %H:%M" "date" 600
-  , Run Alsa "default" "Master" [
-      "--template", "<status> <volume>%"
-    , "--"
-    , "-O", "音"
-    , "-o", "静"
-    ]
   , Run XPropertyLog "_XMONAD_LOG"
   ]
 }

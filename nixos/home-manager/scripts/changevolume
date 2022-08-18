@@ -1,0 +1,13 @@
+#!/usr/bin/env bash 
+
+msgTag="changevolume"
+amixer sset Master "$@" > /dev/null
+
+# Query amixer for the current volume and whether or not the speaker is muted
+volume="$(amixer get Master | tail -1 | cut -d " " -f 7 | sed 's/[^0-9]*//g')"
+on="$(amixer get Master | tail -1 | cut -d " " -f 8 | sed 's/[^a-z]*//g')"
+if [[ "$on" == "off" ]]; then
+    dunstify -a "changevolume" -u low -i audio-volume-muted -h string:x-dunst-stack-tag:$msgTag "静音🔇"
+else
+    dunstify -a "changevolume" -u low -i audio-volume-high -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "音量"
+fi

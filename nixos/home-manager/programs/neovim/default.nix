@@ -42,6 +42,7 @@
       nodePackages.prettier
       nodePackages.typescript
       xdotool # for synctex
+      ripgrep # for cocsearch
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -62,8 +63,12 @@
     coc.settings = {
       "coc.source.around.enable" = false;
       "coc.preferences.jumpCommand" = "tab drop";
+      "coc.preferences.formatOnSaveFiletypes" = [
+        "go" "haskell"
+      ];
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave"= true;
+      "diagnostic.checkCurrentLine" = true;
       "suggest.maxCompleteItemCount" = 10;
       "codeLens" = {
         "enable" = true;

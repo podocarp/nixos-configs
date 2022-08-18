@@ -1,7 +1,7 @@
 { pkgs, config, homeDir, ... }:
 
 let
-  # This should match the
+  # This should match the script
   soundpath = ".config/dunst";
 in
 {
@@ -11,7 +11,7 @@ in
     sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
   };
   home.file."${soundpath}/boop.sh" = {
-    text = "${pkgs.mpv}/bin/mpv --keep-open=no ${homeDir}/${soundpath}/boop.ogg";
+    text = "${pkgs.pulseaudio}/bin/paplay ${homeDir}/${soundpath}/boop.ogg";
     executable = true;
   };
 
@@ -42,12 +42,6 @@ in
         frame_color = "#8ECC7C";
         browser = "${pkgs.chromium}/bin/chromium";
       };
-      shortcuts = {
-        close = "ctrl+space";
-        close_all = "ctrl+mod1+space";
-        history = "ctrl+grave";
-        context = "ctrl+shift+period";
-      };
       urgency_low = {
         frame_color = "#66AB76";
         foreground = "#AAFFAA";
@@ -65,10 +59,14 @@ in
         foreground = "#B7472A";
         background = "#191311";
         timeout = 10;
-        };
-        play_sound = {
+      };
+      play_sound = {
         summary = "*";
         script = "${homeDir}/${soundpath}/boop.sh";
+      };
+      change_volume = {
+        appname = "changevolume";
+        history_ignore = true;
       };
     };
   };

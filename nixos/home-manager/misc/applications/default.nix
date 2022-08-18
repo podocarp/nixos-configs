@@ -53,6 +53,7 @@
     (python3.withPackages(p: with p; [
       pygments
       autopep8
+      pip
     ]))
 
     ### Fonts

@@ -144,6 +144,9 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+" Auto import on go files
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:vimtex_view_method = 'zathura'

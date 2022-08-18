@@ -13,7 +13,8 @@
       la = "ls -a";
       lla = "ls -la";
       f = "grep -RHn";
-      v ="vim .";
+      v = "vim .";
+      tmux = "tmux -u";
     };
     initExtra = ''
         stty -ixon

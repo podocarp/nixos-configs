@@ -10,7 +10,7 @@ Config {
   -- layout
 , sepChar = "%"
 , alignSep = "}{"
-, template = "%_XMONAD_LOG% }{| %alsa:default:Master% | %battery% | %date%"
+, template = "%_XMONAD_LOG% }{| %battery% | %date%"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.

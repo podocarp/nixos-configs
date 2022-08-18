@@ -14,7 +14,7 @@
       lla = "ls -la";
       f = "grep -RHn";
       v = "vim .";
-      tmux = "tmux -u";
+      t = "tmux -u";
     };
     initExtra = ''
         stty -ixon

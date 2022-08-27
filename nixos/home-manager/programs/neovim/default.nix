@@ -20,6 +20,7 @@
       vim-airline
       vim-airline-themes
       vim-nix
+      vim-obsession
       vim-surround
       vim-sleuth
       vimtex
@@ -93,6 +94,7 @@
           };
         };
       };
+      "snippets.ultisnips.enable" = false;
       "typescript.disableAutomaticTypeAcquisition" = true;
       "typescript" = {
         "disableAutomaticTypeAcquisition"= true;

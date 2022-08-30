@@ -43,8 +43,8 @@ in
 
         extensions = {
           InputBox = pkgs.fetchzip {
-            url = "https://extdist.wmflabs.org/dist/extensions/InputBox-REL1_36-aa70764.tar.gz";
-            sha256 = "0rqvn6rf7jswv02s8ajh31hd5ksvxq84sjpapda0083drxbwj96f";
+            url = "https://extdist.wmflabs.org/dist/extensions/InputBox-REL1_38-c936e93.tar.gz";
+            sha256 = "sha256-fvbHwTUtYxQq00DO2/DqZ30apnZdMESnKnRrmYowzNg=";
           };
         };
 

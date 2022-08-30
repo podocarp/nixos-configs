@@ -1,5 +1,4 @@
 """""""""""""""""""""""""""""FLAGS""""""""""""""""""""""""""
-set autochdir
 set autoindent
 set autowriteall
 set colorcolumn=80
@@ -48,7 +47,7 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 nmap <silent> co <Plug>(coc-codelens-action)
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-b> coc#refresh()
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -99,6 +98,8 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -143,6 +144,8 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+nmap <c-F> :CocSearch <CR>
 
 " Auto import on go files
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')

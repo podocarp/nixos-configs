@@ -11,6 +11,11 @@
     scriptPath = ".xsession-hm";
   };
 
+  services.picom = {
+    enable = true;
+    vSync = true;
+  };
+
   xresources.extraConfig =
   ''
     ! PaperColor Theme

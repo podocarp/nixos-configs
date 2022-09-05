@@ -229,6 +229,5 @@ main = xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
     , manageHook = scratchpadHook <+> myManageHook
     , layoutHook = myLayoutHook
     , workspaces = withScreens 2 myWorkspaces
-    , logHook = updatePointer (0.5, 0.5) (0, 0)
     }
     `additionalKeysP` myKeys

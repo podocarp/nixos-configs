@@ -5,9 +5,7 @@
     enable = true;
     plugins = with pkgs.vimPlugins; [
       coc-css
-      coc-go
       coc-json
-      coc-metals # scala
       coc-nvim
       coc-pyright
       coc-snippets
@@ -37,7 +35,6 @@
     extraPackages = with pkgs; [
       haskell-language-server
       haskellPackages.hlint
-      metals # scala language server
       gopls # go language server
       nodePackages.eslint
       nodePackages.prettier
@@ -77,20 +74,28 @@
         "subseparator" = "▹";
       };
       "python" = {
-          "linting.flake8Enabled" = true;
+        "linting.flake8Enabled" = true;
       };
       "languageserver" = {
         "haskell" = {
           "command" = "haskell-language-server-wrapper";
           "args" = ["--lsp"];
           "rootPatterns" = ["*.cabal" "stack.yaml" "cabal.project"
-            "package.yaml" "hie.yaml"];
-          "filetypes"= ["haskell" "lhaskell"];
+          "package.yaml" "hie.yaml"];
+          "filetypes" = ["haskell" "lhaskell"];
           "initializationOptions" = {
             "languageServerHaskell" = {
               "hlintOn" = true;
               "completionSnippetsOn" = true;
             };
+          };
+        };
+        "golang" = {
+          "command" = "gopls";
+          "rootPatterns" = ["go.work"  "go.mod"];
+          "filetypes" = ["go"];
+          "initializationOptions" = {
+            "usePlaceholders" = true;
           };
         };
       };

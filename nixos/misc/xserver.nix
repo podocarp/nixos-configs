@@ -6,7 +6,6 @@
 
   services.xserver = {
     enable = true;
-    useGlamor = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager.session = [

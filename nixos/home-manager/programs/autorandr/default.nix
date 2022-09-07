@@ -15,7 +15,7 @@ let
     enable = true;
     primary = false;
     mode = "3840x2160";
-    dpi = 130;
+    dpi = 150;
     rate = "60.00";
     position = "0x0";
   };

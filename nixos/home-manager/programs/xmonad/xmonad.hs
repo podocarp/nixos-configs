@@ -1,138 +1,167 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
+import Control.Monad (liftM2, void)
+import qualified Data.Text as T
+import System.Exit (exitSuccess)
+import System.IO ()
+import System.Posix.Process (executeFile)
+import Text.Regex.Posix ((=~))
 import XMonad
-    ( mod4Mask,
-      io,
-      runQuery,
-      withWindowSet,
-      xfork,
-      (|||),
-      xmonad,
-      (-->),
-      (<+>),
-      (=?),
-      className,
-      composeAll,
-      doFloat,
-      stringProperty,
-      title,
-      kill,
-      sendMessage,
-      windows,
-      Window,
-      Default(def),
-      ManageHook,
-      Query,
-      ScreenId,
-      X,
-      XConfig(terminal, modMask, normalBorderColor, focusedBorderColor,
-              borderWidth, manageHook, layoutHook, workspaces, logHook) )
+  ( Default (def),
+    ManageHook,
+    Query,
+    ScreenId,
+    Window,
+    X,
+    XConfig
+      ( borderWidth,
+        focusedBorderColor,
+        layoutHook,
+        logHook,
+        manageHook,
+        modMask,
+        normalBorderColor,
+        terminal,
+        workspaces
+      ),
+    className,
+    composeAll,
+    doFloat,
+    io,
+    kill,
+    mod4Mask,
+    runQuery,
+    sendMessage,
+    stringProperty,
+    title,
+    windows,
+    withWindowSet,
+    xfork,
+    xmonad,
+    (-->),
+    (<+>),
+    (=?),
+    (|||),
+  )
 import XMonad.Actions.CycleWS (toggleWS)
 import XMonad.Actions.GridSelect
-    ( goToSelected, GSConfig(gs_cellheight, gs_cellwidth) )
+  ( GSConfig (gs_cellheight, gs_cellwidth),
+    goToSelected,
+  )
 import XMonad.Actions.PhysicalScreens
-    ( horizontalScreenOrderer, sendToScreen, viewScreen )
+  ( horizontalScreenOrderer,
+    sendToScreen,
+    viewScreen,
+  )
+import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
-import XMonad.Hooks.StatusBar
-    ( dynamicEasySBs, statusBarPropTo, StatusBarConfig )
-import XMonad.Hooks.StatusBar.PP
-    ( PP(ppSep, ppCurrent, ppVisible, ppHidden, ppSort, ppOrder,
-         ppTitle),
-      shorten,
-      wrap,
-      xmobarColor,
-      xmobarPP )
 import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks ()
+import XMonad.Hooks.StatusBar
+  ( StatusBarConfig,
+    dynamicEasySBs,
+    statusBarPropTo,
+  )
+import XMonad.Hooks.StatusBar.PP
+  ( PP
+      ( ppCurrent,
+        ppHidden,
+        ppOrder,
+        ppSep,
+        ppSort,
+        ppTitle,
+        ppVisible
+      ),
+    shorten,
+    wrap,
+    xmobarColor,
+    xmobarPP,
+  )
 import XMonad.Layout.IndependentScreens
-    ( onCurrentScreen, withScreens, VirtualWorkspace )
+  ( VirtualWorkspace,
+    onCurrentScreen,
+    withScreens,
+  )
 import XMonad.Layout.ResizableThreeColumns
-    ( ResizableThreeCol(ResizableThreeColMid),
-      MirrorResize(MirrorExpand, MirrorShrink) )
-import XMonad.Layout.ResizableTile ( ResizableTall(ResizableTall) )
-import XMonad.Prompt ( XPConfig(font, height) )
+  ( MirrorResize (MirrorExpand, MirrorShrink),
+    ResizableThreeCol (ResizableThreeColMid),
+  )
+import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
+import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
+import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
-import XMonad.Util.WorkspaceCompare ( getSortByTag )
-import System.Posix.Process (executeFile)
-
-import Text.Regex.Posix ( (=~) )
-
-import qualified XMonad.StackSet as W
-import qualified Data.Text as T
-
-import System.IO ()
-import System.Exit ( exitSuccess )
-import Control.Monad ( void, liftM2 )
-import XMonad.Actions.UpdatePointer (updatePointer)
+import XMonad.Util.WorkspaceCompare (getSortByTag)
 
 myXPConfig :: XPConfig
-myXPConfig = def
-  { font = "xft:DejaVu Sans Mono:size=12"
-  , height = 40
-  }
+myXPConfig =
+  def
+    { font = "xft:DejaVu Sans Mono:size=12",
+      height = 40
+    }
 
 myGsConfig :: GSConfig Window
-myGsConfig = def {
-  gs_cellheight = 20
-  , gs_cellwidth = 300
-}
+myGsConfig =
+  def
+    { gs_cellheight = 20,
+      gs_cellwidth = 300
+    }
 
-
--- |List of workspace names, bound to keys 1 to 9 respectively.
+-- | List of workspace names, bound to keys 1 to 9 respectively.
 myWorkspaces :: [VirtualWorkspace]
-myWorkspaces = map show [1..9]
+myWorkspaces = map show [1 .. 9]
 
 spawn x = void $ spawnPID x
   where
     spawnPID x = xfork $ executeFile "/usr/bin/env" False ["bash", "-c", x] Nothing
 
-myKeys :: [(String, X())]
+myKeys :: [(String, X ())]
 myKeys =
-  [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess)
-  , ("M-S-q", kill) -- close focused window
-  , ("M-S-<Return>", spawn myTerm) -- myTerm is appended by Nix
-  , ("M-S-h", sendMessage MirrorShrink) -- shrink slave size
-  , ("M-S-l", sendMessage MirrorExpand) -- expand slave size
-  , ("M-o", scratchpadSpawnActionTerminal myTerm)
-  , ("M-g", goToSelected myGsConfig)
-  , ("M-d", spawn "rofi -show combi")
-  , ("M-f", spawn "rofi-pass")
-  , ("M-<Tab>", toggleWS) -- exclude those on other screens
-  -- screenshot and copies to clipboard
-  , ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
+  [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess),
+    ("M-S-q", kill), -- close focused window
+    ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix
+    ("M-S-h", sendMessage MirrorShrink), -- shrink slave size
+    ("M-S-l", sendMessage MirrorExpand), -- expand slave size
+    ("M-o", scratchpadSpawnActionTerminal myTerm),
+    ("M-g", goToSelected myGsConfig),
+    ("M-d", spawn "rofi -show combi"),
+    ("M-f", spawn "rofi-pass"),
+    ("M-<Tab>", toggleWS), -- exclude those on other screens
+    -- screenshot and copies to clipboard
+    ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
   ]
-  ++
-  [("M-" ++ mask ++ key, f scr)
-    | (key, scr) <- zip ["w", "e", "r"] [0..]
-    , (f, mask) <- [(viewScreen horizontalScreenOrderer, ""), (sendToScreen horizontalScreenOrderer, "S-")]]
-  ++
-  -- M-Shift-[1-9] moves windows to workspaces
-  -- M-[1-9] greedyviews workspaces
-  [("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)
-    | (key, i) <- zip [1..9] myWorkspaces
-    , (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")] ]
-  ++
-  [
-  ("<XF86AudioMute>", spawn "changevolume toggle")
-  , ("<XF86AudioRaiseVolume>", spawn "changevolume 5%+")
-  , ("<XF86AudioLowerVolume>", spawn "changevolume 5%-")
-  --("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
-  --, ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
-  --, ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
-  -- Brightness controls
-  , ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+")
-  , ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
-  ]
+    ++ [ ("M-" ++ mask ++ key, f scr)
+         | (key, scr) <- zip ["w", "e", "r"] [0 ..],
+           (f, mask) <- [(viewScreen horizontalScreenOrderer, ""), (sendToScreen horizontalScreenOrderer, "S-")]
+       ]
+    ++
+    -- M-Shift-[1-9] moves windows to workspaces
+    -- M-[1-9] greedyviews workspaces
+    [ ("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)
+      | (key, i) <- zip [1 .. 9] myWorkspaces,
+        (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")]
+    ]
+    ++ [ ("<XF86AudioMute>", spawn "changevolume toggle"),
+         ("<XF86AudioRaiseVolume>", spawn "changevolume 5%+"),
+         ("<XF86AudioLowerVolume>", spawn "changevolume 5%-"),
+         --("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
+         --, ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
+         --, ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
+         -- Brightness controls
+         ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+"),
+         ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
+       ]
 
 scratchpadHook :: ManageHook
 scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
   where
-    h = 0.5     -- height
-    w = 0.3     -- width
-    t = 0.9 - h   -- distance from top edge
-    l = 1 - w   -- distance from left edge
+    h = 0.5 -- height
+    w = 0.3 -- width
+    t = 0.9 - h -- distance from top edge
+    l = 1 - w -- distance from left edge
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
@@ -142,28 +171,34 @@ q =?~ regex = fmap (matchRegex regex) q
     matchRegex pattern string = string =~ pattern
 
 myManageHook :: ManageHook
-myManageHook = composeAll $
-  [ title =? name --> doFloat | name <- [
-    "Volume Control"
-    , "Open Folder"
-  ]]
-  ++
-  [ title =?~ name --> doFloat | name <- [
-    ".?zoom.?" -- zoom modals
-  ]]
-  ++
-  [ className =? name --> doFloat | name <- [
-     "About"
-     , "Image Lounge" -- nomacs
-     , "Picture in picture"
-     , "Picture-in-Picture"
-     , "TelegramDesktop"
-     , "dialog"
-  ]]
-  ++
-  [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat | name <- [
-    "pop-up"
-  ]]
+myManageHook =
+  composeAll $
+    [ title =? name --> doFloat
+      | name <-
+          [ "Volume Control",
+            "Open Folder"
+          ]
+    ]
+      ++ [ title =?~ name --> doFloat
+           | name <-
+               [ ".?zoom.?" -- zoom modals
+               ]
+         ]
+      ++ [ className =? name --> doFloat
+           | name <-
+               [ "About",
+                 "Image Lounge", -- nomacs
+                 "Picture in picture",
+                 "Picture-in-Picture",
+                 "TelegramDesktop",
+                 "dialog"
+               ]
+         ]
+      ++ [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat
+           | name <-
+               [ "pop-up"
+               ]
+         ]
 
 -- This gives the hidden workspaces and the master window in those workspaces
 -- as a string.
@@ -173,14 +208,14 @@ myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidd
     -- Gets the master window's (if any) name in the workspace
     ripName (W.Workspace i _ (Just stack)) =
       liftM2 (\x y -> concat [header, x, dash, y]) c t
-        where
-          header = i ++ ":"
-          dash = " - "
-          fshorten :: X String -> X String
-          fshorten = fmap (shorten 10)
-          t = fshorten (runQuery title (W.focus stack))
-          c = fshorten (runQuery className (W.focus stack))
-    ripName _ =  return ""
+      where
+        header = i ++ ":"
+        dash = " - "
+        fshorten :: X String -> X String
+        fshorten = fmap (shorten 10)
+        t = fshorten (runQuery title (W.focus stack))
+        c = fshorten (runQuery className (W.focus stack))
+    ripName _ = return ""
 
     -- Given a stack of workspaces, return a list of names as per above
     getNames ws = foldl (liftM2 (++)) (return "") (map ripName ws)
@@ -191,32 +226,42 @@ myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidd
     -- Gets the Maybe String out.
     safeUnpack s = if s == "" then Nothing else Just s
 
-myLogHook = xmobarPP
-  { ppSep = " | "
-  , ppCurrent = xmobarColor "green" "" . wrap "[" "]"
-  , ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]"
-  , ppHidden = xmobarColor "gray" "" .  wrap "(" ")"
-  , ppTitle = xmobarColor "cyan" "" . shorten 100      -- window title format
-  , ppSort = getSortByTag
-  , ppOrder = \(ws:layout:wt:extra) -> [layout, ws, wt] ++ extra
-  }
+myLogHook =
+  xmobarPP
+    { ppSep = " | ",
+      ppCurrent = xmobarColor "green" "" . wrap "[" "]",
+      ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]",
+      ppHidden = xmobarColor "gray" "" . wrap "(" ")",
+      ppTitle = xmobarColor "cyan" "" . shorten 100, -- window title format
+      ppSort = getSortByTag,
+      ppOrder = \(ws : layout : wt : extra) -> [layout, ws, wt] ++ extra
+    }
 
-myLogHookSecondary = myLogHook
-  { ppTitle = xmobarColor "lightblue" "" . shorten 100
-  }
+myLogHookSecondary =
+  myLogHook
+    { ppTitle = xmobarColor "lightblue" "" . shorten 100
+    }
 
-xmobarMain = statusBarPropTo "_XMONAD_LOG"
-  "xmobar -x 0 ~/.config/xmobar/xmobarrc" (pure myLogHook)
-xmobarSecondary = statusBarPropTo "_XMONAD_LOG_1"
-  "xmobar -x 1 ~/.config/xmobar/xmobarrc_unfocused" (pure myLogHookSecondary)
+xmobarMain =
+  statusBarPropTo
+    "_XMONAD_LOG"
+    "xmobar -x 0 ~/.config/xmobar/xmobarrc"
+    (pure myLogHook)
+
+xmobarSecondary =
+  statusBarPropTo
+    "_XMONAD_LOG_1"
+    "xmobar -x 1 ~/.config/xmobar/xmobarrc_unfocused"
+    (pure myLogHookSecondary)
 
 barSpawner :: ScreenId -> IO StatusBarConfig
 barSpawner 0 = pure xmobarMain
 barSpawner 1 = pure xmobarSecondary
 barSpawner _ = mempty
 
-myLayoutHook = ResizableTall 1 (1/100) (1/2) []
-  ||| ResizableThreeColMid 1 (1/100) (30/100) []
+myLayoutHook =
+  ResizableTall 1 (1 / 100) (1 / 2) []
+    ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
 main :: IO()
 main = xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $

@@ -47,7 +47,7 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 nmap <silent> co <Plug>(coc-codelens-action)
-inoremap <silent><expr> <c-b> coc#refresh()
+inoremap <silent><expr> <c-c> coc#refresh()
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -86,6 +86,10 @@ nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
+
+" Jump to next diagnostic (errors, etc)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -145,7 +149,7 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-nmap <c-F> :CocSearch <CR>
+nmap <c-F> :CocSearch 
 
 " Auto import on go files
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')

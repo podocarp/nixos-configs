@@ -187,6 +187,8 @@ let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 let g:NERDTreeNodeDelimiter = "\u00a0"
 
+nmap <leader>f :NERDTreeFind<cr>
+
 "Plug 'mbbill/undotree'
 nnoremap <F1> :UndotreeToggle<CR>
 
@@ -225,6 +227,7 @@ let g:PaperColor_Theme_Options = {
     \ }
 \ }
 colorscheme PaperColor
+highlight CocMenuSel guibg=#13354A guifg=#ffffff gui=bold
 
 " No line numbers in terminal (this breaks in vanilla vim)
 autocmd TermOpen * setlocal nonumber norelativenumber

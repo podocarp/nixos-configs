@@ -191,6 +191,7 @@ myManageHook =
                  "Picture in picture",
                  "Picture-in-Picture",
                  "TelegramDesktop",
+                 "RuneLite Launcher",
                  "dialog"
                ]
          ]

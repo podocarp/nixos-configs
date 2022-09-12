@@ -46,6 +46,7 @@ let g:UltiSnipsEditSplit="vertical"
 "Plug 'honza/vim-snippets'
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+set tagfunc=CocTagFunc
 nmap <silent> co <Plug>(coc-codelens-action)
 inoremap <silent><expr> <c-c> coc#refresh()
 nmap <silent> gd <Plug>(coc-definition)
@@ -53,6 +54,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gD :call CocAction('jumpDefinition', 'tab drop')<CR>
 nmap <silent> gh :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')

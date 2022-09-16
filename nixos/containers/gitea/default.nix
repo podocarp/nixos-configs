@@ -16,13 +16,13 @@
         domain = "gitea.jiaxiaodong.com";
         rootUrl = "https://gitea.jiaxiaodong.com";
         httpPort = port;
-        ssh.clonePort = sshPort;
 
         settings = {
           server = {
             START_SSH_SERVER = true;
             SSH_DOMAIN = "ssh.gitea.jiaxiaodong.com";
             LANDING_PAGE = "login";
+            SSH_PORT = sshPort;
           };
         };
       };

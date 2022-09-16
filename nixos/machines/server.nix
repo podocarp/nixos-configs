@@ -40,11 +40,11 @@ in
       }))
 
       ../services/fail2ban/default.nix
-      ((import ../services/hydra/default.nix {
-        port = hydraPort;
-        dbPort = postgresPort;
-      }))
-      ((import ../services/postgresql/default.nix { port = postgresPort; }))
+      # ((import ../services/hydra/default.nix {
+      #   port = hydraPort;
+      #   dbPort = postgresPort;
+      # }))
+      # ((import ../services/postgresql/default.nix { port = postgresPort; }))
       ../services/openssh/default.nix
       ../services/samba/default.nix
       ((import ../services/syncthing/default.nix) (args // {
@@ -57,8 +57,7 @@ in
             ["error" 65535] # acts as a fallback and throws errors
             # ["firefly" fireflyPort]
             ["gitea" giteaPort]
-            ["ssh-gitea" giteaSshPort]
-            ["hydra" hydraPort]
+            # ["hydra" hydraPort]
             ["jellyfin" jellyfinPort]
             ["mealie" mealiePort]
             # ["stash" stashPort]

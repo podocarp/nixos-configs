@@ -30,6 +30,7 @@
         action_menu="Alt+a"
         type_menu="Alt+t"
         help="Alt+h"
+        help_color="#000000"
         switch="Alt+x"
         insert_pass="Alt+n"
       '';

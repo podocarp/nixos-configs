@@ -129,6 +129,7 @@ myKeys =
     ("M-g", goToSelected myGsConfig),
     ("M-d", spawn "rofi -show combi"),
     ("M-f", spawn "rofi-pass"),
+    ("M-p", spawn "autorandr -c"),
     ("M-<Tab>", toggleWS), -- exclude those on other screens
     -- screenshot and copies to clipboard
     ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
@@ -264,16 +265,17 @@ myLayoutHook =
   ResizableTall 1 (1 / 100) (1 / 2) []
     ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
-main :: IO()
-main = xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
-  desktopConfig
-    { terminal = myTerm
-    , modMask = mod4Mask  -- meta key
-    , normalBorderColor = "#999999"
-    , focusedBorderColor = "#FF0000"
-    , borderWidth = 5
-    , manageHook = scratchpadHook <+> myManageHook
-    , layoutHook = myLayoutHook
-    , workspaces = withScreens 2 myWorkspaces
-    }
-    `additionalKeysP` myKeys
+main :: IO ()
+main =
+  xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
+    desktopConfig
+      { terminal = myTerm,
+        modMask = mod4Mask, -- meta key
+        normalBorderColor = "#999999",
+        focusedBorderColor = "#FF0000",
+        borderWidth = 5,
+        manageHook = scratchpadHook <+> myManageHook,
+        layoutHook = myLayoutHook,
+        workspaces = withScreens 2 myWorkspaces
+      }
+      `additionalKeysP` myKeys

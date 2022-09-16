@@ -60,6 +60,7 @@
     coc.enable = true;
     coc.settings = {
       "coc.source.around.enable" = false;
+      "coc.preferences.jumpCommand" = "tab drop";
       "coc.preferences.formatOnSaveFiletypes" = [
         "go" "haskell"
       ];

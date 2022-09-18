@@ -24,15 +24,18 @@ in
         };
       };
 
-      # Maps a list [name, port] into a config that we want
-      configgen = (host: xs:
+      # Maps a list [name, port, public] into a config that we want
+      configgen = (host: isPublic: xs:
         let
           name = builtins.elemAt xs 0;
           port = toString (builtins.elemAt xs 1);
+          skip = if isPublic
+            then isPublic == (builtins.elemAt xs 2)
+            else false;
         in
         {
           name = "${name}.${host}";
-          value = {
+          value = if skip then {} else {
             locations."/" = {
               proxyPass = "http://localhost:${port}";
               priority = 1000; # lower is higher
@@ -43,15 +46,14 @@ in
           };
         }
       );
+      publicHosts = builtins.listToAttrs (
+        map (configgen "jiaxiaodong.com" true) portMap
+        );
+      privateHosts = builtins.listToAttrs (
+        map (configgen "home.com" false) portMap
+        );
     in
-    # portMap is a list of lists of [name, port]
-    # for each hostname, we generate the config for name.hostname
-    # then they are all foldl'ed together
-    (builtins.foldl'
-      (x: y: x // builtins.listToAttrs (map (configgen y) portMap))
-      {}
-      [ "home.com" "jiaxiaodong.com" ]
-    ) // customConfigs;
+    publicHosts // privateHosts // customConfigs;
   };
 
   sops.secrets.tls_cert.owner = nginxUsername;

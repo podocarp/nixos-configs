@@ -10,8 +10,8 @@ let
   postgresPort = 7777;
   stashPort = 8000;
   syncthingPort = 9000;
-  transRpcPort = 10000;
-  trans2RpcPort = 10100;
+  delugePort = 10000;
+  transmissionPort = 10001;
   wireguardPort = 50000;
 in
 {
@@ -32,11 +32,12 @@ in
       ((import ../containers/mediawiki/default.nix) (args // {
         port = mediawikiPort;
       }))
-      # ((import ../containers/stashapp/default.nix) { port = stashPort; })
-      ((import ../containers/transmission/default.nix) {
-        config = config; port = transRpcPort;})
+      ((import ../containers/stashapp/default.nix) { port = stashPort; })
+      ((import ../containers/deluge/default.nix) (args // {
+        port = delugePort;
+      }))
       ((import ../containers/transmission/private.nix) (args // {
-        port = trans2RpcPort;
+        port = transmissionPort;
       }))
 
       ../services/fail2ban/default.nix
@@ -54,17 +55,17 @@ in
 
       ((import ../services/nginx/default.nix) (args // {
           portMap = [
-            ["error" 65535] # acts as a fallback and throws errors
+            # [host port isPublic]
             # ["firefly" fireflyPort]
-            ["gitea" giteaPort]
+            ["gitea" giteaPort true]
             # ["hydra" hydraPort]
-            ["jellyfin" jellyfinPort]
-            ["mealie" mealiePort]
-            # ["stash" stashPort]
-            ["sync" syncthingPort]
-            ["transmission" transRpcPort]
-            ["torrent" trans2RpcPort]
-            ["wiki" mediawikiPort]
+            ["jellyfin" jellyfinPort true]
+            ["mealie" mealiePort true]
+            ["stash" stashPort false]
+            ["sync" syncthingPort false]
+            ["deluge" delugePort false]
+            ["transmission" transmissionPort false]
+            ["wiki" mediawikiPort false]
           ];
       }))
     ];
@@ -92,6 +93,10 @@ in
       efiInstallAsRemovable = true;
       efiSupport = true;
       device = "nodev";
+    };
+    kernel.sysctl = {
+      "net.core.rmem_max" = 4194304;
+      "net.core.wmem_max" = 1048576;
     };
   };
 

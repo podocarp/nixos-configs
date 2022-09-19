@@ -10,8 +10,8 @@ let
   postgresPort = 7777;
   stashPort = 8000;
   syncthingPort = 9000;
-  delugePort = 10000;
-  transmissionPort = 10001;
+  transmissionPort = 10000;
+  transmissionPrivPort = 10001;
   wireguardPort = 50000;
 in
 {
@@ -33,11 +33,11 @@ in
         port = mediawikiPort;
       }))
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
-      ((import ../containers/deluge/default.nix) (args // {
-        port = delugePort;
+      ((import ../containers/transmission/default.nix) (args // {
+        port = transmissionPort;
       }))
       ((import ../containers/transmission/private.nix) (args // {
-        port = transmissionPort;
+        port = transmissionPrivPort;
       }))
 
       ../services/fail2ban/default.nix
@@ -63,8 +63,8 @@ in
             ["mealie" mealiePort true]
             ["stash" stashPort false]
             ["sync" syncthingPort false]
-            ["deluge" delugePort false]
-            ["transmission" transmissionPort false]
+            ["torrents" transmissionPort false]
+            ["transmission" transmissionPrivPort false]
             ["wiki" mediawikiPort false]
           ];
       }))
@@ -168,14 +168,10 @@ in
   # This is a public user made available to NFS and Samba
   users.users.fileshare = {
     isSystemUser = true;
-    # createHome = false;
-    # shell = "/run/current-system/sw/bin/nologin";
-    # uid = 42069;
     group = "users";
   };
 
   users.groups."users".gid = 100;
-  # users.groups."fileshare".gid = 42069;
 
   environment.systemPackages = with pkgs; [
     fio

@@ -11,7 +11,7 @@ in
         hostPath = "/tank/local/transmission";
         isReadOnly = false;
       };
-      "/Downloads" = {
+      "/downloads" = {
         hostPath = "/tank/public/Downloads";
         isReadOnly = false;
       };
@@ -32,7 +32,7 @@ in
         user = "pengu";
         group = "users";
         settings = {
-          download-dir = "/Downloads";
+          download-dir = "/downloads";
           incomplete-dir-enabled = false;
 
           rpc-bind-address = "0.0.0.0";
@@ -50,7 +50,7 @@ in
           seed-queue-size = 5;
 
           idle-seeding-limit-enabled = true;
-          idle-seeding-limit = 30;
+          idle-seeding-limit = 10;
           ratio-limit-enabled = true;
           ratio-limit = 1;
         };

@@ -51,13 +51,21 @@ in
           "max_upload_speed" = 100;
           "stop_seed_at_ratio" = true;
           "stop_seed_ratio" = 1;
+          "announce_to_all_trackers" = true;
+          "announce_to_all_tiers" = true;
         };
         authFile = "/tmp/authfile";
       };
 
+      systemd.services."systemd-tmpfiles-setup".before = [
+        "deluged.service"
+        "delugeweb.service"
+      ];
+
       # copy the file and set the proper permissions
       systemd.tmpfiles.rules = [
-        "C /tmp/authfile 0444 pengu users ${authFile}"
+        "C /tmp/authfile - - - - ${authFile}"
+        "z /tmp/authfile 0444 pengu users - -"
       ];
 
       networking.firewall.enable = false;

@@ -30,7 +30,7 @@ in
           name = builtins.elemAt xs 0;
           port = toString (builtins.elemAt xs 1);
           skip = if isPublic
-            then isPublic == (builtins.elemAt xs 2)
+            then !(builtins.elemAt xs 2)
             else false;
         in
         {
@@ -38,6 +38,7 @@ in
           value = if skip then {} else {
             locations."/" = {
               proxyPass = "http://localhost:${port}";
+              proxyWebsockets = true;
               priority = 1000; # lower is higher
             };
             addSSL = true;

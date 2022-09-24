@@ -58,6 +58,7 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
 import XMonad.Hooks.ManageDocks ()
+import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.StatusBar
   ( StatusBarConfig,
     dynamicEasySBs,
@@ -80,6 +81,7 @@ import XMonad.Hooks.StatusBar.PP
   )
 import XMonad.Layout.IndependentScreens
   ( VirtualWorkspace,
+    countScreens,
     onCurrentScreen,
     withScreens,
   )
@@ -276,6 +278,7 @@ main =
         borderWidth = 5,
         manageHook = scratchpadHook <+> myManageHook,
         layoutHook = myLayoutHook,
-        workspaces = withScreens 2 myWorkspaces
+        -- TODO: use countscreens somehow
+        workspaces = 2 `withScreens` myWorkspaces
       }
       `additionalKeysP` myKeys

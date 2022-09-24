@@ -30,6 +30,7 @@ in
     ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
+    (import ./programs/ranger/default.nix args)
     ./programs/readline/default.nix
     # ./programs/sioyek/default.nix
     ./programs/texlive/default.nix
@@ -52,5 +53,7 @@ in
 
   home.packages = with pkgs; [
     octaveWithSym
+    handbrake
+    nixops_unstable
   ];
 }

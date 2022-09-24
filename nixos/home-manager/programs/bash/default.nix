@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 {
   programs.bash = {
     enable = true;
@@ -13,7 +12,7 @@
       la = "ls -a";
       lla = "ls -la";
       f = "grep -RHn";
-      v = "vim .";
+      v = "vim -S";
       t = "tmux -u";
     };
     initExtra = ''

@@ -59,7 +59,9 @@
     ### Fonts
     source-han-sans
     source-han-mono
-    julia-mono
+    (nerdfonts.override {
+      fonts = [ "DroidSansMono" ];
+    })
   ];
 
   # This must be enabled for fonts to be installed through packages.

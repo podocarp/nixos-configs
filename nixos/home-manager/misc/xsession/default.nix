@@ -46,7 +46,7 @@
     *.color7: #F5F5F5
     *.color15: #2D2D2C
 
-    XTerm*faceName: xft:JuliaMono
+    XTerm*faceName: xft:DroidSansMono Nerd Font Mono
     XTerm*faceSize: 10
     XTerm*forceBoxChars: false
     XTerm.vt100.translations: #override \n\

@@ -25,12 +25,13 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
+    ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
-    (import ./programs/ranger/default.nix args)
+    ./programs/ranger/default.nix
     ./programs/readline/default.nix
     # ./programs/sioyek/default.nix
     ./programs/texlive/default.nix

@@ -39,6 +39,7 @@ in
 
     ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
+    ./services/picom/default.nix
     ./services/syncthing/default.nix
     ./services/random-background/default.nix
 

@@ -134,7 +134,7 @@ myKeys =
     ("M-p", spawn "autorandr -c"),
     ("M-<Tab>", toggleWS), -- exclude those on other screens
     -- screenshot and copies to clipboard
-    ("<Print>", spawn "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'")
+    ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")
   ]
     ++ [ ("M-" ++ mask ++ key, f scr)
          | (key, scr) <- zip ["w", "e", "r"] [0 ..],

@@ -24,6 +24,7 @@
     killall
     lm_sensors
     lsof
+    maim
     neofetch
     neovim-remote
     nmap
@@ -35,7 +36,6 @@
     pavucontrol
     poppler_utils
     reptyr
-    scrot
     stress
     syncthing
     sysstat # iostat

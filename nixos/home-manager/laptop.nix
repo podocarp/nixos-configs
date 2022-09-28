@@ -25,6 +25,7 @@ in
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
+    ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix

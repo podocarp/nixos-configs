@@ -45,19 +45,40 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'honza/vim-snippets'
 
+"Plug 'puremourning/vimspector'
+nnoremap <Leader>dd :call vimspector#Launch()<CR>
+nnoremap <Leader>de :call vimspector#Reset()<CR>
+nnoremap <Leader>dc :call vimspector#Continue()<CR>
+
+nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+
+nmap <Leader>dk <Plug>VimspectorRestart
+nmap <Leader>dh <Plug>VimspectorStepOut
+nmap <Leader>dl <Plug>VimspectorStepInto
+nmap <Leader>dj <Plug>VimspectorStepOver
+
+nmap <Leader>di <Plug>VimspectorBalloonEval
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
+nmap <Leader>df <Plug>VimspectorUpFrame
+nmap <Leader>db <Plug>VimspectorDownFrame
+
+let g:vimspector_install_gadgets = [ 'delve'  ]
+
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
 nmap <silent> co <Plug>(coc-codelens-action)
 inoremap <silent><expr> <c-c> coc#refresh()
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gD :call CocAction('jumpDefinition', 'drop')<CR>
+nmap <silent> gy :call CocAction('jumpTypeDefinition', 'vsplit')<CR>
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr :call CocAction('jumpUsed')<CR>
 nmap <silent> gh :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
+    call CocActionAsync('definitionHover')
   endif
 endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -150,8 +171,6 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
-nmap <c-F> :CocSearch 
-
 " Auto import on go files
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
@@ -193,9 +212,13 @@ nmap <leader>f :NERDTreeFind<cr>
 "Plug 'mbbill/undotree'
 nnoremap <F1> :UndotreeToggle<CR>
 
-"Plug 'wincent/command-t', {'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'}
-let g:CommandTCursorColor = 'Search'
-let g:CommandTHighlightColor = 'Search'
+"Plug 'wincent/command-t'
+lua << EOF
+require('wincent.commandt').setup({ })
+vim.keymap.set('n', '<Leader>b', '<Plug>(CommandTBuffer)')
+vim.keymap.set('n', '<Leader>j', '<Plug>(CommandTJump)')
+vim.keymap.set('n', '<Leader>t', '<Plug>(CommandT)')
+EOF
 
 "Plug 'vim-airline/vim-airline'
 let g:airline_symbols_ascii=1

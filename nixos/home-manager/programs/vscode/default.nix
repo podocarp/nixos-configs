@@ -22,6 +22,7 @@
       "workbench.activityBar.visible" = false;
       "workbench.colorTheme" = "Default Light+";
 
+      "git.confirmSync" = false;
 
       "C_Cpp.default.cppStandard" = "c++17";
 

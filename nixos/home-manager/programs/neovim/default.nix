@@ -10,6 +10,7 @@
       coc-pyright
       coc-snippets
       coc-vimtex
+      command-t
       nerdtree
       papercolor-theme
       ultisnips
@@ -21,6 +22,7 @@
       vim-obsession
       vim-surround
       vim-sleuth
+      vimspector
       vimtex
     ];
 
@@ -50,7 +52,7 @@
 
     withNodeJs = true;
     withPython3 = true;
-    withRuby = false;
+    withRuby = true;
 
     # Unfortunately having the snippets file RO is too troublesome.
     extraConfig = builtins.readFile (toString ./.vimrc) + ''

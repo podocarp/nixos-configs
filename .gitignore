@@ -4,3 +4,4 @@ configuration.nix
 tinode.conf
 wireless.nix
 *.vim
+.direnv

@@ -27,6 +27,7 @@ in
     ./programs/chromium/default.nix
     ./programs/direnv/default.nix
     ((import ./programs/firefox/default.nix) args )
+    ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
     ./programs/mpv/default.nix
@@ -79,13 +80,11 @@ in
     goPrivate = [ "*.garena.com" ];
   };
 
-  programs.git = {
+  programs.git = lib.mkForce {
     enable = true;
+    userName = "Jia Xiaodong";
+    userEmail = "xiaodong.jia@shopee.com";
     extraConfig = {
-      user = {
-        name = "Jia Xiaodong";
-        email = "xiaodong.jia@shopee.com";
-      };
       url = {
         "ssh://gitlab@git.garena.com:2222" = { insteadOf = "https://git.garena.com"; };
       };

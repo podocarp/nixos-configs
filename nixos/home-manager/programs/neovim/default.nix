@@ -12,6 +12,8 @@
       coc-vimtex
       command-t
       nerdtree
+      nvim-dap
+      nvim-dap-ui
       papercolor-theme
       ultisnips
       undotree
@@ -22,7 +24,6 @@
       vim-obsession
       vim-surround
       vim-sleuth
-      vimspector
       vimtex
     ];
 
@@ -35,6 +36,7 @@
     ];
 
     extraPackages = with pkgs; [
+      delve # go debugger
       haskell-language-server
       haskellPackages.hlint
       gopls # go language server

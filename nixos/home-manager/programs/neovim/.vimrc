@@ -45,26 +45,86 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'honza/vim-snippets'
 
-"Plug 'puremourning/vimspector'
-nnoremap <Leader>dd :call vimspector#Launch()<CR>
-nnoremap <Leader>de :call vimspector#Reset()<CR>
-nnoremap <Leader>dc :call vimspector#Continue()<CR>
+"Plug 'mfussenegger/nvim-dap'
+"Plug 'rcarriga/nvim-dap-ui'
+lua << EOF
+local dap = require('dap')
+vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointCondition', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapLogPoint', {text='', texthl='', linehl='', numhl=''})
 
-nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
-nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+dap.adapters.go = {
+  type = 'server',
+  port = '${port}',
+  executable = {
+    command = 'dlv',
+    args = {'dap', '-l', '127.0.0.1:${port}'},
+    }
+  }
 
-nmap <Leader>dk <Plug>VimspectorRestart
-nmap <Leader>dh <Plug>VimspectorStepOut
-nmap <Leader>dl <Plug>VimspectorStepInto
-nmap <Leader>dj <Plug>VimspectorStepOver
+-- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+dap.configurations.go = {
+  {
+      type = "go",
+      name = "Debug",
+      request = "launch",
+      program = "${file}"
+  },
+  {
+      type = "go",
+      name = "Debug test", -- configuration for debugging test files
+      request = "launch",
+      mode = "test",
+      program = "${file}"
+  },
+}
 
-nmap <Leader>di <Plug>VimspectorBalloonEval
-xmap <Leader>di <Plug>VimspectorBalloonEval
+require('dap.ext.vscode').load_launchjs(nil, {})
 
-nmap <Leader>df <Plug>VimspectorUpFrame
-nmap <Leader>db <Plug>VimspectorDownFrame
+require("dapui").setup({
+ layouts = {
+    {
+      elements = {
+      -- Elements can be strings or table with id and size keys.
+        { id = "breakpoints", size = 0.2},
+        { id = "scopes", size = 0.4 },
+        { id = "stacks", size = 0.2 },
+        { id = "watches", size = 0.2}
+      },
+      size = 40, -- 40 columns
+      position = "left",
+    },
+    {
+      elements = {
+        "repl",
+      },
+      size = 0.25, -- 25% of total lines
+      position = "bottom",
+    },
+  }
+})
+local dap, dapui = require("dap"), require("dapui")
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+EOF
 
-let g:vimspector_install_gadgets = [ 'delve'  ]
+nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
+nnoremap <silent> <F6> <Cmd>lua require'dap'.step_over()<CR>
+nnoremap <silent> <F7> <Cmd>lua require'dap'.step_into()<CR>
+nnoremap <silent> <F8> <Cmd>lua require'dap'.step_out()<CR>
+nnoremap <silent> <Leader>dt <Cmd>lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc

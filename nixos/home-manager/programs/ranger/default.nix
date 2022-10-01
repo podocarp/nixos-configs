@@ -7,11 +7,28 @@
     rifle = ./rifle.conf;
     scope = ./scope.sh;
     commands = ./commands.py;
-    extraPackages = [ pkgs.ueberzug ];
+    package = pkgs.ranger.overrideAttrs (super: {
+      src = pkgs.fetchFromGitHub {
+        owner = "ranger";
+        repo = "ranger";
+        rev = "master";
+        sha256= "1rygfryczanvqxn43lmlkgs04sbqznbvbb9hlbm3h5qgdcl0xlw8";
+      };
+    });
+    extraPackages = with pkgs; [
+      ueberzug
+      ffmpegthumbnailer
+      trash-cli
+    ];
     plugins = [
       {
         name = "ranger_devicons";
-        path = builtins.fetchGit "https://github.com/alexanderjeurissen/ranger_devicons";
+        path = pkgs.fetchFromGitHub {
+          owner = "alexanderjeurissen";
+          repo = "ranger_devicons";
+          rev = "master";
+          sha256= "1rygfryczanvqxn43lmlkgs04sbqznbvbb9hlbm3h5qgdcl0xlw8";
+        };
       }
     ];
   };

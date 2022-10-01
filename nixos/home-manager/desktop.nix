@@ -31,7 +31,7 @@ in
     ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
-    ./programs/ranger/default.nix
+    # ./programs/ranger/default.nix
     ./programs/readline/default.nix
     # ./programs/sioyek/default.nix
     ./programs/texlive/default.nix

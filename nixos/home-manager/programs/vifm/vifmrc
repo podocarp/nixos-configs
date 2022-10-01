@@ -1,13 +1,11 @@
 " This is the actual command used to start vi.  The default is vim.
 " If you would like to use another vi clone such as Elvis or Vile
 " you will need to change this setting.
-
 set vicmd='nvim'
 
 " This makes vifm perform file operations on its own instead of relying on
 " standard utilities like `cp`.  While using `cp` and alike is a more universal
 " solution, it's also much slower and doesn't support progress measuring.
-
 set syscalls
 
 " Trash Directory
@@ -16,7 +14,6 @@ set syscalls
 " files by deleting them and then using p to put the file in the new location.
 " I recommend not changing this until you are familiar with vifm.
 " This probably shouldn't be an option.
-
 set trash
 
 " Only ask for confirmation when permdelete
@@ -40,7 +37,7 @@ set sortnumbers
 
 " If you installed the vim.txt help file set vimhelp.
 " If would rather use a plain text help file set novimhelp.
-set novimhelp
+set vimhelp
 
 " If you would like to run an executable file when you
 " press return on the file name set this.
@@ -85,6 +82,8 @@ set statusline="%t%= %A %10u:%-7g %15E %20d"
 set nowrap
 
 set tuioptions="pu"
+
+set previewoptions+=maxtreedepth:1
 
 " :mark mark /full/directory/path [filename]
 mark d ~/Downloads

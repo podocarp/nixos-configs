@@ -33,6 +33,7 @@ import XMonad
     mod4Mask,
     runQuery,
     sendMessage,
+    spawn,
     stringProperty,
     title,
     windows,
@@ -116,7 +117,7 @@ myGsConfig =
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1 .. 9]
 
-spawn x = void $ spawnPID x
+myspawn x = void $ spawnPID x
   where
     spawnPID x = xfork $ executeFile "/usr/bin/env" False ["bash", "-c", x] Nothing
 
@@ -147,12 +148,12 @@ myKeys =
       | (key, i) <- zip [1 .. 9] myWorkspaces,
         (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")]
     ]
-    ++ [ ("<XF86AudioMute>", spawn "changevolume toggle"),
-         ("<XF86AudioRaiseVolume>", spawn "changevolume 5%+"),
-         ("<XF86AudioLowerVolume>", spawn "changevolume 5%-"),
-         --("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
-         --, ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
-         --, ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
+    ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
+         ("<XF86AudioRaiseVolume>", myspawn "changevolume 5%+"),
+         ("<XF86AudioLowerVolume>", myspawn "changevolume 5%-"),
+         -- ("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
+         -- , ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
+         -- , ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
          -- Brightness controls
          ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+"),
          ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")

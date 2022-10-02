@@ -117,6 +117,8 @@ myGsConfig =
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1 .. 9]
 
+-- This is needed to run scripts, because `spawn` uses `sh` which does not read
+-- `.bashrc` and so does not know about any user defined `$PATH`.
 myspawn x = void $ spawnPID x
   where
     spawnPID x = xfork $ executeFile "/usr/bin/env" False ["bash", "-c", x] Nothing
@@ -268,18 +270,20 @@ myLayoutHook =
   ResizableTall 1 (1 / 100) (1 / 2) []
     ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
+myConfig =
+  desktopConfig
+    { terminal = myTerm,
+      modMask = mod4Mask, -- meta key
+      normalBorderColor = "#999999",
+      focusedBorderColor = "#FF0000",
+      borderWidth = 5,
+      manageHook = scratchpadHook <+> myManageHook,
+      layoutHook = myLayoutHook,
+      -- TODO: use countscreens somehow
+      workspaces = 2 `withScreens` myWorkspaces
+    }
+
 main :: IO ()
 main =
   xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
-    desktopConfig
-      { terminal = myTerm,
-        modMask = mod4Mask, -- meta key
-        normalBorderColor = "#999999",
-        focusedBorderColor = "#FF0000",
-        borderWidth = 5,
-        manageHook = scratchpadHook <+> myManageHook,
-        layoutHook = myLayoutHook,
-        -- TODO: use countscreens somehow
-        workspaces = 2 `withScreens` myWorkspaces
-      }
-      `additionalKeysP` myKeys
+    additionalKeysP myConfig myKeys

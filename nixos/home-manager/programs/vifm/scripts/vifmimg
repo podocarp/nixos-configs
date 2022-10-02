@@ -1,7 +1,7 @@
 [ -d "/tmp/vifm" ] || mkdir "/tmp/vifm"
 
 # $1 action, $2 panel width, $3 panel height, $4 image path
-width=$(($2*8))
+width=$(($2*12))
 height=$(($3*14))
 PCACHE="/tmp/vifm/$(stat --terse -- "$(readlink -f "$4")" | md5sum | cut -d' ' -f1)"
 

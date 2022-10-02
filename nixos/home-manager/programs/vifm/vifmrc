@@ -85,6 +85,9 @@ set tuioptions="pu"
 
 set previewoptions+=maxtreedepth:1
 
+" Enables terminal multiplexer support
+screen
+
 " :mark mark /full/directory/path [filename]
 mark d ~/Downloads
 mark n /network/
@@ -182,7 +185,7 @@ fileviewer <audio/*>
 " Video
 filextype <video/*>
         \ {View using MPV}
-        \ mpv %f &,
+        \ mpv %f &> /dev/null &,
 fileviewer <video/*>
         \ vifmimg video %pw %ph %c %pd
         \ %pc
@@ -343,7 +346,7 @@ set vifminfo=dhistory,chistory,state,tui,shistory,
 " Examples of configuring both panels
 
 " Customize view columns a bit (enable ellipsis for truncated file names)
-set viewcolumns=-{name}..,*{target}..,5{size},11{perms}.
+set viewcolumns=-{name},*{target},5{size},11{perms}.
 
 " Filter-out build and temporary files
 " filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/

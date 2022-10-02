@@ -43,7 +43,10 @@
   };
 
   systemd.services.fix_acpi_wakeup = {
-    serviceConfig.Type = "oneshot";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    }
     description = "Prevents USB from waking the system up so the system can sleep properly.";
     script = ''
       ${pkgs.bash}/bin/bash -c 'echo PTXH > /proc/acpi/wakeup; echo XHC0 > /proc/acpi/wakeup;'

@@ -17,6 +17,7 @@ import XMonad
     XConfig
       ( borderWidth,
         focusedBorderColor,
+        handleEventHook,
         layoutHook,
         logHook,
         manageHook,
@@ -96,7 +97,6 @@ import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run (spawnPipe)
-import XMonad.Util.Scratchpad (scratchpadManageHook, scratchpadSpawnActionTerminal)
 import XMonad.Util.WorkspaceCompare (getSortByTag)
 
 myXPConfig :: XPConfig
@@ -130,7 +130,6 @@ myKeys =
     ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix
     ("M-S-h", sendMessage MirrorShrink), -- shrink slave size
     ("M-S-l", sendMessage MirrorExpand), -- expand slave size
-    ("M-o", scratchpadSpawnActionTerminal myTerm),
     ("M-g", goToSelected myGsConfig),
     ("M-d", spawn "rofi -show combi"),
     ("M-f", spawn "rofi-pass"),
@@ -161,14 +160,6 @@ myKeys =
          ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
        ]
 
-scratchpadHook :: ManageHook
-scratchpadHook = scratchpadManageHook (W.RationalRect l t w h)
-  where
-    h = 0.5 -- height
-    w = 0.3 -- width
-    t = 0.9 - h -- distance from top edge
-    l = 1 - w -- distance from left edge
-
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
 q =?~ regex = fmap (matchRegex regex) q
@@ -185,11 +176,11 @@ myManageHook =
             "Open Folder"
           ]
     ]
-      ++ [ title =?~ name --> doFloat
-           | name <-
-               [ ".?zoom.?" -- zoom modals
-               ]
-         ]
+      -- ++ [ title =?~ name --> doFloat
+      --      | name <-
+      --          [ ".?zoom.?" -- zoom modals
+      --          ]
+      --   ]
       ++ [ className =? name --> doFloat
            | name <-
                [ "About",
@@ -267,8 +258,9 @@ barSpawner 1 = pure xmobarSecondary
 barSpawner _ = mempty
 
 myLayoutHook =
-  ResizableTall 1 (1 / 100) (1 / 2) []
-    ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+  refocusLastLayoutHook $
+    ResizableTall 1 (1 / 100) (1 / 2) []
+      ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
 myConfig =
   desktopConfig
@@ -276,11 +268,12 @@ myConfig =
       modMask = mod4Mask, -- meta key
       normalBorderColor = "#999999",
       focusedBorderColor = "#FF0000",
-      borderWidth = 5,
-      manageHook = scratchpadHook <+> myManageHook,
+      borderWidth = myBorderWidth,
+      manageHook = myManageHook,
       layoutHook = myLayoutHook,
       -- TODO: use countscreens somehow
-      workspaces = 2 `withScreens` myWorkspaces
+      workspaces = withScreens 2 myWorkspaces,
+      handleEventHook = refocusLastWhen (return True) <+> handleEventHook def
     }
 
 main :: IO ()

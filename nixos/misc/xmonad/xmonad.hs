@@ -26,6 +26,7 @@ import XMonad
     className,
     composeAll,
     doFloat,
+    doIgnore,
     io,
     kill,
     mod4Mask,
@@ -55,8 +56,9 @@ import XMonad.Actions.PhysicalScreens
   )
 import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
-import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
-import XMonad.Hooks.ManageDocks ()
+import XMonad.Config.Kde (kdeConfig)
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -87,6 +89,7 @@ import XMonad.Layout.IndependentScreens
     onCurrentScreen,
     withScreens,
   )
+import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableThreeColumns
   ( MirrorResize (MirrorExpand, MirrorShrink),
     ResizableThreeCol (ResizableThreeColMid),
@@ -142,7 +145,7 @@ myKeys =
   ]
     ++ [ ("M-" ++ mask ++ key, f scr)
          | (key, scr) <- zip ["w", "e", "r"] [0 ..],
-           (f, mask) <- [(viewScreen horizontalScreenOrderer, ""), (sendToScreen horizontalScreenOrderer, "S-")]
+           (f, mask) <- [(XMonad.Actions.PhysicalScreens.viewScreen XMonad.Actions.PhysicalScreens.horizontalScreenOrderer, ""), (XMonad.Actions.PhysicalScreens.sendToScreen XMonad.Actions.PhysicalScreens.horizontalScreenOrderer, "S-")]
        ]
     ++
     -- M-Shift-[1-9] moves windows to workspaces
@@ -173,35 +176,24 @@ q =?~ regex = fmap (matchRegex regex) q
 myManageHook :: ManageHook
 myManageHook =
   composeAll $
-    [ title =? name --> doFloat
+    -- ++ [ title =?~ name --> doFloat
+    --      | name <-
+    --          [ ".?zoom.?" -- zoom modals
+    --          ]
+    --   ]
+    [ className =? name --> doFloat
       | name <-
-          [ "Volume Control",
-            "Open Folder"
+          [ "About",
+            "Open Folder",
+            "Picture in picture",
+            "Picture-in-Picture",
+            "RuneLite Launcher",
+            "TelegramDesktop",
+            "Volume Control",
+            "dialog"
           ]
     ]
-      -- ++ [ title =?~ name --> doFloat
-      --      | name <-
-      --          [ ".?zoom.?" -- zoom modals
-      --          ]
-      --   ]
-      ++ [ className =? name --> doFloat
-           | name <-
-               [ "About",
-                 "Image Lounge", -- nomacs
-                 "Picture in picture",
-                 "Picture-in-Picture",
-                 "TelegramDesktop",
-                 "RuneLite Launcher",
-                 "dialog",
-                 "krunner",
-                 "plasmashell"
-               ]
-         ]
-      ++ [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat
-           | name <-
-               [ "pop-up"
-               ]
-         ]
+      ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
 
 -- This gives the hidden workspaces and the master window in those workspaces
 -- as a string.
@@ -229,59 +221,28 @@ myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidd
     -- Gets the Maybe String out.
     safeUnpack s = if s == "" then Nothing else Just s
 
-myLogHook =
-  xmobarPP
-    { ppSep = " | ",
-      ppCurrent = xmobarColor "green" "" . wrap "[" "]",
-      ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]",
-      ppHidden = xmobarColor "gray" "" . wrap "(" ")",
-      ppTitle = xmobarColor "cyan" "" . shorten 100, -- window title format
-      ppSort = getSortByTag,
-      ppOrder = \(ws : layout : wt : extra) -> [layout, ws, wt] ++ extra
-    }
-
-myLogHookSecondary =
-  myLogHook
-    { ppTitle = xmobarColor "lightblue" "" . shorten 100
-    }
-
-xmobarMain =
-  statusBarPropTo
-    "_XMONAD_LOG"
-    "xmobar -x 0 ~/.config/xmobar/xmobarrc"
-    (pure myLogHook)
-
-xmobarSecondary =
-  statusBarPropTo
-    "_XMONAD_LOG_1"
-    "xmobar -x 1 ~/.config/xmobar/xmobarrc_unfocused"
-    (pure myLogHookSecondary)
-
-barSpawner :: ScreenId -> IO StatusBarConfig
-barSpawner 0 = pure xmobarMain
-barSpawner 1 = pure xmobarSecondary
-barSpawner _ = mempty
-
 myLayoutHook =
-  refocusLastLayoutHook $
-    ResizableTall 1 (1 / 100) (1 / 2) []
-      ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+  avoidStruts $
+    refocusLastLayoutHook $
+      ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
-myConfig =
-  desktopConfig
-    { terminal = myTerm,
-      modMask = mod4Mask, -- meta key
-      normalBorderColor = "#999999",
-      focusedBorderColor = "#FF0000",
-      borderWidth = 3,
-      manageHook = myManageHook,
-      layoutHook = myLayoutHook,
-      -- TODO: use countscreens somehow
-      workspaces = withScreens 2 myWorkspaces,
-      handleEventHook = refocusLastWhen (return True) <+> handleEventHook def
-    }
+myConfig nScreens =
+  ewmh $
+    desktopConfig
+      { terminal = myTerm,
+        modMask = mod4Mask, -- meta key
+        normalBorderColor = "#999999",
+        focusedBorderColor = "#FF0000",
+        borderWidth = 3,
+        manageHook = myManageHook <+> manageHook kdeConfig,
+        layoutHook = myLayoutHook,
+        -- TODO: use countscreens somehow
+        workspaces = withScreens nScreens myWorkspaces,
+        handleEventHook = refocusLastWhen (return True) <+> handleEventHook def,
+        logHook = logHook kdeConfig
+      }
+      `additionalKeysP` myKeys
 
 main :: IO ()
 main =
-  xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
-    additionalKeysP myConfig myKeys
+  countScreens >>= (xmonad . docks . myConfig)

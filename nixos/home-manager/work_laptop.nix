@@ -12,31 +12,22 @@ in
 
   imports =
   [
-    ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm;
-    })
-    ((import ./programs/rofi/default.nix) {
-      myTerm = myTerm;
-    })
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
-    })
-
     ./programs/autorandr/default.nix
     ./programs/bash/default.nix
     ./programs/chromium/default.nix
     ./programs/direnv/default.nix
-    ((import ./programs/firefox/default.nix) args )
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
+    ((import ./programs/password-store/default.nix) { homeDir = homeDir; })
     ./programs/readline/default.nix
+    ((import ./programs/rofi/default.nix) { myTerm = myTerm; })
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ./programs/vscode/default.nix
-    ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
+    ((import ./programs/vifm/default.nix) (args // { myTerm = myTerm; }))
     ./programs/zathura/default.nix
 
     ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
@@ -48,7 +39,7 @@ in
 
     ((import ./misc/applications/default.nix) args)
     ./misc/keyboard/default.nix
-    ./misc/xsession/default.nix
+         ((import ./misc/xsession/default.nix) (args // { myTerm = myTerm; }))
   ];
 
   home.packages =

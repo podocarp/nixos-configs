@@ -1,8 +1,16 @@
-{ pkgs, ... }:
+{ pkgs, lib, myTerm, ... }:
 {
+  imports = [
+    # ((import ../../programs/xmonad/default.nix) {
+    #   pkgs = pkgs; myTerm = myTerm;
+    # })
+  ];
+
   xsession = {
     enable = true;
     initExtra = ''
+      kwriteconfig5 --file startkderc --group General --key systemdBoot false
+      export KDEWM=xmonad
       autorandr -c
     '';
     profileExtra = ''
@@ -10,6 +18,8 @@
     '';
     scriptPath = ".xsession-hm";
   };
+
+  xsession.windowManager.command = lib.mkForce "startplasma-x11";
 
   xresources.extraConfig =
   ''
@@ -65,7 +75,7 @@
 
   gtk = {
     # Note: this requires programs.dconf.enable = true.
-    enable = true;
+    enable = false;
     iconTheme = {
       name = "Breeze";
       package = pkgs.breeze-icons;
@@ -76,11 +86,20 @@
     };
   };
   qt = {
-    enable = true;
+    enable = false;
     platformTheme = "gnome";
     style = {
       name = "Breeze";
       package = pkgs.breeze-qt5;
     };
+  };
+
+  services.picom = {
+    enable = false;
+    activeOpacity = 1.0;
+    inactiveOpacity = 1.0;
+    fade = false;
+    shadow = false;
+    vSync = true;
   };
 }

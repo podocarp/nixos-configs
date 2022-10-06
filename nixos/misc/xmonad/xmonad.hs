@@ -99,6 +99,8 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.WorkspaceCompare (getSortByTag)
 
+myTerm = "xterm"
+
 myXPConfig :: XPConfig
 myXPConfig =
   def
@@ -271,7 +273,7 @@ myConfig =
       modMask = mod4Mask, -- meta key
       normalBorderColor = "#999999",
       focusedBorderColor = "#FF0000",
-      borderWidth = myBorderWidth,
+      borderWidth = 3,
       manageHook = myManageHook,
       layoutHook = myLayoutHook,
       -- TODO: use countscreens somehow

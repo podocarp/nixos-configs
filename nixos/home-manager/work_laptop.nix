@@ -71,10 +71,9 @@ in
     goPrivate = [ "*.garena.com" ];
   };
 
-  programs.git = lib.mkForce {
-    enable = true;
-    userName = "Jia Xiaodong";
-    userEmail = "xiaodong.jia@shopee.com";
+  programs.git = {
+    userName = lib.mkForce "Jia Xiaodong";
+    userEmail = lib.mkForce "xiaodong.jia@shopee.com";
     extraConfig = {
       url = {
         "ssh://gitlab@git.garena.com:2222" = { insteadOf = "https://git.garena.com"; };

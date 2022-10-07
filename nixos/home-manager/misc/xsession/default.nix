@@ -11,7 +11,6 @@
     initExtra = ''
       kwriteconfig5 --file startkderc --group General --key systemdBoot false
       export KDEWM=xmonad
-      autorandr -c
     '';
     profileExtra = ''
       xset r rate 200 30

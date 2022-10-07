@@ -132,6 +132,7 @@ myKeys :: [(String, X ())]
 myKeys =
   [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess),
     ("M-S-q", kill), -- close focused window
+    ("M-q", spawn "xmonad --restart"), -- don't recompile, nix does it for us
     ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix
     ("M-S-h", sendMessage MirrorShrink), -- shrink slave size
     ("M-S-l", sendMessage MirrorExpand), -- expand slave size
@@ -139,13 +140,18 @@ myKeys =
     ("M-d", spawn "rofi -show combi"),
     ("M-f", spawn "rofi-pass"),
     ("M-p", spawn "autorandr -c"),
-    ("M-<Tab>", toggleWS), -- exclude those on other screens
+    ("M-<Tab>", toggleWS),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")
   ]
+    -- M-Shift-[z,x,c] moves windows to screens
+    -- M-[z,x,c] views screens
     ++ [ ("M-" ++ mask ++ key, f scr)
-         | (key, scr) <- zip ["w", "e", "r"] [0 ..],
-           (f, mask) <- [(XMonad.Actions.PhysicalScreens.viewScreen XMonad.Actions.PhysicalScreens.horizontalScreenOrderer, ""), (XMonad.Actions.PhysicalScreens.sendToScreen XMonad.Actions.PhysicalScreens.horizontalScreenOrderer, "S-")]
+         | (key, scr) <- zip ["z", "x", "c"] [0 ..],
+           (f, mask) <-
+             [ (viewScreen horizontalScreenOrderer, ""),
+               (sendToScreen horizontalScreenOrderer, "S-")
+             ]
        ]
     ++
     -- M-Shift-[1-9] moves windows to workspaces
@@ -190,7 +196,8 @@ myManageHook =
             "RuneLite Launcher",
             "TelegramDesktop",
             "Volume Control",
-            "dialog"
+            "dialog",
+            "plasmashell"
           ]
     ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
@@ -222,9 +229,10 @@ myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidd
     safeUnpack s = if s == "" then Nothing else Just s
 
 myLayoutHook =
-  avoidStruts $
-    refocusLastLayoutHook $
-      ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+  smartBorders $
+    avoidStruts $
+      refocusLastLayoutHook $
+        ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
 myConfig nScreens =
   ewmh $
@@ -236,7 +244,6 @@ myConfig nScreens =
         borderWidth = 3,
         manageHook = myManageHook <+> manageHook kdeConfig,
         layoutHook = myLayoutHook,
-        -- TODO: use countscreens somehow
         workspaces = withScreens nScreens myWorkspaces,
         handleEventHook = refocusLastWhen (return True) <+> handleEventHook def,
         logHook = logHook kdeConfig

@@ -149,7 +149,7 @@ nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
-nmap <silent> co <Plug>(coc-codelens-action)
+nmap <silent> ca <Plug>(coc-codelens-action)
 inoremap <silent><expr> <c-c> coc#refresh()
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gD :call CocAction('jumpDefinition', 'drop')<CR>

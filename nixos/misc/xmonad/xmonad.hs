@@ -1,11 +1,12 @@
 import Control.Monad (liftM2, void)
-import qualified Data.Text as T
+import Data.Semigroup (All)
 import System.Exit (exitSuccess)
 import System.IO ()
 import System.Posix.Process (executeFile)
 import Text.Regex.Posix ((=~))
 import XMonad
   ( Default (def),
+    Event,
     ManageHook,
     Query,
     ScreenId,
@@ -58,7 +59,7 @@ import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Config.Kde (kdeConfig)
 import XMonad.Hooks.EwmhDesktops (ewmh)
-import XMonad.Hooks.ManageDocks (avoidStruts, docks)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -202,37 +203,14 @@ myManageHook =
     ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
 
--- This gives the hidden workspaces and the master window in those workspaces
--- as a string.
-myExtras :: [X (Maybe String)]
-myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidden)]
-  where
-    -- Gets the master window's (if any) name in the workspace
-    ripName (W.Workspace i _ (Just stack)) =
-      liftM2 (\x y -> concat [header, x, dash, y]) c t
-      where
-        header = i ++ ":"
-        dash = " - "
-        fshorten :: X String -> X String
-        fshorten = fmap (shorten 10)
-        t = fshorten (runQuery title (W.focus stack))
-        c = fshorten (runQuery className (W.focus stack))
-    ripName _ = return ""
-
-    -- Given a stack of workspaces, return a list of names as per above
-    getNames ws = foldl (liftM2 (++)) (return "") (map ripName ws)
-    extraFormatting = fmap (\s -> front ++ s ++ back)
-      where
-        front = "<fc=lightgray>"
-        back = "</fc>"
-    -- Gets the Maybe String out.
-    safeUnpack s = if s == "" then Nothing else Just s
-
 myLayoutHook =
   smartBorders $
     avoidStruts $
       refocusLastLayoutHook $
         ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+
+myEventHook :: Event -> X All
+myEventHook = refocusLastWhen (return True)
 
 myConfig nScreens =
   ewmh $
@@ -245,11 +223,10 @@ myConfig nScreens =
         manageHook = myManageHook <+> manageHook kdeConfig,
         layoutHook = myLayoutHook,
         workspaces = withScreens nScreens myWorkspaces,
-        handleEventHook = refocusLastWhen (return True) <+> handleEventHook def,
+        handleEventHook = myEventHook <+> handleEventHook def,
         logHook = logHook kdeConfig
       }
       `additionalKeysP` myKeys
 
 main :: IO ()
-main =
-  countScreens >>= (xmonad . docks . myConfig)
+main = countScreens >>= (xmonad . docks . myConfig)

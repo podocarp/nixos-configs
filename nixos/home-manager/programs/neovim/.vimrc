@@ -294,6 +294,8 @@ nmap <leader>f :NERDTreeFind<cr>
 nnoremap <F1> :UndotreeToggle<CR>
 
 "Plug 'wincent/command-t'
+
+let g:CommandTPreferredImplementation='lua'
 lua << EOF
 require('wincent.commandt').setup({ })
 vim.keymap.set('n', '<Leader>b', '<Plug>(CommandTBuffer)')

@@ -12,7 +12,6 @@
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
-    dolphin
     ffmpeg
     highlight
     hugo
@@ -42,7 +41,6 @@
     tdesktop # telegram desktop
     unzip
     usbutils # for lsusb
-    veracrypt
     xclip
     xorg.xev
     xorg.xkill

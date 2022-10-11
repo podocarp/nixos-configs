@@ -12,9 +12,6 @@ in
 
   imports =
   [
-    ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm;
-    })
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
     })
@@ -40,7 +37,6 @@ in
 
     ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
     ./services/gpg-agent/default.nix
-    ./services/picom/default.nix
     ./services/syncthing/default.nix
     ./services/random-background/default.nix
 

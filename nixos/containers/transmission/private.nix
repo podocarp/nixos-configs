@@ -11,6 +11,7 @@ in
       "/tank/private/Downloads:/Downloads"
       "/tank/private/Downloaded:/Downloaded"
       "${config.sops.secrets.openvpn-credentials.path}:/config/openvpn-credentials.txt"
+      "${config.sops.secrets.openvpn-config.path}:/etc/openvpn/custom/default.ovpn"
     ];
     ports = [ "${toString port}:9091" ];
     extraOptions = [ "--cap-add=NET_ADMIN" ];
@@ -18,14 +19,12 @@ in
     {
       GLOBAL_APPLY_PERMISSIONS = "false";
       LOCAL_NETWORK= "192.168.1.0/24";
-      NORDVPN_CATEGORY = "standard";
-      NORDVPN_COUNTRY = "CH";
-      NORDVPN_PROTOCOL = "UDP";
+      OPENVPN_PROVIDER = "custom";
       OPENVPN_PASSWORD = "**None**";
-      OPENVPN_PROVIDER = "NORDVPN";
       OPENVPN_USERNAME = "**None**";
       PGID = builtins.toString config.users.groups."users".gid;
       PUID = builtins.toString config.users.users."pengu".uid;
+      GITHUB_CONFIG_SOURCE_REPO = "rubbish domain";
 
       TRANSMISSION_DOWNLOAD_DIR = "/Downloaded";
       TRANSMISSION_DOWNLOAD_QUEUE_ENABLED = "true";
@@ -39,7 +38,7 @@ in
       TRANSMISSION_RATIO_LIMIT = "1";
       TRANSMISSION_RATIO_LIMIT_ENABLED = "true";
       TRANSMISSION_RPC_AUTHENTICATION_REQUIRED = "true";
-      TRANSMISSION_RPC_HOST_WHITELIST = "*.home.com";
+      TRANSMISSION_RPC_HOST_WHITELIST = "*.home.com,*.jiaxiaodong.com";
       TRANSMISSION_RPC_PASSWORD = "pengu";
       TRANSMISSION_RPC_USERNAME = "pengu";
       TRANSMISSION_RPC_WHITELIST = "192.168.1.*,127.0.0.1";
@@ -48,4 +47,6 @@ in
   };
 
   sops.secrets."openvpn-credentials" = {};
+  sops.secrets."openvpn-config" = { sopsFile = ../../secrets/secrets-misc.yaml; };
+  sops.secrets."transmission-credentials" = {};
 }

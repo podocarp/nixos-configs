@@ -18,6 +18,9 @@
       x1 = {
         id = "OX5NYH3-RHKF6DI-AREQDJV-QLX3W3Q-YIATG65-GCL7N7V-ECT2QMR-WBDCSA4";
       };
+      slate = {
+        id = "3IY5VEY-HL3E33H-GZ3LJIR-5SIUTLJ-ROZ3FSO-NA5K3X6-JSF4SUE-BXUICAH";
+      };
     };
 
     folders = {
@@ -26,12 +29,12 @@
         rescanInterval = 36000;
         versioning.type = "trashcan";
         versioning.params = { "cleanoutDays" = "7"; };
-        devices = [ "desktop" "x200" "x1" ];
+        devices = [ "desktop" "x200" "x1" "slate" ];
       };
       "/tank/public/Sync/Books" = {
         id = "Books";
         rescanInterval = 36000;
-        devices = [ "desktop" "x200" "x1" ];
+        devices = [ "desktop" "x200" "x1" "slate" ];
       };
     };
 
@@ -40,7 +43,7 @@
         insecureSkipHostcheck = true;
         insecureAdminAccess = false;
         user = "syncthing";
-        password = "$2a$12$EXP3SoCTKv.QwCd8pWwRK.n3oG0Rdv3KLEPgAsdpcgs0N2l/jmGjW";
+        password = "$2y$12$P/sRGMoWp29Q/UveX7MDkepWQoEecl5ABF3W97UVIXCtm1T1XpuZm";
       };
 
       options = {

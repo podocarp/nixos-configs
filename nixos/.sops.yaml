@@ -4,11 +4,11 @@ keys:
   - &server_age age12ccgpfkz5tvz5jyqv5ykqmvg93l0glruexwkclguf3pvg6pegdus4jhavn
   - &work_age age1kreslvarvpen2kc0sxpeg7wp9j0ufmj0g37pnqxs3peqfjprd4pq2fvla8
 creation_rules:
-  - path_regex: secrets/secrets.yaml$
+  - path_regex: secrets/secrets.*?.yaml
     key_groups:
     - age:
       - *jxd_age
-  - path_regex: secrets/work_secrets.yaml$
+  - path_regex: secrets/work_secrets.yaml
     key_groups:
     - age:
       - *work_age

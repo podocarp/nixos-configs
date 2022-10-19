@@ -25,6 +25,7 @@ in
     })
 
     ./programs/bash/default.nix
+    ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
     ./programs/neovim/default.nix

@@ -29,9 +29,9 @@ in
       })
       ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      ((import ../containers/mediawiki/default.nix) (args // {
-        port = mediawikiPort;
-      }))
+      # ((import ../containers/mediawiki/default.nix) (args // {
+      #   port = mediawikiPort;
+      # }))
       ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) (args // {
         port = transmissionPort;
@@ -55,15 +55,16 @@ in
 
       ((import ../services/nginx/default.nix) (args // {
           portMap = [
-            # [host port isPublic]
+            # format: [host port openToPublic?]
+            ["error" 65500 true]
             # ["firefly" fireflyPort]
             ["gitea" giteaPort true]
             # ["hydra" hydraPort]
             ["jellyfin" jellyfinPort true]
             ["mealie" mealiePort true]
-            ["stash" stashPort false]
-            ["sync" syncthingPort false]
-            ["torrents" transmissionPort false]
+            ["stash" stashPort true]
+            ["sync" syncthingPort true]
+            ["torrents" transmissionPort true]
             ["transmission" transmissionPrivPort false]
             ["wiki" mediawikiPort false]
           ];
@@ -190,10 +191,6 @@ in
   ];
 
   nix = {
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
     settings = {
       allowed-users = [
         "root" "@nixbld" "@wheel" "@hydra"

@@ -19,9 +19,6 @@
   networking.hostName = "desktop"; # Define your hostname.
   networking.firewall.allowedUDPPorts = [ 50000 ];
 
-  # to allow for gtk theme config
-  programs.dconf.enable = true;
-
   services.xserver.videoDrivers = [ "nvidia" ];
 
   # Some hardware acceleration things.

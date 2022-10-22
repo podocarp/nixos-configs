@@ -12,9 +12,6 @@ in
 
   imports =
   [
-    ((import ./programs/xmonad/default.nix) {
-      pkgs = pkgs; myTerm = myTerm;
-    })
     ((import ./programs/password-store/default.nix) {
       homeDir = homeDir;
     })

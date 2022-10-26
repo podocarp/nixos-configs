@@ -58,7 +58,7 @@ import XMonad.Actions.PhysicalScreens
 import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Config.Kde (kdeConfig)
-import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
@@ -171,7 +171,7 @@ myKeys =
 -- Brightness controls
 -- ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+"),
 -- ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
---]
+-- ]
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
@@ -213,20 +213,19 @@ myEventHook :: Event -> X All
 myEventHook = refocusLastWhen (return True)
 
 myConfig nScreens =
-  ewmh $
-    desktopConfig
-      { terminal = myTerm,
-        modMask = mod4Mask, -- meta key
-        normalBorderColor = "#999999",
-        focusedBorderColor = "#FF0000",
-        borderWidth = 3,
-        manageHook = myManageHook <+> manageHook kdeConfig,
-        layoutHook = myLayoutHook,
-        workspaces = withScreens nScreens myWorkspaces,
-        handleEventHook = myEventHook <+> handleEventHook def,
-        logHook = logHook kdeConfig
-      }
-      `additionalKeysP` myKeys
+  desktopConfig
+    { terminal = myTerm,
+      modMask = mod4Mask, -- meta key
+      normalBorderColor = "#999999",
+      focusedBorderColor = "#FF0000",
+      borderWidth = 3,
+      manageHook = myManageHook <+> manageHook kdeConfig,
+      layoutHook = myLayoutHook,
+      workspaces = withScreens nScreens myWorkspaces,
+      handleEventHook = myEventHook <+> handleEventHook def,
+      logHook = logHook kdeConfig
+    }
+    `additionalKeysP` myKeys
 
 main :: IO ()
-main = countScreens >>= (xmonad . docks . myConfig)
+main = countScreens >>= (xmonad . ewmhFullscreen . ewmh . docks . myConfig)

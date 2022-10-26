@@ -159,7 +159,7 @@ myKeys =
 -- Brightness controls
 -- ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+"),
 -- ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
---]
+-- ]
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool

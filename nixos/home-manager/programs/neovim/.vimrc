@@ -47,6 +47,15 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'mfussenegger/nvim-dap'
 "Plug 'rcarriga/nvim-dap-ui'
+nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
+nnoremap <silent> <F6> <Cmd>lua require'dap'.step_over()<CR>
+nnoremap <silent> <F7> <Cmd>lua require'dap'.step_into()<CR>
+nnoremap <silent> <F8> <Cmd>lua require'dap'.step_out()<CR>
+nnoremap <silent> <Leader>dt <Cmd>lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
+nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 lua << EOF
 local dap = require('dap')
 vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
@@ -66,7 +75,15 @@ dap.adapters.go = {
 require('dap.ext.vscode').load_launchjs(nil, {})
 
 require("dapui").setup({
- layouts = {
+  mappings = {
+    expand = {"o", "<CR>", "<2-LeftMouse>"},
+    open = {"o", "<CR>"},
+    remove = "d",
+    edit = "e",
+    repl = "r",
+    toggle = "t",
+  },
+  layouts = {
     {
       elements = {
         { id = "breakpoints", size = 0.1 },
@@ -86,10 +103,10 @@ require("dapui").setup({
     },
   }
 })
+local dapui = require("dapui")
 
 local debug_win = nil
 local debug_tab = nil
-
 local function open_in_tab()
   if debug_win and vim.api.nvim_win_is_valid(debug_win) then
     vim.api.nvim_set_current_win(debug_win)
@@ -115,7 +132,6 @@ local function close_tab()
   debug_tab = nil
 end
 
-local dap, dapui = require("dap"), require("dapui")
 dap.listeners.after.event_initialized['dapui_config'] = function()
   open_in_tab()
 end
@@ -136,16 +152,6 @@ end
 --   dapui.close()
 -- end
 EOF
-
-nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
-nnoremap <silent> <F6> <Cmd>lua require'dap'.step_over()<CR>
-nnoremap <silent> <F7> <Cmd>lua require'dap'.step_into()<CR>
-nnoremap <silent> <F8> <Cmd>lua require'dap'.step_out()<CR>
-nnoremap <silent> <Leader>dt <Cmd>lua require'dap'.toggle_breakpoint()<CR>
-nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
-nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
-nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
-nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc

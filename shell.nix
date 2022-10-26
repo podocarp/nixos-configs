@@ -5,6 +5,7 @@ pkgs.mkShell {
     (haskellPackages.ghcWithPackages (hp: [
       hp.xmonad
       hp.xmonad-contrib
+      hp.regex-posix
     ]))
     nixops_unstable
     sops

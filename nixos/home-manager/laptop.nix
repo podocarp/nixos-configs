@@ -25,7 +25,6 @@ in
     ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
-    ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
     ./programs/readline/default.nix

@@ -33,14 +33,6 @@
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
 
-  # Add your wireless networks.
-  networking = {
-    # The global useDHCP flag is deprecated. Per-interface useDHCP will be
-    # mandatory in the future. However to supprort multiple machines, we will
-    # still continue using it as long as it works.
-    useDHCP = true;
-  };
-
   # Disables GUI askpass prompt
   programs.ssh = {
     askPassword = "";

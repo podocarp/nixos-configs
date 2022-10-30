@@ -25,7 +25,6 @@
     lsof
     maim
     neofetch
-    neovim-remote
     nmap
     nodePackages.firebase-tools
     nomacs

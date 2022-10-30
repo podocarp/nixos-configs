@@ -115,6 +115,8 @@
     };
   };
 
+  home.packages = [ pkgs.neovim-remote ];
+
   # Used for a snippet.
   xdg.configFile.inkscapeTemplate = {
     source = builtins.fetchurl {

@@ -12,11 +12,11 @@ in
 
   imports =
   [
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
-    })
     ((import ./programs/rofi/default.nix) {
       myTerm = myTerm;
+    })
+    ((import ./programs/password-store/default.nix) {
+      homeDir = homeDir;
     })
 
     ./programs/bash/default.nix
@@ -24,28 +24,36 @@ in
     ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
-    ./programs/mpv/default.nix
     ./programs/neovim/default.nix
-    # ./programs/ranger/default.nix
     ./programs/readline/default.nix
-    # ./programs/sioyek/default.nix
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
-    (import ./programs/vifm/default.nix args)
-    ./programs/vscode/default.nix
-    ./programs/zathura/default.nix
+    ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
 
     ./services/gpg-agent/default.nix
-    ./services/syncthing/default.nix
 
     ./scripts/default.nix
 
-    (import ./misc/applications/default.nix args)
     ./misc/keyboard/default.nix
     ./misc/xsession/default.nix
   ];
 
   home.packages = with pkgs; [
-    handbrake
+    highlight
+    hugo
+    inetutils
+    killall
+    neovim-remote
+    nmap
+    nodePackages.firebase-tools
+    unzip
+    xclip
+    xorg.xev
+    xorg.xkill
+    xorg.xprop
+    xterm
+    zip
   ];
+
+  xresources.extraConfig = "XTerm*faceSize: 11";
 }

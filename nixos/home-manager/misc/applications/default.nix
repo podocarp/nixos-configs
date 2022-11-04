@@ -13,6 +13,7 @@
     ### Applications
     bind # for nslookup
     ffmpeg
+    gnumake
     highlight
     hugo
     iftop
@@ -28,13 +29,11 @@
     nmap
     nodePackages.firebase-tools
     nomacs
-    okular
     openvpn
     p7zip
     pavucontrol
     poppler_utils
     reptyr
-    stress
     syncthing
     sysstat # iostat
     tdesktop # telegram desktop

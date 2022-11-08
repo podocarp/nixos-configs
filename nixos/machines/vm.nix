@@ -15,12 +15,19 @@
 
   virtualisation.virtualbox.guest.enable = true;
 
+  services.xserver.desktopManager.plasma5.enable = lib.mkForce false;
+  services.xserver.dpi = 180;
+
   networking.hostName = "vm"; # Define your hostname.
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_SG.utf8";
 
   home-manager.users.pengu = import ../home-manager/vm.nix;
+
+  users.users.pengu = {
+    extraGroups = [ "vboxsf" ];
+  };
 
   nixpkgs.config.allowUnfree = true;
 

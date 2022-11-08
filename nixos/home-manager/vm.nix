@@ -1,6 +1,5 @@
 args@{ config, pkgs, lib, ... }:
-let
-  myTerm = "xterm";
+let myTerm = "xterm";
   homeDir = "/home/pengu";
 in
 {
@@ -29,6 +28,7 @@ in
     ./programs/texlive/default.nix
     ./programs/tmux/default.nix
     ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
+    ./programs/zathura/default.nix
 
     ./services/gpg-agent/default.nix
 
@@ -53,6 +53,12 @@ in
     xorg.xprop
     xterm
     zip
+
+    (python3.withPackages(p: with p; [
+      pygments
+      autopep8
+      pip
+    ]))
   ];
 
   xresources.extraConfig = "XTerm*faceSize: 11";

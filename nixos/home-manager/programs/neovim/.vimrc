@@ -34,6 +34,7 @@ set updatetime=300
 set whichwrap+=<,>,h,l,[,]
 set wildmenu
 set wildmode=longest,list,full
+let g:vimsyn_embed= 'l'
 
 """""""""""""""""""""""""""PLUGINS"""""""""""""""""""""""""""""
 "call plug#begin(stdpath('data') . '/bundle')
@@ -56,6 +57,7 @@ nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
+
 lua << EOF
 local dap = require('dap')
 vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
@@ -151,6 +153,7 @@ end
 -- dap.listeners.before.event_exited["dapui_config"] = function()
 --   dapui.close()
 -- end
+
 EOF
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}

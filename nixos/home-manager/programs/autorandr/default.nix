@@ -2,8 +2,8 @@
 
 let
   screen4k = "00ffffffffffff005a63348c*";
-  officeScreenH = "00ffffffffffff0010ace*";
-  officeScreenV = "00ffffffffffff0010acb*";
+  officeScreenH = "00ffffffffffff0010ac*";
+  officeScreenV = "00ffffffffffff0010ac*";
   laptopscreen = "0*";
   settingslaptop = {
     enable = true;

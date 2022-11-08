@@ -212,7 +212,7 @@ myLayoutHook =
 myEventHook :: Event -> X All
 myEventHook = refocusLastWhen (return True)
 
-myConfig nScreens =
+myConfig =
   desktopConfig
     { terminal = myTerm,
       modMask = mod4Mask, -- meta key
@@ -221,11 +221,11 @@ myConfig nScreens =
       borderWidth = 3,
       manageHook = myManageHook <+> manageHook kdeConfig,
       layoutHook = myLayoutHook,
-      workspaces = withScreens nScreens myWorkspaces,
+      workspaces = withScreens 2 myWorkspaces,
       handleEventHook = myEventHook <+> handleEventHook def,
       logHook = logHook kdeConfig
     }
     `additionalKeysP` myKeys
 
 main :: IO ()
-main = countScreens >>= (xmonad . ewmhFullscreen . ewmh . docks . myConfig)
+main = xmonad $ ewmhFullscreen $ ewmh $ docks myConfig

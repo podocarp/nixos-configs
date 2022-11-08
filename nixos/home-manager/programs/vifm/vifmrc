@@ -85,9 +85,6 @@ set tuioptions="pu"
 
 set previewoptions+=maxtreedepth:1
 
-" Enables terminal multiplexer support
-screen
-
 " :mark mark /full/directory/path [filename]
 mark d ~/Downloads
 mark n /network/

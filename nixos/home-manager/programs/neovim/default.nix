@@ -11,6 +11,7 @@
       coc-snippets
       coc-vimtex
       command-t
+      gitsigns-nvim
       nerdtree
       nvim-dap
       nvim-dap-ui
@@ -20,10 +21,11 @@
       vifm-vim
       vim-airline
       vim-airline-themes
+      vim-fugitive
       vim-nix
       vim-obsession
-      vim-surround
       vim-sleuth
+      vim-surround
       vimtex
     ];
 
@@ -45,6 +47,7 @@
       nodePackages.typescript
       xdotool # for synctex
       ripgrep # for cocsearch
+      rnix-lsp
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -57,7 +60,7 @@
     withRuby = true;
 
     # Unfortunately having the snippets file RO is too troublesome.
-    extraConfig = builtins.readFile (toString ./.vimrc) + ''
+    extraConfig = (builtins.readFile ./.vimrc) + ''
       let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
     '';
 
@@ -65,9 +68,7 @@
     coc.settings = {
       "coc.source.around.enable" = false;
       "coc.preferences.jumpCommand" = "tab drop";
-      "coc.preferences.formatOnSaveFiletypes" = [
-        "go" "haskell"
-      ];
+      "coc.preferences.formatOnSaveFiletypes" = ["go" "haskell"];
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave"= true;
       "diagnostic.checkCurrentLine" = true;
@@ -96,11 +97,15 @@
         };
         "golang" = {
           "command" = "gopls";
-          "rootPatterns" = ["go.work"  "go.mod"];
+          "rootPatterns" = ["go.mod"];
           "filetypes" = ["go"];
           "initializationOptions" = {
             "usePlaceholders" = true;
           };
+        };
+        "nix" = {
+          "command" = "rnix-lsp";
+          "filetypes" = ["nix"];
         };
       };
       "snippets.ultisnips.enable" = false;

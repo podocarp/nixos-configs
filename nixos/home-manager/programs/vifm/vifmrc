@@ -83,7 +83,7 @@ set nowrap
 
 set tuioptions="pu"
 
-set previewoptions+=maxtreedepth:1
+set previewoptions+=maxtreedepth:2
 
 " :mark mark /full/directory/path [filename]
 mark d ~/Downloads

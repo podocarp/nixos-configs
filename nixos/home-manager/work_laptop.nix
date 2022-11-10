@@ -41,18 +41,14 @@ in
          ((import ./misc/xsession/default.nix) (args // { myTerm = myTerm; }))
   ];
 
-  home.packages =
-    let
-      mypkgs = with pkgs; {
-        smc = callPackage ../derivations/smc.drv args;
-      };
-    in
-    with pkgs; [
+  home.packages = with pkgs; [
     arandr
     brightnessctl
     wpa_supplicant
     zoom-us
     gcc
+    ansible
+    vagrant
   ];
 
   programs.bash = {
@@ -65,6 +61,7 @@ in
 
   programs.go = {
     enable = true;
+    package = pkgs.go_1_17;
     goPrivate = [ "*.garena.com" ];
   };
 
@@ -85,6 +82,7 @@ in
         HostKeyAlgorithms +ssh-rsa
         PubkeyAcceptedKeyTypes +ssh-rsa
         PubkeyAcceptedAlgorithms +ssh-rsa
+        ForwardAgent yes
     '';
   };
 

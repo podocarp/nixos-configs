@@ -288,6 +288,12 @@ let g:vimtex_indent_on_ampersands = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
+""""""Git
+lua << EOF
+  require('gitsigns').setup()
+EOF
+
+
 """"""Misc
 "Plug 'scrooloose/nerdtree'
 

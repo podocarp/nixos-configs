@@ -310,7 +310,20 @@ let g:loaded_netrwPlugin = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>f :NvimTreeFindFile<CR>
 lua << EOF
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  view = {
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+  git = {
+    enable = true,
+    ignore = false,
+  },
+  remove_keymaps = {"s"},
+})
 EOF
 
 "Plug 'mbbill/undotree'

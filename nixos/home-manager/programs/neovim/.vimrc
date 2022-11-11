@@ -34,7 +34,7 @@ set updatetime=300
 set whichwrap+=<,>,h,l,[,]
 set wildmenu
 set wildmode=longest,list,full
-let g:vimsyn_embed= 'l'
+let g:vimsyn_embed='l'
 
 """""""""""""""""""""""""""PLUGINS"""""""""""""""""""""""""""""
 "call plug#begin(stdpath('data') . '/bundle')
@@ -62,7 +62,7 @@ lua << EOF
 local dap = require('dap')
 vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
 vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointCondition', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointCondition', {	text='', texthl='', linehl='', numhl=''})
 vim.fn.sign_define('DapLogPoint', {text='', texthl='', linehl='', numhl=''})
 
 dap.adapters.go = {
@@ -89,9 +89,9 @@ require("dapui").setup({
     {
       elements = {
         { id = "breakpoints", size = 0.1 },
-        { id = "scopes", size = 0.5 },
-        { id = "stacks", size = 0.3 },
-        { id = "watches", size = 0.1 },
+        { id = "scopes", size = 0.6 },
+        { id = "stacks", size = 0.15 },
+        { id = "watches", size = 0.15 },
       },
       size = 40,
       position = "left",
@@ -289,21 +289,29 @@ let g:vimtex_indent_on_ampersands = 0
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
 """"""Git
-lua << EOF
-  require('gitsigns').setup()
-EOF
+lua require('gitsigns').setup()
 
 
 """"""Misc
-"Plug 'scrooloose/nerdtree'
+lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
 
-nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeDirArrowCollapsible = '-'
-let g:NERDTreeNodeDelimiter = "\u00a0"
+" "Plug 'scrooloose/nerdtree'
+"
+" nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
+" let NERDTreeShowHidden=1
+" let g:NERDTreeDirArrowExpandable = '+'
+" let g:NERDTreeDirArrowCollapsible = '-'
+" let g:NERDTreeNodeDelimiter = "\u00a0"
+"
+" nmap <leader>f :NERDTreeFind<cr>
 
-nmap <leader>f :NERDTreeFind<cr>
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <leader>f :NvimTreeFindFile<CR>
+lua << EOF
+require("nvim-tree").setup()
+EOF
 
 "Plug 'mbbill/undotree'
 nnoremap <F1> :UndotreeToggle<CR>

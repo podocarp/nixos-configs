@@ -12,9 +12,10 @@
       coc-vimtex
       command-t
       gitsigns-nvim
-      nerdtree
       nvim-dap
       nvim-dap-ui
+      nvim-tree-lua
+      nvim-web-devicons
       papercolor-theme
       ultisnips
       undotree
@@ -27,6 +28,12 @@
       vim-sleuth
       vim-surround
       vimtex
+
+      (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: [
+        plugins.tree-sitter-go
+        plugins.tree-sitter-vim
+        plugins.tree-sitter-nix
+      ]))
     ];
 
     extraPython3Packages = p: with p; [

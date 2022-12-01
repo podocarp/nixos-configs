@@ -12,6 +12,7 @@
       br = "branch";
       s = "status";
       l = "log --graph";
+      d = "diff";
       unstage = "reset HEAD --";
     };
     extraConfig = {

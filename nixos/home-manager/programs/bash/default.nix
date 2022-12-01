@@ -11,11 +11,13 @@
     historyControl = [ "ignoredups" ];
     historyIgnore = [ "exit" "ls" "cd" "lla" "la" ];
     shellAliases = {
+      escapeWhitespace = "sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g'";
+      f = "grep -RHn";
+      g = "git";
       la = "ls -a";
       lla = "ls -la";
-      f = "grep -RHn";
-      v = "vim -S";
       t = "tmux -u";
+      v = "vim -S";
     };
     initExtra = ''
         stty -ixon

@@ -26,6 +26,7 @@ import XMonad
       ),
     className,
     composeAll,
+    doF,
     doFloat,
     doIgnore,
     io,
@@ -202,6 +203,7 @@ myManageHook =
           ]
     ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
+      ++ [doF W.focusDown]
 
 myLayoutHook =
   smartBorders $
@@ -212,7 +214,7 @@ myLayoutHook =
 myEventHook :: Event -> X All
 myEventHook = refocusLastWhen (return True)
 
-myConfig =
+myConfig nScreens =
   desktopConfig
     { terminal = myTerm,
       modMask = mod4Mask, -- meta key
@@ -221,11 +223,11 @@ myConfig =
       borderWidth = 3,
       manageHook = myManageHook <+> manageHook kdeConfig,
       layoutHook = myLayoutHook,
-      workspaces = withScreens 2 myWorkspaces,
+      workspaces = withScreens nScreens myWorkspaces,
       handleEventHook = myEventHook <+> handleEventHook def,
       logHook = logHook kdeConfig
     }
     `additionalKeysP` myKeys
 
 main :: IO ()
-main = xmonad $ ewmhFullscreen $ ewmh $ docks myConfig
+main = countScreens >>= \nScreens -> xmonad $ ewmhFullscreen $ ewmh $ docks (myConfig nScreens)

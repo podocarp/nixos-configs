@@ -6,13 +6,14 @@
     userName = "J XD";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {
-      co = "checkout";
+      br = "branch";
       c = "commit";
       cam = "commit -a -m";
-      br = "branch";
-      s = "status";
-      l = "log --graph";
+      co = "checkout";
       d = "diff";
+      l = "log --graph";
+      p = "push";
+      s = "status";
       unstage = "reset HEAD --";
     };
     extraConfig = {

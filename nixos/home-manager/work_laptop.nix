@@ -61,7 +61,7 @@ in
 
   programs.go = {
     enable = true;
-    package = pkgs.go_1_17;
+    package = pkgs.go_1_18;
     goPrivate = [ "*.garena.com" ];
   };
 

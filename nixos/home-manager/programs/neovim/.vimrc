@@ -78,8 +78,8 @@ require('dap.ext.vscode').load_launchjs(nil, {})
 
 require("dapui").setup({
   mappings = {
-    expand = {"o", "<CR>", "<2-LeftMouse>"},
-    open = {"o", "<CR>"},
+    expand = {"<CR>", "<2-LeftMouse>"},
+    open = {"o"},
     remove = "d",
     edit = "e",
     repl = "r",

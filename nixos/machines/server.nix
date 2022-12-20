@@ -8,10 +8,8 @@ let
   mealiePort = 6000;
   mediawikiPort = 7000;
   postgresPort = 7777;
-  stashPort = 8000;
   syncthingPort = 9000;
   transmissionPort = 10000;
-  transmissionPrivPort = 10001;
   wireguardPort = 50000;
 in
 {
@@ -32,12 +30,12 @@ in
       # ((import ../containers/mediawiki/default.nix) (args // {
       #   port = mediawikiPort;
       # }))
-      ((import ../containers/stashapp/default.nix) { port = stashPort; })
       ((import ../containers/transmission/default.nix) (args // {
         port = transmissionPort;
       }))
-      ((import ../containers/transmission/private.nix) (args // {
-        port = transmissionPrivPort;
+
+      ((import ../misc/wireguard/default.nix) (args // {
+        wireguardPort = wireguardPort;
       }))
 
       ../services/fail2ban/default.nix
@@ -62,10 +60,8 @@ in
             # ["hydra" hydraPort]
             ["jellyfin" jellyfinPort true]
             ["mealie" mealiePort true]
-            ["stash" stashPort true]
             ["sync" syncthingPort true]
             ["torrents" transmissionPort true]
-            ["transmission" transmissionPrivPort false]
             ["wiki" mediawikiPort false]
           ];
       }))
@@ -98,6 +94,7 @@ in
     kernel.sysctl = {
       "net.core.rmem_max" = 4194304;
       "net.core.wmem_max" = 1048576;
+      "net.ipv4.ip_forward" = 1;
     };
   };
 
@@ -135,7 +132,7 @@ in
     nat = {
       # Remap container traffic to use external IP address
       enable = true;
-      internalInterfaces = ["ve-+"];
+      internalInterfaces = [ "ve-+" ];
       externalInterface = "enp36s0";
     };
 
@@ -156,10 +153,6 @@ in
     keyMap = "us";
   };
 
-  users.users.pengu = {
-    extraGroups = [ config.users.groups.keys.name ];
-  };
-
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -167,12 +160,26 @@ in
   };
 
   # This is a public user made available to NFS and Samba
-  users.users.fileshare = {
-    isSystemUser = true;
-    group = "users";
+  users.users = {
+    pengu = {
+      extraGroups = [ config.users.groups.keys.name ];
+    };
+    pengu-sftp = {
+      isNormalUser = true;
+      home = "/tank/public/sftp";
+      shell = "/run/current-system/sw/bin/nologin";
+      group = "sftp";
+    };
+    fileshare = {
+      isSystemUser = true;
+      group = "users";
+    };
   };
 
-  users.groups."users".gid = 100;
+  users.groups = {
+    users = { gid = 100; };
+    sftp = { };
+  };
 
   environment.systemPackages = with pkgs; [
     fio
@@ -200,6 +207,15 @@ in
       ];
       sandbox = "relaxed";
     };
+  };
+
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      # poweroff at 10pm
+      "58 21 * * * date '+%s' -d '+ 10 hours' | sudo tee /sys/class/rtc/rtc0/wakealarm"
+      "59 21 * * * sudo poweroff"
+    ];
   };
 
   # 250 is 5 hours. Visit man hdparm for details.

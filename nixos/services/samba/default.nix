@@ -14,17 +14,6 @@
       "directory mask" = "2774";
       "force directory mode" = "2774";
     };
-    shares.private= {
-      path = "/tank/private";
-      writeable = "yes";
-      browseable = "yes";
-      "valid users" = "pengu";
-      "force user" = "pengu";
-      "create mask" = "0700";
-      "force create mode" = "0700";
-      "directory mask" = "2700";
-      "force directory mode" = "2700";
-    };
     shares.global = {
       "usershare path" = "/var/lib/samba/usershares";
       "usershare max shares" = "100";

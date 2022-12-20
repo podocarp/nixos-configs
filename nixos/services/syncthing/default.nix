@@ -21,6 +21,9 @@
       slate = {
         id = "3IY5VEY-HL3E33H-GZ3LJIR-5SIUTLJ-ROZ3FSO-NA5K3X6-JSF4SUE-BXUICAH";
       };
+      xperia = {
+        id = "M2Z3RWZ-K7FGIZM-E5IH5HT-OUGIOS3-V73IOTO-H7WFDMN-FGTBPU3-RIRW3Q4";
+      };
     };
 
     folders = {
@@ -34,7 +37,12 @@
       "/tank/public/Sync/Books" = {
         id = "Books";
         rescanInterval = 36000;
-        devices = [ "desktop" "x200" "x1" "slate" ];
+        devices = [ "desktop" "x200" "x1" "slate" "xperia" ];
+      };
+      "/tank/public/Sync/Keepass" = {
+        id = "Keepass";
+        rescanInterval = 36000;
+        devices = [ "desktop" "x200" "x1" "slate" "xperia" ];
       };
     };
 

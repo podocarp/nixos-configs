@@ -51,7 +51,7 @@ in
         map (configgen "jiaxiaodong.com" true) portMap
         );
       privateHosts = builtins.listToAttrs (
-        map (configgen "home.com" false) portMap
+        map (configgen "home.lan" false) portMap
         );
     in
     publicHosts // privateHosts // customConfigs;

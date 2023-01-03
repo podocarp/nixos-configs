@@ -47,5 +47,7 @@ in
 
   home.packages = with pkgs; [
     handbrake
+    runelite
+    jellyfin-media-player
   ];
 }

@@ -114,19 +114,18 @@ in
       ipv4.addresses = [
         {
           address = "192.168.1.107";
-          prefixLength = 24;
+          prefixLength = 32;
         }
       ];
-        ipv4.routes = [
-        {
-          address = "192.168.1.0";
-          prefixLength = 24;
-          via = "192.168.1.1";
-          options = {
-            dev = "enp35s0";
-          };
-        }
-      ];
+      ipv4.routes = [
+      {
+        address = "192.168.1.0";
+        prefixLength = 24;
+        options = {
+          dev = "enp35s0";
+        };
+      }
+    ];
     };
 
     nat = {
@@ -213,8 +212,8 @@ in
     enable = true;
     systemCronJobs = [
       # poweroff at 10pm
-      "58 21 * * * date '+%s' -d '+ 10 hours' | sudo tee /sys/class/rtc/rtc0/wakealarm"
-      "59 21 * * * sudo poweroff"
+      "58 23 * * * root date '+%s' -d '+ 10 hours' > /sys/class/rtc/rtc0/wakealarm"
+      "59 23 * * * root poweroff"
     ];
   };
 

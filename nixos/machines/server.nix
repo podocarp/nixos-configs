@@ -212,7 +212,7 @@ in
     enable = true;
     systemCronJobs = [
       # poweroff at 10pm
-      "58 23 * * * root date '+%s' -d '+ 10 hours' > /sys/class/rtc/rtc0/wakealarm"
+      "58 23 * * * root date '+%s' -d '+ 7 hours' > /sys/class/rtc/rtc0/wakealarm"
       "59 23 * * * root poweroff"
     ];
   };

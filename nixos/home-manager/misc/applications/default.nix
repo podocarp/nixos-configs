@@ -15,7 +15,6 @@
     ffmpeg
     gnumake
     highlight
-    hugo
     iftop
     imagemagick
     inetutils # telnet
@@ -27,7 +26,6 @@
     maim
     neofetch
     nmap
-    nodePackages.firebase-tools
     nomacs
     openvpn
     p7zip
@@ -45,12 +43,6 @@
     xorg.xprop
     xterm
     zip
-
-    (python3.withPackages(p: with p; [
-      pygments
-      autopep8
-      pip
-    ]))
 
     ### Fonts
     source-han-sans

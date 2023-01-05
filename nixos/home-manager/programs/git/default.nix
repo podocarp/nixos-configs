@@ -6,8 +6,11 @@
     userName = "J XD";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {
-      br = "branch";
+      a = "add";
+      aa = "add -A";
+      b = "branch";
       c = "commit";
+      ca = "commit -a";
       cam = "commit -a -m";
       co = "checkout";
       d = "diff";
@@ -17,9 +20,9 @@
       unstage = "reset HEAD --";
     };
     extraConfig = {
-        pull.rebase = false;
-        init.defaultBranch = "master";
-        push.autoSetupRemote = true;
+      pull.rebase = false;
+      init.defaultBranch = "master";
+      push.autoSetupRemote = true;
     };
   };
 }

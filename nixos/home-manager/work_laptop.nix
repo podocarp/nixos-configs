@@ -18,7 +18,6 @@ in
     ./programs/direnv/default.nix
     ./programs/git/default.nix
     ./programs/gpg/default.nix
-    ./programs/java/default.nix
     ./programs/mpv/default.nix
     ./programs/neovim/default.nix
     ((import ./programs/password-store/default.nix) { homeDir = homeDir; })
@@ -47,8 +46,11 @@ in
     wpa_supplicant
     zoom-us
     gcc
-    ansible
-    vagrant
+
+    (python3.withPackages(p: with p; [
+      autopep8
+      requests
+    ]))
   ];
 
   programs.bash = {

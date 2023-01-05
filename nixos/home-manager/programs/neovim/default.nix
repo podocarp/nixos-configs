@@ -9,6 +9,7 @@
       coc-nvim
       coc-pyright
       coc-snippets
+      coc-tsserver
       coc-vimtex
       command-t
       gitsigns-nvim
@@ -37,9 +38,8 @@
     ];
 
     extraPython3Packages = p: with p; [
-      autopep8
-      black
-      flake8
+      # note: python lsps will use the current interpreter, and so will not see
+      # vim extra python packages
       inotify-simple # ultisnips needs this
       unidecode # ultisnips needs this
     ];
@@ -49,9 +49,6 @@
       haskell-language-server
       haskellPackages.hlint
       gopls # go language server
-      nodePackages.eslint
-      nodePackages.prettier
-      nodePackages.typescript
       xdotool # for synctex
       ripgrep # for cocsearch
       rnix-lsp
@@ -75,7 +72,7 @@
     coc.settings = {
       "coc.source.around.enable" = false;
       "coc.preferences.jumpCommand" = "tab drop";
-      "coc.preferences.formatOnSaveFiletypes" = ["go" "haskell"];
+      "coc.preferences.formatOnSaveFiletypes" = [ "*" ];
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave"= true;
       "diagnostic.checkCurrentLine" = true;
@@ -86,6 +83,7 @@
         "subseparator" = "▹";
       };
       "python" = {
+        "formatting.provider" = "autopep8";
         "linting.flake8Enabled" = true;
       };
       "languageserver" = {
@@ -116,14 +114,6 @@
         };
       };
       "snippets.ultisnips.enable" = false;
-      "typescript.disableAutomaticTypeAcquisition" = true;
-      "typescript" = {
-        "disableAutomaticTypeAcquisition"= true;
-        "referencesCodeLens.enable"= false;
-        "suggest.completeFunctionCals"= false;
-        "suggest.includeAutomaticOptionalChainCompletions"= false;
-        "format.enabled"= false;
-      };
     };
   };
 

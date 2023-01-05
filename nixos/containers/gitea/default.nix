@@ -23,6 +23,7 @@
             SSH_DOMAIN = "ssh.gitea.jiaxiaodong.com";
             LANDING_PAGE = "login";
             SSH_PORT = sshPort;
+            LFS_START_SERVER = true;
           };
         };
       };

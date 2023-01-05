@@ -211,9 +211,11 @@ in
   services.cron = {
     enable = true;
     systemCronJobs = [
-      # poweroff at 10pm
-      "58 23 * * * root date '+%s' -d '+ 7 hours' > /sys/class/rtc/rtc0/wakealarm"
-      "59 23 * * * root poweroff"
+      "00 22 * * * root wall 'Scheduled shutdown in an hour.'"
+      "55 22 * * * root wall 'Scheduled shutdown in 5 minutes.'"
+      "59 22 * * * root date -d '7 hours' +%s > /sys/class/rtc/rtc0/wakealarm"
+      "59 22 * * * root wall 'Shutting down.'"
+      "00 23 * * * root poweroff"
     ];
   };
 

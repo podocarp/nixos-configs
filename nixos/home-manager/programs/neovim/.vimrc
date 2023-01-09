@@ -26,7 +26,6 @@ set smartcase
 set smartindent
 set smarttab
 set splitbelow
-set tabstop=4
 set termguicolors
 set title
 set undofile
@@ -180,8 +179,6 @@ xmap <leader>=  <Plug>(coc-format-selected)
 nmap <leader>=  <Plug>(coc-format-selected)
 augroup cocgroup
   autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end

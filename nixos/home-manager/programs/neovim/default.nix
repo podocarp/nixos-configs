@@ -46,12 +46,13 @@
 
     extraPackages = with pkgs; [
       delve # go debugger
+      gopls # go language server
       haskell-language-server
       haskellPackages.hlint
-      gopls # go language server
-      xdotool # for synctex
       ripgrep # for cocsearch
       rnix-lsp
+      watchman # for coc
+      xdotool # for synctex
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -74,7 +75,7 @@
       "coc.preferences.jumpCommand" = "tab drop";
       "coc.preferences.formatOnSaveFiletypes" = [ "*" ];
       "diagnostic.displayByAle" = false;
-      "diagnostic.refreshAfterSave"= true;
+      "diagnostic.refreshAfterSave" = true;
       "diagnostic.checkCurrentLine" = true;
       "suggest.maxCompleteItemCount" = 10;
       "codeLens" = {
@@ -86,13 +87,24 @@
         "formatting.provider" = "autopep8";
         "linting.flake8Enabled" = true;
       };
+      "typescript" = {
+        "format" = {
+          "semicolons" = "insert";
+          "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces" = true;
+        };
+      };
       "languageserver" = {
         "haskell" = {
           "command" = "haskell-language-server-wrapper";
-          "args" = ["--lsp"];
-          "rootPatterns" = ["*.cabal" "stack.yaml" "cabal.project"
-          "package.yaml" "hie.yaml"];
-          "filetypes" = ["haskell" "lhaskell"];
+          "args" = [ "--lsp" ];
+          "rootPatterns" = [
+            "*.cabal"
+            "stack.yaml"
+            "cabal.project"
+            "package.yaml"
+            "hie.yaml"
+          ];
+          "filetypes" = [ "haskell" "lhaskell" ];
           "initializationOptions" = {
             "languageServerHaskell" = {
               "hlintOn" = true;
@@ -102,15 +114,15 @@
         };
         "golang" = {
           "command" = "gopls";
-          "rootPatterns" = ["go.mod"];
-          "filetypes" = ["go"];
+          "rootPatterns" = [ "go.mod" ];
+          "filetypes" = [ "go" ];
           "initializationOptions" = {
             "usePlaceholders" = true;
           };
         };
         "nix" = {
           "command" = "rnix-lsp";
-          "filetypes" = ["nix"];
+          "filetypes" = [ "nix" ];
         };
       };
       "snippets.ultisnips.enable" = false;

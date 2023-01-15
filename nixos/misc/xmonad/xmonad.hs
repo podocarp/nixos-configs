@@ -42,6 +42,7 @@ import XMonad
     xfork,
     xmonad,
     (-->),
+    (<&&>),
     (<+>),
     (=?),
     (|||),
@@ -61,6 +62,7 @@ import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Config.Kde (kdeConfig)
 import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
+import XMonad.Hooks.ManageHelpers (isInProperty)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -204,6 +206,7 @@ myManageHook =
           ]
     ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
+      ++ [className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR" --> doIgnore]
 
 myLayoutHook =
   smartBorders $

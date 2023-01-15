@@ -11,39 +11,39 @@ in
   home.stateVersion = "22.11";
 
   imports =
-  [
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
-    })
-    ((import ./programs/rofi/default.nix) {
-      myTerm = myTerm;
-    })
+    [
+      ((import ./programs/password-store/default.nix) {
+        homeDir = homeDir;
+      })
+      ((import ./programs/rofi/default.nix) {
+        myTerm = myTerm;
+      })
 
-    ./programs/bash/default.nix
-    ./programs/chromium/default.nix
-    ./programs/direnv/default.nix
-    ./programs/git/default.nix
-    ./programs/gpg/default.nix
-    ./programs/mpv/default.nix
-    ./programs/neovim/default.nix
-    # ./programs/ranger/default.nix
-    ./programs/readline/default.nix
-    # ./programs/sioyek/default.nix
-    ./programs/texlive/default.nix
-    ./programs/tmux/default.nix
-    (import ./programs/vifm/default.nix args)
-    ./programs/vscode/default.nix
-    ./programs/zathura/default.nix
+      ./programs/bash/default.nix
+      ./programs/chromium/default.nix
+      ./programs/direnv/default.nix
+      ./programs/git/default.nix
+      ./programs/gpg/default.nix
+      ./programs/mpv/default.nix
+      ./programs/neovim/default.nix
+      # ./programs/ranger/default.nix
+      ./programs/readline/default.nix
+      # ./programs/sioyek/default.nix
+      ./programs/texlive/default.nix
+      ./programs/tmux/default.nix
+      (import ./programs/vifm/default.nix args)
+      ./programs/vscode/default.nix
+      ./programs/zathura/default.nix
 
-    ./services/gpg-agent/default.nix
-    ./services/syncthing/default.nix
+      ./services/gpg-agent/default.nix
+      ./services/syncthing/default.nix
 
-    ./scripts/default.nix
+      ./scripts/default.nix
 
-    (import ./misc/applications/default.nix args)
-    ./misc/keyboard/default.nix
-    ./misc/xsession/default.nix
-  ];
+      (import ./misc/applications/default.nix args)
+      ./misc/keyboard/default.nix
+      ./misc/xsession/default.nix
+    ];
 
   home.packages = with pkgs; [
     handbrake

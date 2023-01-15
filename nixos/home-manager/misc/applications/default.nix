@@ -3,7 +3,7 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     (self: super: {
-      octaveWithSym = super.octaveFull.withPackages(p: with p; [
+      octaveWithSym = super.octaveFull.withPackages (p: with p; [
         symbolic
       ]);
     })

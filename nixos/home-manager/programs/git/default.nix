@@ -3,6 +3,7 @@
 {
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "J XD";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {
@@ -11,6 +12,7 @@
       b = "branch";
       c = "commit";
       ca = "commit -a";
+      cm = "commit -m";
       cam = "commit -a -m";
       co = "checkout";
       d = "diff";

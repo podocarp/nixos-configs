@@ -42,6 +42,7 @@ import XMonad
     xfork,
     xmonad,
     (-->),
+    (<&&>),
     (<+>),
     (=?),
     (|||),
@@ -61,6 +62,7 @@ import XMonad.Config.Desktop (desktopConfig)
 import XMonad.Config.Kde (kdeConfig)
 import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
+import XMonad.Hooks.ManageHelpers (isInProperty)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -99,7 +101,7 @@ import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
 import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
-import qualified XMonad.StackSet as W
+import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.WorkspaceCompare (getSortByTag)
@@ -199,20 +201,18 @@ myManageHook =
             "TelegramDesktop",
             "Volume Control",
             "dialog",
-            "plasmashell"
+            "plasmashell",
+            "zoom"
           ]
     ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
-      ++ [doF W.focusDown]
+      ++ [className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR" --> doIgnore]
 
 myLayoutHook =
   smartBorders $
     avoidStruts $
       refocusLastLayoutHook $
         ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
-
-myEventHook :: Event -> X All
-myEventHook = refocusLastWhen (return True)
 
 myConfig nScreens =
   desktopConfig
@@ -224,7 +224,7 @@ myConfig nScreens =
       manageHook = myManageHook <+> manageHook kdeConfig,
       layoutHook = myLayoutHook,
       workspaces = withScreens nScreens myWorkspaces,
-      handleEventHook = myEventHook <+> handleEventHook def,
+      handleEventHook = handleEventHook def,
       logHook = logHook kdeConfig
     }
     `additionalKeysP` myKeys

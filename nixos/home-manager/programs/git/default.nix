@@ -12,6 +12,7 @@
       b = "branch";
       c = "commit";
       ca = "commit -a";
+      cm = "commit -m";
       cam = "commit -a -m";
       co = "checkout";
       d = "diff";

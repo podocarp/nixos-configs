@@ -1,4 +1,4 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 pkgs.mkShell {
   nativeBuildInputs = [
@@ -7,7 +7,6 @@ pkgs.mkShell {
       hp.xmonad-contrib
       hp.regex-posix
     ]))
-    nixops_unstable
     sops
   ];
 }

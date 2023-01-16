@@ -23,7 +23,6 @@
       vifm-vim
       vim-airline
       vim-airline-themes
-      vim-fugitive
       vim-nix
       vim-obsession
       vim-sleuth

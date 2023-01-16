@@ -3,6 +3,7 @@
 {
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "J XD";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {

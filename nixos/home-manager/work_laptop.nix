@@ -11,34 +11,34 @@ in
   home.stateVersion = "22.11";
 
   imports =
-  [
-    ./programs/autorandr/default.nix
-    ./programs/bash/default.nix
-    ./programs/chromium/default.nix
-    ./programs/direnv/default.nix
-    ./programs/git/default.nix
-    ./programs/gpg/default.nix
-    ./programs/mpv/default.nix
-    ./programs/neovim/default.nix
-    ((import ./programs/password-store/default.nix) { homeDir = homeDir; })
-    ./programs/readline/default.nix
-    ((import ./programs/rofi/default.nix) { myTerm = myTerm; })
-    ./programs/texlive/default.nix
-    ./programs/tmux/default.nix
-    ./programs/vscode/default.nix
-    ((import ./programs/vifm/default.nix) (args // { myTerm = myTerm; }))
-    ./programs/zathura/default.nix
+    [
+      ./programs/autorandr/default.nix
+      ./programs/bash/default.nix
+      ./programs/chromium/default.nix
+      ./programs/direnv/default.nix
+      ./programs/git/default.nix
+      ./programs/gpg/default.nix
+      ./programs/mpv/default.nix
+      ./programs/neovim/default.nix
+      ((import ./programs/password-store/default.nix) { homeDir = homeDir; })
+      ./programs/readline/default.nix
+      ((import ./programs/rofi/default.nix) { myTerm = myTerm; })
+      ./programs/texlive/default.nix
+      ./programs/tmux/default.nix
+      ./programs/vscode/default.nix
+      ((import ./programs/vifm/default.nix) (args // { myTerm = myTerm; }))
+      ./programs/zathura/default.nix
 
-    ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
-    ./services/gpg-agent/default.nix
-    ./services/syncthing/default.nix
+      ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
+      ./services/gpg-agent/default.nix
+      ./services/syncthing/default.nix
 
-    ./scripts/default.nix
+      ./scripts/default.nix
 
-    ((import ./misc/applications/default.nix) args)
-    ./misc/keyboard/default.nix
-         ((import ./misc/xsession/default.nix) (args // { myTerm = myTerm; }))
-  ];
+      ((import ./misc/applications/default.nix) args)
+      ./misc/keyboard/default.nix
+      ((import ./misc/xsession/default.nix) (args // { myTerm = myTerm; }))
+    ];
 
   home.packages = with pkgs; [
     arandr
@@ -47,7 +47,7 @@ in
     zoom-us
     gcc
 
-    (python3.withPackages(p: with p; [
+    (python3.withPackages (p: with p; [
       autopep8
       requests
     ]))
@@ -58,6 +58,8 @@ in
       GOPROXY = "https://nexus.shopee.io/,direct";
       GOPATH = "$HOME/go";
       GOPRIVATE = "*.garena.com";
+      ENV = "test";
+      LOG_LEVEL = "debug";
     };
   };
 

@@ -1,5 +1,6 @@
 args@{ config, pkgs, lib, ... }:
-let myTerm = "xterm";
+let
+  myTerm = "xterm";
   homeDir = "/home/pengu";
 in
 {
@@ -10,42 +11,38 @@ in
   home.stateVersion = "22.11";
 
   imports =
-  [
-    ((import ./programs/rofi/default.nix) {
-      myTerm = myTerm;
-    })
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
-    })
+    [
+      ((import ./programs/rofi/default.nix) {
+        myTerm = myTerm;
+      })
+      ((import ./programs/password-store/default.nix) {
+        homeDir = homeDir;
+      })
 
-    ./programs/bash/default.nix
-    ./programs/chromium/default.nix
-    ./programs/direnv/default.nix
-    ./programs/git/default.nix
-    ./programs/gpg/default.nix
-    ./programs/neovim/default.nix
-    ./programs/readline/default.nix
-    ./programs/texlive/default.nix
-    ./programs/tmux/default.nix
-    ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
-    ./programs/zathura/default.nix
+      ./programs/bash/default.nix
+      ./programs/chromium/default.nix
+      ./programs/direnv/default.nix
+      ./programs/git/default.nix
+      ./programs/gpg/default.nix
+      ./programs/neovim/default.nix
+      ./programs/readline/default.nix
+      ./programs/texlive/default.nix
+      ./programs/tmux/default.nix
+      ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
+      ./programs/zathura/default.nix
 
-    ./services/gpg-agent/default.nix
+      ./services/gpg-agent/default.nix
 
-    ./scripts/default.nix
+      ./scripts/default.nix
 
-    ./misc/keyboard/default.nix
-    ./misc/xsession/default.nix
-  ];
+      ./misc/keyboard/default.nix
+      ./misc/xsession/default.nix
+    ];
 
   home.packages = with pkgs; [
-    highlight
-    hugo
     inetutils
     killall
     neovim-remote
-    nmap
-    nodePackages.firebase-tools
     unzip
     xclip
     xorg.xev
@@ -54,11 +51,14 @@ in
     xterm
     zip
 
-    (python3.withPackages(p: with p; [
-      pygments
-      autopep8
-      pip
+    (python3.withPackages (p: with p; [
     ]))
+
+    source-han-sans
+    source-han-mono
+    (nerdfonts.override {
+      fonts = [ "DroidSansMono" ];
+    })
   ];
 
   xresources.extraConfig = "XTerm*faceSize: 11";

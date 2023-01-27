@@ -49,6 +49,8 @@ in
 
     (python3.withPackages (p: with p; [
       autopep8
+      flake8
+      mypy
       requests
     ]))
   ];

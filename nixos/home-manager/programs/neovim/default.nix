@@ -85,6 +85,7 @@
       "python" = {
         "formatting.provider" = "autopep8";
         "linting.flake8Enabled" = true;
+        "linting.mypyEnabled" = true;
       };
       "typescript" = {
         "format" = {

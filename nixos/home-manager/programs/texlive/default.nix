@@ -3,7 +3,7 @@
 {
   programs.texlive = {
     enable = true;
-    extraPackages = texpkgs : {
+    extraPackages = texpkgs: {
       inherit (texpkgs)
         algorithm2e
         amsmath

@@ -49,5 +49,10 @@ in
     handbrake
     runelite
     jellyfin-media-player
+    libreoffice-fresh
+
+    (python3.withPackages (p: with p; [
+      pygments
+    ]))
   ];
 }

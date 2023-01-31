@@ -49,6 +49,8 @@ in
 
     (python3.withPackages (p: with p; [
       autopep8
+      flake8
+      mypy
       requests
     ]))
   ];
@@ -58,6 +60,8 @@ in
       GOPROXY = "https://nexus.shopee.io/,direct";
       GOPATH = "$HOME/go";
       GOPRIVATE = "*.garena.com";
+      ENV = "test";
+      LOG_LEVEL = "debug";
     };
   };
 

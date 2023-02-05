@@ -23,7 +23,8 @@ in
       #   port = fireflyPort;
       # }))
       ((import ../containers/gitea/default.nix) {
-        port = giteaPort; sshPort = giteaSshPort;
+        port = giteaPort;
+        sshPort = giteaSshPort;
       })
       ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
       ((import ../containers/mealie/default.nix) { port = mealiePort; })
@@ -52,24 +53,24 @@ in
       ../services/zfs/default.nix
 
       ((import ../services/nginx/default.nix) (args // {
-          portMap = [
-            # format: [host port openToPublic?]
-            ["error" 65500 true]
-            # ["firefly" fireflyPort]
-            ["gitea" giteaPort true]
-            # ["hydra" hydraPort]
-            ["jellyfin" jellyfinPort true]
-            ["mealie" mealiePort true]
-            ["sync" syncthingPort true]
-            ["torrents" transmissionPort true]
-            ["wiki" mediawikiPort false]
-          ];
+        portMap = [
+          # format: [host port openToPublic?]
+          [ "error" 65500 true ]
+          # ["firefly" fireflyPort]
+          [ "gitea" giteaPort true ]
+          # ["hydra" hydraPort]
+          [ "jellyfin" jellyfinPort true ]
+          [ "mealie" mealiePort true ]
+          [ "sync" syncthingPort true ]
+          [ "torrents" transmissionPort true ]
+          [ "wiki" mediawikiPort false ]
+        ];
       }))
     ];
 
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
-    gnupg.sshKeyPaths = [];
+    gnupg.sshKeyPaths = [ ];
     age.keyFile = "/var/lib/sops/age/keys.txt";
   };
 
@@ -78,8 +79,14 @@ in
   # Use the GRUB 2 boot loader.
   boot = {
     initrd.supportedFilesystems = [ "zfs" ];
-    initrd.kernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage"
-      "usbhid" "sd_mod" ];
+    initrd.kernelModules = [
+      "xhci_pci"
+      "ahci"
+      "nvme"
+      "usb_storage"
+      "usbhid"
+      "sd_mod"
+    ];
     kernelModules = [ "kvm-amd" ];
     supportedFilesystems = [ "zfs" ];
     zfs = {
@@ -118,14 +125,14 @@ in
         }
       ];
       ipv4.routes = [
-      {
-        address = "192.168.1.0";
-        prefixLength = 24;
-        options = {
-          dev = "enp35s0";
-        };
-      }
-    ];
+        {
+          address = "192.168.1.0";
+          prefixLength = 24;
+          options = {
+            dev = "enp35s0";
+          };
+        }
+      ];
     };
 
     nat = {
@@ -139,7 +146,10 @@ in
       enable = true;
       checkReversePath = "loose";
       allowedTCPPorts = [
-        69 80 443 giteaSshPort
+        69
+        80
+        443
+        giteaSshPort
       ];
       allowedUDPPorts = [ ];
     };
@@ -199,10 +209,15 @@ in
   nix = {
     settings = {
       allowed-users = [
-        "root" "@nixbld" "@wheel" "@hydra"
+        "root"
+        "@nixbld"
+        "@wheel"
+        "@hydra"
       ];
       trusted-users = [
-        "root" "@nixbld" "@wheel"
+        "root"
+        "@nixbld"
+        "@wheel"
       ];
       sandbox = "relaxed";
     };
@@ -211,10 +226,7 @@ in
   services.cron = {
     enable = true;
     systemCronJobs = [
-      "00 22 * * * root wall 'Scheduled shutdown in an hour.'"
-      "55 22 * * * root wall 'Scheduled shutdown in 5 minutes.'"
       "59 22 * * * root date -d '7 hours' +%s > /sys/class/rtc/rtc0/wakealarm"
-      "59 22 * * * root wall 'Shutting down.'"
       "00 23 * * * root poweroff"
     ];
   };
@@ -231,28 +243,31 @@ in
   time.timeZone = "Asia/Singapore";
 
   fileSystems."/" =
-    { device = "zroot/local/root";
+    {
+      device = "zroot/local/root";
       fsType = "zfs";
     };
 
   fileSystems."/home" =
-    { device = "zroot/local/home";
+    {
+      device = "zroot/local/home";
       fsType = "zfs";
     };
 
   fileSystems."/nix" =
-    { device = "zroot/nix/nix";
+    {
+      device = "zroot/nix/nix";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/nvme0n1p1";
+    {
+      device = "/dev/nvme0n1p1";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/8064cf73-931b-4c5b-8d94-16b4f9272181"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/8064cf73-931b-4c5b-8d94-16b4f9272181"; }];
 
   system.stateVersion = "22.11";
 }

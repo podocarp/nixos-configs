@@ -43,9 +43,10 @@ in
   home.packages = with pkgs; [
     arandr
     brightnessctl
+    gcc
+    tdesktop
     wpa_supplicant
     zoom-us
-    gcc
 
     (python3.withPackages (p: with p; [
       autopep8

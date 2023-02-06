@@ -9,58 +9,38 @@ in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
   home.username = "pengu";
   home.homeDirectory = homeDir;
   home.stateVersion = "22.11";
 
   imports = [
-    ((import ./programs/vifm/default.nix) {
-      pkgs = pkgs; myTerm = myTerm;
-    })
-    ((import ./programs/password-store/default.nix) {
+    ./programs/bash
+    ./programs/direnv
+    ./programs/git
+    ./programs/gpg
+    ./programs/neovim
+    ((import ./programs/password-store) {
       homeDir = homeDir;
     })
+    ./programs/readline
+    ./programs/tmux
+    ((import ./programs/vifm) {
+      pkgs = pkgs;
+      myTerm = myTerm;
+    })
 
-    ./programs/bash/default.nix
-    ./programs/direnv/default.nix
-    ./programs/git/default.nix
-    ./programs/gpg/default.nix
-    ./programs/neovim/default.nix
-    ./programs/readline/default.nix
-    ./programs/tmux/default.nix
+    ./services/gpg-agent
 
-    ./services/gpg-agent/default.nix
-
-    ./scripts/default.nix
+    ./misc/applications
+    ./scripts
   ];
 
-  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
-    ### Applications
-    bind # for nslookup
-    gcc
-    gdb
-    gnumake
-    highlight
-    iftop
-    inetutils # telnet
-    iotop
-    lm_sensors
-    neofetch
-    nmap
-    openvpn
-    (python3.withPackages(p: with p; [
-      pip
+    (python3.withPackages (p: with p; [
+      requests
     ]))
     stress
     sysstat
-    unzip
-    usbutils # for lsusb
-    veracrypt
-    zip
   ];
 }
 

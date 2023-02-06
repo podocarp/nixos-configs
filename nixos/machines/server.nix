@@ -1,10 +1,10 @@
 args@{ config, pkgs, lib, ... }:
 let
-  fireflyPort = 2000;
   giteaPort = 3001;
   giteaSshPort = 3002;
   hydraPort = 4000;
   jellyfinPort = 5000;
+  k3sPort = 6443;
   mealiePort = 6000;
   mediawikiPort = 7000;
   postgresPort = 7777;
@@ -19,38 +19,36 @@ in
       <home-manager/nixos>
       <sops-nix/modules/sops>
 
-      # ((import ../containers/firefly/default.nix) (args // {
-      #   port = fireflyPort;
-      # }))
-      ((import ../containers/gitea/default.nix) {
+      ((import ../containers/gitea) {
         port = giteaPort;
         sshPort = giteaSshPort;
       })
-      ((import ../containers/jellyfin/default.nix) { port = jellyfinPort; })
-      ((import ../containers/mealie/default.nix) { port = mealiePort; })
+      ((import ../containers/jellyfin) { port = jellyfinPort; })
+      # ((import ../containers/mealie/default.nix) { port = mealiePort; })
       # ((import ../containers/mediawiki/default.nix) (args // {
       #   port = mediawikiPort;
       # }))
-      ((import ../containers/transmission/default.nix) (args // {
+      ((import ../containers/transmission) (args // {
         port = transmissionPort;
       }))
 
-      ((import ../misc/wireguard/default.nix) (args // {
+      ((import ../misc/wireguard) (args // {
         wireguardPort = wireguardPort;
       }))
 
-      ../services/fail2ban/default.nix
+      ../services/fail2ban
       # ((import ../services/hydra/default.nix {
       #   port = hydraPort;
       #   dbPort = postgresPort;
       # }))
+      ((import ../services/k3s) { port = k3sPort; })
       # ((import ../services/postgresql/default.nix { port = postgresPort; }))
-      ../services/openssh/default.nix
-      ../services/samba/default.nix
-      ((import ../services/syncthing/default.nix) (args // {
+      ((import ../services/openssh) args)
+      ../services/samba
+      ((import ../services/syncthing) (args // {
         port = syncthingPort;
       }))
-      ../services/zfs/default.nix
+      ../services/zfs
 
       ((import ../services/nginx/default.nix) (args // {
         portMap = [
@@ -163,8 +161,6 @@ in
   };
 
   home-manager = {
-    useUserPackages = true;
-    useGlobalPkgs = true;
     users.pengu = import ../home-manager/server.nix;
   };
 

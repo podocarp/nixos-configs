@@ -11,43 +11,44 @@ in
   home.stateVersion = "22.11";
 
   imports =
-  [
-    ((import ./programs/rofi/default.nix) {
-      myTerm = myTerm;
-    })
-    ((import ./programs/password-store/default.nix) {
-      homeDir = homeDir;
-    })
+    [
+      ((import ./programs/rofi) {
+        myTerm = myTerm;
+      })
+      ((import ./programs/password-store) {
+        homeDir = homeDir;
+      })
 
-    ./programs/autorandr/default.nix
-    ./programs/bash/default.nix
-    ./programs/chromium/default.nix
-    ./programs/direnv/default.nix
-    ./programs/git/default.nix
-    ./programs/gpg/default.nix
-    ./programs/mpv/default.nix
-    ./programs/neovim/default.nix
-    ./programs/readline/default.nix
-    ./programs/texlive/default.nix
-    ./programs/tmux/default.nix
-    ./programs/vscode/default.nix
-    ((import ./programs/vifm/default.nix) { pkgs = pkgs; myTerm = myTerm; })
-    ./programs/zathura/default.nix
+      ./programs/autorandr
+      ./programs/bash
+      ./programs/chromium
+      ./programs/direnv
+      ./programs/git
+      ./programs/gpg
+      ./programs/mpv
+      ./programs/neovim
+      ./programs/readline
+      ./programs/texlive
+      ./programs/tmux
+      ./programs/vscode
+      ((import ./programs/vifm) { pkgs = pkgs; myTerm = myTerm; })
+      ./programs/zathura
 
-    ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
-    ./services/gpg-agent/default.nix
-    ./services/syncthing/default.nix
+      ((import ./services/dunst) (args // { homeDir = homeDir; }))
+      ./services/gpg-agent
+      ./services/syncthing
 
-    ./scripts/default.nix
+      ./scripts
 
-    ((import ./misc/applications/default.nix) args)
-    ./misc/keyboard/default.nix
-    ./misc/xsession/default.nix
-  ];
+      ((import ./misc/applications) args)
+      ./misc/keyboard
+      ./misc/xsession
+    ];
 
   home.packages = with pkgs; [
     arandr
     brightnessctl
+    tdesktop
     wpa_supplicant
   ];
 

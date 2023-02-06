@@ -18,8 +18,8 @@
     iftop
     imagemagick
     inetutils # telnet
-    inkscape
     iotop
+    jq
     killall
     lm_sensors
     lsof
@@ -29,18 +29,12 @@
     nomacs
     openvpn
     p7zip
-    pavucontrol
     poppler_utils
     reptyr
     syncthing
     sysstat # iostat
-    tdesktop # telegram desktop
     unzip
     usbutils # for lsusb
-    xclip
-    xorg.xev
-    xorg.xkill
-    xorg.xprop
     xterm
     zip
 

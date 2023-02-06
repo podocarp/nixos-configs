@@ -47,9 +47,11 @@ in
 
   home.packages = with pkgs; [
     handbrake
-    runelite
+    inkscape
     jellyfin-media-player
     libreoffice-fresh
+    runelite
+    tdesktop
 
     (python3.withPackages (p: with p; [
       pygments

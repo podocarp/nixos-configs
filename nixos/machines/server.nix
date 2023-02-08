@@ -24,9 +24,9 @@ in
       })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
       # ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      # ((import ../containers/mediawiki/default.nix) (args // {
-      #   port = mediawikiPort;
-      # }))
+      ((import ../containers/mediawiki/default.nix) (args // {
+        port = mediawikiPort;
+      }))
       ((import ../containers/transmission) (args // {
         port = transmissionPort;
       }))
@@ -56,10 +56,10 @@ in
           [ "gitea" giteaPort true ]
           # ["hydra" hydraPort]
           [ "jellyfin" jellyfinPort true ]
-          [ "mealie" mealiePort true ]
-          [ "sync" syncthingPort true ]
-          [ "torrents" transmissionPort true ]
-          [ "wiki" mediawikiPort false ]
+          # [ "mealie" mealiePort true ]
+          [ "sync" syncthingPort false ]
+          [ "torrents" transmissionPort false ]
+          [ "wiki" mediawikiPort true ]
         ];
       }))
     ];

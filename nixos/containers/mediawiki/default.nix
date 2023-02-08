@@ -1,9 +1,9 @@
 { config, pkgs, port, ... }:
 let
-    pwdfilePath = "/tmp/password";
+  pwdfilePath = "/tmp/password";
 in
 {
-  containers.mediawiki= {
+  containers.mediawiki = {
     autoStart = true;
     ephemeral = true;
     bindMounts = {
@@ -26,19 +26,19 @@ in
     };
 
     config = {
-      services.mediawiki= {
+      services.mediawiki = {
         enable = true;
         name = "My Wiki";
 
         passwordFile = pwdfilePath;
 
         poolConfig = {
-            "pm" = "dynamic";
-            "pm.max_children" = 16;
-            "pm.max_requests" = 100;
-            "pm.max_spare_servers" = 2;
-            "pm.min_spare_servers" = 1;
-            "pm.start_servers" = 1;
+          "pm" = "dynamic";
+          "pm.max_children" = 16;
+          "pm.max_requests" = 100;
+          "pm.max_spare_servers" = 2;
+          "pm.min_spare_servers" = 1;
+          "pm.start_servers" = 1;
         };
 
         extensions = {
@@ -50,19 +50,18 @@ in
 
         extraConfig = ''
           $wgDefaultUserOptions['gender'] = 'male';
+          $wgGroupPermissions['*']['read'] = false;
+
         '';
 
         virtualHost = {
-            hostName = "wiki.home.com";
-            adminAddr = "xdjiaxd@gmail.com";
-
-            listen = [
-              {
-                "ip" = "*";
-                "port" = port;
-                # "ssl" = true;
-              }
-            ];
+          adminAddr = "xdjiaxd@gmail.com";
+          listen = [
+            {
+              "ip" = "127.0.0.1";
+              "port" = port;
+            }
+          ];
         };
       };
 
@@ -70,5 +69,5 @@ in
     };
   };
 
-  sops.secrets."mediawiki" = {};
+  sops.secrets."mediawiki" = { };
 }

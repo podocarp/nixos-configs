@@ -41,6 +41,7 @@ in
     ]))
     stress
     sysstat
+    kube3d
   ];
 }
 

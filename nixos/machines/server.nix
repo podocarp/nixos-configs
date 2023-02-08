@@ -4,7 +4,6 @@ let
   giteaSshPort = 3002;
   hydraPort = 4000;
   jellyfinPort = 5000;
-  k3sPort = 6443;
   mealiePort = 6000;
   mediawikiPort = 7000;
   postgresPort = 7777;
@@ -41,7 +40,6 @@ in
       #   port = hydraPort;
       #   dbPort = postgresPort;
       # }))
-      ((import ../services/k3s) { port = k3sPort; })
       # ((import ../services/postgresql/default.nix { port = postgresPort; }))
       ((import ../services/openssh) args)
       ../services/samba

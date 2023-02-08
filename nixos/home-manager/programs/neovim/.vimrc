@@ -261,6 +261,9 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " Auto import on go files
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
+" keyword for scss
+autocmd FileType scss setl iskeyword+=@-@
+
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:vimtex_view_method = 'zathura'

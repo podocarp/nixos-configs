@@ -12,43 +12,44 @@ in
 
   imports =
     [
-      ((import ./programs/password-store/default.nix) {
+      ((import ./programs/password-store) {
         homeDir = homeDir;
       })
-      ((import ./programs/rofi/default.nix) {
+      ((import ./programs/rofi) {
         myTerm = myTerm;
       })
 
-      ./programs/bash/default.nix
-      ./programs/chromium/default.nix
-      ./programs/direnv/default.nix
-      ./programs/git/default.nix
-      ./programs/gpg/default.nix
-      ./programs/mpv/default.nix
-      ./programs/neovim/default.nix
-      # ./programs/ranger/default.nix
-      ./programs/readline/default.nix
-      # ./programs/sioyek/default.nix
-      ./programs/texlive/default.nix
-      ./programs/tmux/default.nix
-      (import ./programs/vifm/default.nix args)
-      ./programs/vscode/default.nix
-      ./programs/zathura/default.nix
+      ./programs/bash
+      ./programs/chromium
+      ./programs/direnv
+      ./programs/git
+      ./programs/gpg
+      ./programs/mpv
+      ./programs/neovim
+      # ./programs/ranger
+      ./programs/readline
+      # ./programs/sioyek
+      ./programs/texlive
+      ./programs/tmux
+      (import ./programs/vifm args)
+      ./programs/vscode
+      ./programs/zathura
 
-      ./services/gpg-agent/default.nix
-      ./services/syncthing/default.nix
+      ./services/gpg-agent
+      ./services/syncthing
 
-      ./scripts/default.nix
+      ./scripts
 
-      (import ./misc/applications/default.nix args)
-      ./misc/keyboard/default.nix
-      ./misc/xsession/default.nix
+      (import ./misc/applications args)
+      ./misc/keyboard
+      ./misc/xsession
     ];
 
   home.packages = with pkgs; [
     handbrake
     inkscape
     jellyfin-media-player
+    keepassxc
     libreoffice-fresh
     runelite
     tdesktop

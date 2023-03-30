@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 {
-  home.file."Scripts" = {
-      source = ./.;
-      executable = true;
+  home.file.".scripts" = {
+    source = ./.;
+    executable = true;
   };
 }

@@ -6,10 +6,8 @@ import System.Posix.Process (executeFile)
 import Text.Regex.Posix ((=~))
 import XMonad
   ( Default (def),
-    Event,
     ManageHook,
     Query,
-    ScreenId,
     Window,
     X,
     XConfig
@@ -24,21 +22,18 @@ import XMonad
         terminal,
         workspaces
       ),
+    appName,
     className,
     composeAll,
-    doF,
     doFloat,
     doIgnore,
     io,
     kill,
     mod4Mask,
-    runQuery,
     sendMessage,
     spawn,
     stringProperty,
-    title,
     windows,
-    withWindowSet,
     xfork,
     xmonad,
     (-->),
@@ -93,7 +88,7 @@ import XMonad.Layout.IndependentScreens
     onCurrentScreen,
     withScreens,
   )
-import XMonad.Layout.NoBorders
+import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ResizableThreeColumns
   ( MirrorResize (MirrorExpand, MirrorShrink),
     ResizableThreeCol (ResizableThreeColMid),
@@ -103,6 +98,7 @@ import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedScratchpad (NamedScratchpad (NS), NamedScratchpads, customFloating, defaultFloating, namedScratchpadAction, namedScratchpadManageHook)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.WorkspaceCompare (getSortByTag)
 
@@ -126,6 +122,20 @@ myGsConfig =
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1 .. 9]
 
+scratchpads :: NamedScratchpads
+scratchpads =
+  [ NS
+      "xterm"
+      "xterm -name scratch"
+      (appName =? "scratch") -- position: 2/3 width from the left 1/2 height from the top, dimensions: 1/3 width by 1/2 height
+      (customFloating $ W.RationalRect (2 / 3) (1 / 2) (1 / 3) (1 / 2)),
+    NS
+      "telegram"
+      "telegram-desktop"
+      (className =? "TelegramDesktop")
+      defaultFloating
+  ]
+
 -- This is needed to run scripts, because `spawn` uses `sh` which does not read
 -- `.bashrc` and so does not know about any user defined `$PATH`.
 myspawn x = void $ spawnPID x
@@ -144,6 +154,8 @@ myKeys =
     ("M-d", spawn "rofi -show combi"),
     ("M-f", spawn "rofi-pass"),
     ("M-p", spawn "autorandr -c"),
+    ("M-o", namedScratchpadAction scratchpads "xterm"),
+    ("M-t", namedScratchpadAction scratchpads "telegram"),
     ("M-<Tab>", toggleWS),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")
@@ -198,7 +210,6 @@ myManageHook =
             "Picture in picture",
             "Picture-in-Picture",
             "RuneLite Launcher",
-            "TelegramDesktop",
             "Volume Control",
             "dialog",
             "plasmashell",
@@ -221,7 +232,7 @@ myConfig nScreens =
       normalBorderColor = "#999999",
       focusedBorderColor = "#FF0000",
       borderWidth = 3,
-      manageHook = myManageHook <+> manageHook kdeConfig,
+      manageHook = myManageHook <+> namedScratchpadManageHook scratchpads <+> manageHook kdeConfig,
       layoutHook = myLayoutHook,
       workspaces = withScreens nScreens myWorkspaces,
       handleEventHook = handleEventHook def,

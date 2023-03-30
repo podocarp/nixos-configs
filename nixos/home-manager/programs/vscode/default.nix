@@ -5,6 +5,7 @@
     enable = true;
     extensions = (with pkgs.vscode-extensions; [
       vscodevim.vim
+      golang.go
     ]) ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
         name = "activitusbar";
@@ -30,8 +31,8 @@
 
       "vim.normalModeKeyBindings" = [
         {
-          "before" = ["<Esc>"];
-          "commands" = ["workbench.action.files.save"];
+          "before" = [ "<Esc>" ];
+          "commands" = [ "workbench.action.files.save" ];
         }
       ];
 

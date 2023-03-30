@@ -27,6 +27,7 @@
       vim-obsession
       vim-sleuth
       vim-surround
+      vimwiki
       vimtex
 
       (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: [
@@ -93,6 +94,7 @@
           "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces" = true;
         };
       };
+      "tsserver.useLocalTsdk" = true;
       "languageserver" = {
         "haskell" = {
           "command" = "haskell-language-server-wrapper";
@@ -105,12 +107,6 @@
             "hie.yaml"
           ];
           "filetypes" = [ "haskell" "lhaskell" ];
-          "initializationOptions" = {
-            "languageServerHaskell" = {
-              "hlintOn" = true;
-              "completionSnippetsOn" = true;
-            };
-          };
         };
         "golang" = {
           "command" = "gopls";

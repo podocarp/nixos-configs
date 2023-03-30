@@ -16,6 +16,7 @@ in
       ./programs/bash/default.nix
       ./programs/chromium/default.nix
       ./programs/direnv/default.nix
+      ((import ./programs/firefox/default.nix) args)
       ./programs/git/default.nix
       ./programs/gpg/default.nix
       ./programs/mpv/default.nix
@@ -44,6 +45,7 @@ in
     arandr
     brightnessctl
     gcc
+    mysql-workbench
     tdesktop
     wpa_supplicant
     zoom-us

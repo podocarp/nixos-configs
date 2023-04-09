@@ -16,7 +16,7 @@
       cam = "commit -a -m";
       co = "checkout";
       d = "diff";
-      l = "log --graph";
+      l = "log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(green)%an%C(reset)%C(bold yellow)%d%C(reset) - %s'";
       p = "push";
       s = "status";
       unstage = "reset HEAD --";
@@ -25,6 +25,11 @@
       pull.rebase = false;
       init.defaultBranch = "master";
       push.autoSetupRemote = true;
+      mergetool = {
+        tool = "vimdiff";
+        prompt = false;
+        conflictstyle = "diff3";
+      };
     };
   };
 }

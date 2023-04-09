@@ -12,6 +12,7 @@
   home.packages = with pkgs; [
     ### Applications
     bind # for nslookup
+    entr
     ffmpeg
     gnumake
     highlight
@@ -31,8 +32,10 @@
     p7zip
     poppler_utils
     reptyr
+    ripgrep
     syncthing
     sysstat # iostat
+    tldr
     unzip
     usbutils # for lsusb
     xterm

@@ -12,33 +12,36 @@ in
 
   imports =
     [
-      ./programs/autorandr/default.nix
-      ./programs/bash/default.nix
-      ./programs/chromium/default.nix
-      ./programs/direnv/default.nix
-      ((import ./programs/firefox/default.nix) args)
-      ./programs/git/default.nix
-      ./programs/gpg/default.nix
-      ./programs/mpv/default.nix
-      ./programs/neovim/default.nix
-      ((import ./programs/password-store/default.nix) { homeDir = homeDir; })
-      ./programs/readline/default.nix
-      ((import ./programs/rofi/default.nix) { myTerm = myTerm; })
-      ./programs/texlive/default.nix
-      ./programs/tmux/default.nix
-      ./programs/vscode/default.nix
-      ((import ./programs/vifm/default.nix) (args // { myTerm = myTerm; }))
-      ./programs/zathura/default.nix
+      ./programs/autorandr
+      ./programs/bash
+      ./programs/chromium
+      ./programs/direnv
+      ((import ./programs/firefox) args)
+      ./programs/fzf
+      ./programs/git
+      ./programs/gpg
+      ./programs/mpv
+      ./programs/navi
+      ./programs/neovim
+      ./programs/lazygit
+      ((import ./programs/password-store) { homeDir = homeDir; })
+      ./programs/readline
+      ((import ./programs/rofi) { myTerm = myTerm; })
+      ./programs/texlive
+      ./programs/tmux
+      ./programs/vscode
+      ((import ./programs/vifm) (args // { myTerm = myTerm; }))
+      ./programs/zathura
 
-      ((import ./services/dunst/default.nix) (args // { homeDir = homeDir; }))
-      ./services/gpg-agent/default.nix
-      ./services/syncthing/default.nix
+      ((import ./services/dunst) (args // { homeDir = homeDir; }))
+      ./services/gpg-agent
+      ./services/syncthing
 
-      ./scripts/default.nix
+      ./scripts
 
-      ((import ./misc/applications/default.nix) args)
-      ./misc/keyboard/default.nix
-      ((import ./misc/xsession/default.nix) (args // { myTerm = myTerm; }))
+      ((import ./misc/applications) args)
+      ./misc/keyboard
+      ((import ./misc/xsession) (args // { myTerm = myTerm; }))
     ];
 
   home.packages = with pkgs; [
@@ -48,7 +51,6 @@ in
     mysql-workbench
     tdesktop
     wpa_supplicant
-    zoom-us
 
     (python3.withPackages (p: with p; [
       autopep8

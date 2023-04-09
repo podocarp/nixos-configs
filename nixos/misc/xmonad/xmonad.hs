@@ -42,7 +42,7 @@ import XMonad
     (=?),
     (|||),
   )
-import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Actions.CycleWS (toggleWS, toggleWS')
 import XMonad.Actions.GridSelect
   ( GSConfig (gs_cellheight, gs_cellwidth),
     goToSelected,
@@ -155,8 +155,8 @@ myKeys =
     ("M-f", spawn "rofi-pass"),
     ("M-p", spawn "autorandr -c"),
     ("M-o", namedScratchpadAction scratchpads "xterm"),
-    ("M-t", namedScratchpadAction scratchpads "telegram"),
-    ("M-<Tab>", toggleWS),
+    ("M-S-t", namedScratchpadAction scratchpads "telegram"),
+    ("M-<Tab>", toggleWS' ["NSP"]),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")
   ]
@@ -171,10 +171,10 @@ myKeys =
        ]
     ++
     -- M-Shift-[1-9] moves windows to workspaces
-    -- M-[1-9] greedyviews workspaces
+    -- M-[1-9] views workspaces
     [ ("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)
       | (key, i) <- zip [1 .. 9] myWorkspaces,
-        (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")]
+        (f, mask) <- [(W.view, ""), (W.shift, "S-")]
     ]
 
 -- ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
@@ -219,11 +219,7 @@ myManageHook =
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
       ++ [className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR" --> doIgnore]
 
-myLayoutHook =
-  smartBorders $
-    avoidStruts $
-      refocusLastLayoutHook $
-        ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+myLayoutHook = ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
 myConfig nScreens =
   desktopConfig
@@ -233,7 +229,7 @@ myConfig nScreens =
       focusedBorderColor = "#FF0000",
       borderWidth = 3,
       manageHook = myManageHook <+> namedScratchpadManageHook scratchpads <+> manageHook kdeConfig,
-      layoutHook = myLayoutHook,
+      layoutHook = smartBorders $ refocusLastLayoutHook $ avoidStruts myLayoutHook,
       workspaces = withScreens nScreens myWorkspaces,
       handleEventHook = handleEventHook def,
       logHook = logHook kdeConfig
@@ -241,4 +237,4 @@ myConfig nScreens =
     `additionalKeysP` myKeys
 
 main :: IO ()
-main = countScreens >>= \nScreens -> xmonad $ ewmhFullscreen $ ewmh $ docks (myConfig nScreens)
+main = countScreens >>= \nScreens -> xmonad $ ewmhFullscreen . ewmh $ docks (myConfig nScreens)

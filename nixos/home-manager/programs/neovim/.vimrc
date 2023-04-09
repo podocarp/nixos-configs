@@ -329,15 +329,9 @@ EOF
 nnoremap <F1> :UndotreeToggle<CR>
 let g:undotree_SetFocusWhenToggle = 1
 
-"Plug 'wincent/command-t'
-
-let g:CommandTPreferredImplementation='lua'
-lua << EOF
-require('wincent.commandt').setup({ })
-vim.keymap.set('n', '<Leader>b', '<Plug>(CommandTBuffer)')
-vim.keymap.set('n', '<Leader>j', '<Plug>(CommandTJump)')
-vim.keymap.set('n', '<Leader>t', '<Plug>(CommandT)')
-EOF
+"Plug 'junegunn/fzf.vim'
+nnoremap <leader>t :GFiles<CR>
+nnoremap <leader>s :Rg<CR>
 
 "Plug 'vim-airline/vim-airline'
 let g:airline_symbols_ascii=1

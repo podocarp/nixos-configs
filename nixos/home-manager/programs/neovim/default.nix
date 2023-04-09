@@ -11,7 +11,7 @@
       coc-snippets
       coc-tsserver
       coc-vimtex
-      command-t
+      fzf-vim
       gitsigns-nvim
       nvim-dap
       nvim-dap-ui
@@ -23,6 +23,7 @@
       vifm-vim
       vim-airline
       vim-airline-themes
+      vim-fugitive
       vim-nix
       vim-obsession
       vim-sleuth
@@ -70,6 +71,7 @@
     '';
 
     coc.enable = true;
+    # can override in local dir's .vim/coc-settings.json
     coc.settings = {
       "coc.source.around.enable" = false;
       "coc.preferences.jumpCommand" = "tab drop";

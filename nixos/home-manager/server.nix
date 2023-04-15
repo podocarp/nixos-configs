@@ -16,6 +16,7 @@ in
   imports = [
     ./programs/bash
     ./programs/direnv
+    ./programs/fzf
     ./programs/git
     ./programs/gpg
     ./programs/neovim

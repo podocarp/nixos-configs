@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+sudo modprobe i2c-dev
+sudo ddcutil --display=1 setvcp 10 "$1"

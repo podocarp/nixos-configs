@@ -94,6 +94,7 @@ import XMonad.Layout.ResizableThreeColumns
     ResizableThreeCol (ResizableThreeColMid),
   )
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
+import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
 import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.StackSet qualified as W

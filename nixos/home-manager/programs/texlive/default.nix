@@ -52,6 +52,14 @@
         wrapfig
         xkeyval
         xstring
+
+        microtype
+        threeparttable
+        listings
+        comment
+        soul
+        lastpage
+        subfig
         ;
     };
   };

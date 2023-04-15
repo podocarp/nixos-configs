@@ -46,6 +46,7 @@ in
     ];
 
   home.packages = with pkgs; [
+    ddcutil
     handbrake
     inkscape
     jellyfin-media-player

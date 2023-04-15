@@ -99,6 +99,7 @@ import XMonad.Layout.ResizableThreeColumns
     ResizableThreeCol (ResizableThreeColMid),
   )
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
+import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
 import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
 import XMonad.StackSet qualified as W
@@ -212,7 +213,7 @@ myLayoutHook =
   smartBorders $
     avoidStruts $
       refocusLastLayoutHook $
-        ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+        ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) [] ||| ThreeColMid 1 (3 / 100) (1 / 2)
 
 myConfig nScreens =
   desktopConfig

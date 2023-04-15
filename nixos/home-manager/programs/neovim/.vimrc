@@ -51,6 +51,7 @@ nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
 nnoremap <silent> <F6> <Cmd>lua require'dap'.step_over()<CR>
 nnoremap <silent> <F7> <Cmd>lua require'dap'.step_into()<CR>
 nnoremap <silent> <F8> <Cmd>lua require'dap'.step_out()<CR>
+nnoremap <silent> <F12> <Cmd>lua require'dap'.terminate()<CR>
 nnoremap <silent> <Leader>dt <Cmd>lua require'dap'.toggle_breakpoint()<CR>
 nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
 nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
@@ -157,10 +158,8 @@ EOF
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
-nmap <silent> ca <Plug>(coc-codelens-action)
 inoremap <silent><expr> <c-c> coc#refresh()
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gD :call CocAction('jumpDefinition', 'drop')<CR>
+nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
 nmap <silent> gy :call CocAction('jumpTypeDefinition', 'vsplit')<CR>
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr :call CocAction('jumpUsed')<CR>
@@ -328,16 +327,11 @@ EOF
 
 "Plug 'mbbill/undotree'
 nnoremap <F1> :UndotreeToggle<CR>
+let g:undotree_SetFocusWhenToggle = 1
 
-"Plug 'wincent/command-t'
-
-let g:CommandTPreferredImplementation='lua'
-lua << EOF
-require('wincent.commandt').setup({ })
-vim.keymap.set('n', '<Leader>b', '<Plug>(CommandTBuffer)')
-vim.keymap.set('n', '<Leader>j', '<Plug>(CommandTJump)')
-vim.keymap.set('n', '<Leader>t', '<Plug>(CommandT)')
-EOF
+"Plug 'junegunn/fzf.vim'
+nnoremap <leader>t :GFiles<CR>
+nnoremap <leader>s :Rg<CR>
 
 "Plug 'vim-airline/vim-airline'
 let g:airline_symbols_ascii=1

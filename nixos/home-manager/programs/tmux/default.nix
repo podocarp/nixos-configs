@@ -8,12 +8,12 @@
     newSession = true;
     terminal = "screen-256color";
     extraConfig = builtins.readFile ./tmux.conf;
-    plugins = with pkgs.tmuxPlugins; [
+    plugins = with pkgs; [
       {
-        plugin = resurrect;
+        plugin = tmuxPlugins.continuum;
         extraConfig = ''
-          set -g @resurrect-strategy-nvim 'session'
-          set -g @resurrect-capture-pane-contents 'on'
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '60' # minutes
         '';
       }
     ];

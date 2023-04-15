@@ -4,12 +4,12 @@ let
   giteaSshPort = 3002;
   hydraPort = 4000;
   jellyfinPort = 5000;
+  wireguardPort = 5333;
   mealiePort = 6000;
   mediawikiPort = 7000;
   postgresPort = 7777;
   syncthingPort = 9000;
   transmissionPort = 10000;
-  wireguardPort = 50000;
 in
 {
   imports =
@@ -113,16 +113,10 @@ in
 
     # Local
     interfaces.enp35s0 = {
-      useDHCP = false;
-      ipv4.addresses = [
-        {
-          address = "192.168.1.107";
-          prefixLength = 32;
-        }
-      ];
+      useDHCP = true;
       ipv4.routes = [
         {
-          address = "192.168.1.0";
+          address = "192.168.10.0";
           prefixLength = 24;
           options = {
             dev = "enp35s0";
@@ -142,12 +136,11 @@ in
       enable = true;
       checkReversePath = "loose";
       allowedTCPPorts = [
-        69
         80
         443
-        giteaSshPort
       ];
-      allowedUDPPorts = [ ];
+      allowedUDPPorts = [
+      ];
     };
   };
 

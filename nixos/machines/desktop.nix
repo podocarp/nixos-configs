@@ -54,6 +54,9 @@
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
 
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.backend = "docker";
+
   home-manager.users.pengu = import ../home-manager/desktop.nix;
   # services.xserver.desktopManager.plasma5.enable = true;
 

@@ -21,8 +21,8 @@
   # installing home-manager. The others are optional.
   environment.systemPackages = with pkgs; [
     git
-    pciutils            # for lspci
-    sof-firmware        # some audio devices need this
+    pciutils # for lspci
+    sof-firmware # some audio devices need this
     tmux
     vim
     wget
@@ -63,17 +63,17 @@
 
   security.wrappers = {
     "mount.nfs" = {
-        setuid = true;
-        setgid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
+      setuid = true;
+      setgid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.nfs-utils.out}/bin/mount.nfs";
     };
     "mount.cifs" = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.cifs-utils}/bin/mount.cifs";
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.cifs-utils}/bin/mount.cifs";
     };
   };
 
@@ -95,7 +95,17 @@
     dates = [ "weekly" ];
   };
 
-  nix.settings.allowed-users = [ "@wheel" ];
+  nix.settings = {
+    allowed-users = [ "@wheel" ];
+    experimental-features = [ "nix-command" ];
+    substituters = [
+      "http://nix-cache.jiaxiaodong.com"
+    ];
+    trusted-public-keys = [
+      "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="
+    ];
+  };
+
 
   system.stateVersion = "22.11";
 }

@@ -9,6 +9,7 @@ in
   home.username = "pengu";
   home.homeDirectory = homeDir;
   home.stateVersion = "22.11";
+  nixpkgs.config.allowUnfree = true;
 
   imports =
     [
@@ -54,6 +55,7 @@ in
     libreoffice-fresh
     runelite
     tdesktop
+    cudatoolkit
 
     (python3.withPackages (p: with p; [
       pygments

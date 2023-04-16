@@ -44,7 +44,6 @@ in
           dbPort = postgresPort;
         })
       )
-      ((import ../services/nix-serve (args // { port = nixservePort; })))
       ((import ../services/postgresql/default.nix { port = postgresPort; }))
       ((import ../services/openssh) args)
       ../services/samba

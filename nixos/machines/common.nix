@@ -97,9 +97,9 @@
 
   nix.settings = {
     allowed-users = [ "@wheel" ];
-    experimental-features = [ "nix-command" ];
+    experimental-features = [ "flakes" "nix-command" ];
     substituters = [
-      "http://nix-cache.jiaxiaodong.com"
+      #"http://nix-cache.jiaxiaodong.com"
     ];
     trusted-public-keys = [
       "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="

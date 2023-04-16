@@ -9,9 +9,9 @@ in
     hydraURL = "hydra.jiaxiaodong.com";
     port = port;
     notificationSender = "hydra@localhost";
-    buildMachinesFiles = [];
+    buildMachinesFiles = [ ];
     useSubstitutes = true;
-    dbi = "dbi:Pg:dbname=hydra;user=hydra;host=${socketPath};port=${postgresPort}";
+    dbi = "dbi:Pg:dbname=hydra;user=hydra;port=${postgresPort}";
     extraConfig = ''
       using_frontend_proxy 1
     '';

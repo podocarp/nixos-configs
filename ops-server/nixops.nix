@@ -12,7 +12,7 @@
   };
 
   machine = { ... }:
-  {
-    deployment.targetHost = "192.168.1.107";
-  };
+    {
+      deployment.targetHost = "home.lan";
+    };
 }

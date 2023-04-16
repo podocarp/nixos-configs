@@ -7,6 +7,7 @@ let
   wireguardPort = 5333;
   mealiePort = 6000;
   mediawikiPort = 7000;
+  nixservePort = 7100;
   postgresPort = 7777;
   syncthingPort = 9000;
   transmissionPort = 10000;
@@ -18,6 +19,7 @@ in
       <home-manager/nixos>
       <sops-nix/modules/sops>
 
+      ((import ../containers/elasticsearch) { })
       ((import ../containers/gitea) {
         port = giteaPort;
         sshPort = giteaSshPort;
@@ -36,11 +38,14 @@ in
       }))
 
       ../services/fail2ban
-      # ((import ../services/hydra/default.nix {
-      #   port = hydraPort;
-      #   dbPort = postgresPort;
-      # }))
-      # ((import ../services/postgresql/default.nix { port = postgresPort; }))
+      (
+        (import ../services/hydra {
+          port = hydraPort;
+          dbPort = postgresPort;
+        })
+      )
+      ((import ../services/nix-serve (args // { port = nixservePort; })))
+      ((import ../services/postgresql/default.nix { port = postgresPort; }))
       ((import ../services/openssh) args)
       ../services/samba
       ((import ../services/syncthing) (args // {
@@ -54,9 +59,10 @@ in
           [ "error" 65500 true ]
           # ["firefly" fireflyPort]
           [ "gitea" giteaPort true ]
-          # ["hydra" hydraPort]
+          [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
           # [ "mealie" mealiePort true ]
+          [ "nix-cache" nixservePort true ]
           [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
           [ "wiki" mediawikiPort true ]
@@ -211,7 +217,7 @@ in
   };
 
   services.cron = {
-    enable = true;
+    enable = false;
     systemCronJobs = [
       "59 22 * * * root date -d '7 hours' +%s > /sys/class/rtc/rtc0/wakealarm"
       "00 23 * * * root poweroff"

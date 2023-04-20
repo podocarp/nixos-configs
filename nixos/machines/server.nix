@@ -5,10 +5,10 @@ let
   hydraPort = 4000;
   jellyfinPort = 5000;
   wireguardPort = 5333;
+  postgresPort = 5432;
   mealiePort = 6000;
   mediawikiPort = 7000;
   nixservePort = 7100;
-  postgresPort = 7777;
   syncthingPort = 9000;
   transmissionPort = 10000;
 in
@@ -20,13 +20,8 @@ in
       <sops-nix/modules/sops>
 
       ((import ../containers/elasticsearch) { })
-      ((import ../containers/gitea) {
-        port = giteaPort;
-        sshPort = giteaSshPort;
-      })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
-      # ((import ../containers/mealie/default.nix) { port = mealiePort; })
-      ((import ../containers/mediawiki/default.nix) (args // {
+      ((import ../containers/mediawiki) (args // {
         port = mediawikiPort;
       }))
       ((import ../containers/transmission) (args // {
@@ -38,13 +33,19 @@ in
       }))
 
       ../services/fail2ban
+      ((import ../services/gitea) (args // {
+        giteaPort = giteaPort;
+        giteaSshPort = giteaSshPort;
+        postgresPort = postgresPort;
+      }))
       (
         (import ../services/hydra {
           port = hydraPort;
           dbPort = postgresPort;
         })
       )
-      ((import ../services/postgresql/default.nix { port = postgresPort; }))
+      ((import ../services/nix-serve (args // { port = nixservePort; })))
+      ((import ../services/postgresql { port = postgresPort; }))
       ((import ../services/openssh) args)
       ../services/samba
       ((import ../services/syncthing) (args // {
@@ -52,7 +53,7 @@ in
       }))
       ../services/zfs
 
-      ((import ../services/nginx/default.nix) (args // {
+      ((import ../services/nginx) (args // {
         portMap = [
           # format: [host port openToPublic?]
           [ "error" 65500 true ]
@@ -201,15 +202,16 @@ in
   nix = {
     settings = {
       allowed-users = [
-        "root"
+        "@hydra"
         "@nixbld"
         "@wheel"
-        "@hydra"
+        "nix-serve"
+        "root"
       ];
       trusted-users = [
-        "root"
         "@nixbld"
         "@wheel"
+        "root"
       ];
       sandbox = "relaxed";
     };

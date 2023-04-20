@@ -62,7 +62,7 @@ in
           [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
           # [ "mealie" mealiePort true ]
-          [ "nix-serve" nixservePort true ]
+          [ "nix-cache" nixservePort true ]
           [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
           [ "wiki" mediawikiPort true ]

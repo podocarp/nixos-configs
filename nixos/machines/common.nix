@@ -84,28 +84,35 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+
+    optimise = {
+      automatic = true;
+      dates = [ "weekly" ];
+    };
+
+    settings = {
+      allowed-users = [ "@wheel" ];
+      experimental-features = [ "flakes" "nix-command" ];
+      substituters = [
+        #"http://nix-cache.jiaxiaodong.com"
+      ];
+      trusted-public-keys = [
+        "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="
+      ];
+    };
+
+    extraOptions = ''
+      !include ${config.sops.secrets.nix-access-tokens.path}
+    '';
   };
 
-  nix.optimise = {
-    automatic = true;
-    dates = [ "weekly" ];
-  };
-
-  nix.settings = {
-    allowed-users = [ "@wheel" ];
-    experimental-features = [ "flakes" "nix-command" ];
-    substituters = [
-      #"http://nix-cache.jiaxiaodong.com"
-    ];
-    trusted-public-keys = [
-      "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="
-    ];
-  };
-
+  sops.secrets.nix-access-tokens = { };
 
   system.stateVersion = "22.11";
 }

@@ -48,7 +48,7 @@ in
     arandr
     brightnessctl
     gcc
-    mysql-workbench
+    # mysql-workbench
     tdesktop
     wpa_supplicant
 

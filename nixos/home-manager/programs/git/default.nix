@@ -16,7 +16,7 @@
       cam = "commit -a -m";
       co = "checkout";
       d = "diff";
-      l = "log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(green)%an%C(reset)%C(bold yellow)%d%C(reset) - %s'";
+      l = "log --graph --author-date-order --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(green)%an%C(reset)%C(bold yellow)%d%C(reset) - %s'";
       p = "push";
       s = "status";
       unstage = "reset HEAD --";

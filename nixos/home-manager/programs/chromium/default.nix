@@ -31,9 +31,10 @@
           id = "ocaahdebbfolfmndjeplogmgcagdmblk";
         }
         (
+          # keepassx
           createChromiumExtension {
             id = "oboonakemofpalcgghocfoadofidjkkk";
-            sha256 = "sha256:1b17jihrlnnfpjdp90ffi5ih1jahkc5hxcsswwws20xlw96228dk";
+            sha256 = "sha256:0mm04zhgsiddnl5mkagcqbg2cysy2rhhbpky24xa4bhy8yb3jl20";
             version = "1.8.5.1";
           }
         )

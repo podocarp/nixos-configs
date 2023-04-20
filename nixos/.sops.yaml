@@ -8,7 +8,9 @@ creation_rules:
     key_groups:
     - age:
       - *jxd_age
+      - *work_age
   - path_regex: secrets/work_secrets.yaml
     key_groups:
     - age:
+      - *jxd_age
       - *work_age

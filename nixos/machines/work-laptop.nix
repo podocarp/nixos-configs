@@ -1,12 +1,10 @@
-{ config, pkgs, libs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
     [
       ./common.nix
       ../misc/xserver.nix
-      <home-manager/nixos>
-      <sops-nix/modules/sops>
     ];
 
   boot.loader.grub = {
@@ -16,6 +14,29 @@
   };
 
   boot.supportedFilesystems = [ "ntfs" ];
+
+  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" =
+    {
+      device = "/dev/disk/by-uuid/9a676615-0810-42ef-a749-256eef7bc2c2";
+      fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    {
+      device = "/dev/disk/by-uuid/904C-C2F0";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/79ffb9a3-2435-4c31-bd97-6e1f49ef905e"; }];
+
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   sops = {
     defaultSopsFile = ../secrets/work_secrets.yaml;
@@ -29,6 +50,42 @@
   '';
 
   networking.hostName = "work"; # Define your hostname.
+  networking.networkmanager = {
+    enable = true;
+  };
+  networking.wireless = {
+    enable = true;
+    userControlled.enable = true;
+    environmentFile = config.sops.secrets.work_password_env.path;
+    networks = {
+      "Sailors-Personal" = {
+        authProtocols = [ "WPA-EAP" ];
+        auth = ''
+          eap=PEAP
+          identity="xiaodong.jia"
+          password="@PASS@"
+        '';
+      };
+      "potato" = {
+        psk = "0015011463";
+      };
+    };
+  };
+
+  networking.openconnect = {
+    interfaces = {
+      "work" = {
+        gateway = "sg.oneconnect.shopeemobile.com/uservpn";
+        user = "xiaodong.jia";
+        protocol = "anyconnect";
+        passwordFile = config.sops.secrets.work_password_vpn.path;
+        autoStart = false;
+      };
+    };
+  };
+
+  sops.secrets."work_password_vpn" = { };
+  sops.secrets."work_password_env" = { };
 
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };

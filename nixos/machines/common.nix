@@ -112,7 +112,9 @@
     '';
   };
 
-  sops.secrets.nix-access-tokens = { };
+  sops.secrets.nix-access-tokens = {
+    sopsFile = ../secrets/secrets.yaml;
+  };
 
   system.stateVersion = "22.11";
 }

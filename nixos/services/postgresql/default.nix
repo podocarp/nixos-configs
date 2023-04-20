@@ -11,13 +11,17 @@
           "DATABASE hydra" = "ALL PRIVILEGES";
         };
       }
+      {
+        name = "gitea";
+        ensurePermissions = {
+          "DATABASE gitea" = "ALL PRIVILEGES";
+        };
+      }
     ];
     ensureDatabases = [
       "hydra"
+      "gitea"
     ];
-    identMap = ''
-      hydra root hydra
-    '';
     authentication = ''
       #TYPE     DATABASE      USER      ADDRESS     METHOD
       local     all           all                   trust

@@ -16,8 +16,6 @@ in
   imports =
     [
       ./common.nix
-      <home-manager/nixos>
-      <sops-nix/modules/sops>
 
       ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })

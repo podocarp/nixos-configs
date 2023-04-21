@@ -19,6 +19,16 @@
           sops-nix.nixosModules.sops
         ];
       };
+
+      server = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          ./machines/server.nix
+          home-manager.nixosModules.home-manager
+          sops-nix.nixosModules.sops
+        ];
+      };
     };
   };
 }

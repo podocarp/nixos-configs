@@ -33,4 +33,6 @@ in
       };
     };
   };
+
+  networking.firewall.allowedTCPPorts = [ giteaSshPort ];
 }

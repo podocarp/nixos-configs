@@ -10,21 +10,31 @@
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }: {
     nixosConfigurations = {
-      work = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [
-          ./machines/work-laptop.nix
-          home-manager.nixosModules.home-manager
-          sops-nix.nixosModules.sops
-        ];
-      };
-
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
           ./machines/server.nix
+          home-manager.nixosModules.home-manager
+          sops-nix.nixosModules.sops
+        ];
+      };
+
+      desktop = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          ./machines/desktop.nix
+          home-manager.nixosModules.home-manager
+          sops-nix.nixosModules.sops
+        ];
+      };
+
+      work = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          ./machines/work-laptop.nix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
         ];

@@ -9,6 +9,7 @@ in
   home.username = "pengu";
   home.homeDirectory = homeDir;
   home.stateVersion = "22.11";
+
   nixpkgs.config.allowUnfree = true;
 
   imports =
@@ -23,6 +24,7 @@ in
       ./programs/bash
       ./programs/chromium
       ./programs/direnv
+      ./programs/fzf
       ./programs/git
       ./programs/gpg
       ./programs/mpv
@@ -57,7 +59,7 @@ in
     tdesktop
     cudatoolkit
 
-    (python3.withPackages (p: with p; [
+    (python311.withPackages (p: with p; [
       pygments
     ]))
   ];

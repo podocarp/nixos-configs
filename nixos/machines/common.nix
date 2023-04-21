@@ -1,21 +1,33 @@
 { config, pkgs, libs, ... }:
 
 {
-  boot.loader = {
-    timeout = 5;
-    grub = {
-      enable = true;
-      version = 2;
-      gfxmodeEfi = "640x480";
-      gfxmodeBios = "640x480";
-      configurationLimit = 5;
+  boot = {
+    loader = {
+      timeout = 5;
+      grub = {
+        enable = true;
+        version = 2;
+        gfxmodeEfi = "640x480";
+        gfxmodeBios = "640x480";
+        configurationLimit = 5;
+      };
     };
+
+    kernel.sysctl = {
+      "kernel.nmi_watchdog" = 0;
+      "vm.dirty_writeback_centisecs" = 6000;
+    };
+
+    initrd.kernelModules = [
+      "ahci"
+      "nvme"
+      "sd_mod"
+      "usb_storage"
+      "usbhid"
+      "xhci_pci"
+    ];
   };
 
-  boot.kernel.sysctl = {
-    "kernel.nmi_watchdog" = 0;
-    "vm.dirty_writeback_centisecs" = 6000;
-  };
 
   # Packages we want system-wide. Git is essential to obtain this repo before
   # installing home-manager. The others are optional.
@@ -100,7 +112,8 @@
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
       substituters = [
-        #"http://nix-cache.jiaxiaodong.com"
+        "https://cache.nixos.org?priority=10"
+        "http://nix-cache.jiaxiaodong.com?priority=20"
       ];
       trusted-public-keys = [
         "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="

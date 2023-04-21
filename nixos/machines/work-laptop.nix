@@ -36,7 +36,8 @@
     [{ device = "/dev/disk/by-uuid/79ffb9a3-2435-4c31-bd97-6e1f49ef905e"; }];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.enableAllFirmware = true;
+  hardware.cpu.intel.updateMicrocode = true;
 
   sops = {
     defaultSopsFile = ../secrets/work_secrets.yaml;

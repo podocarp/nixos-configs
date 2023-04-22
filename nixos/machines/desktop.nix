@@ -37,7 +37,7 @@
 
   fileSystems."/network/smb" =
     {
-      device = "//192.168.1.107/public";
+      device = "//obsidian/public";
       fsType = "cifs";
       options = [
         "_netdev"

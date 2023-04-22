@@ -134,6 +134,11 @@ scratchpads =
       "telegram"
       "telegram-desktop"
       (className =? "TelegramDesktop")
+      defaultFloating,
+    NS
+      "keepassxc"
+      "keepassxc"
+      (className =? "KeePassXC")
       defaultFloating
   ]
 
@@ -157,6 +162,7 @@ myKeys =
     ("M-p", spawn "autorandr -c"),
     ("M-o", namedScratchpadAction scratchpads "xterm"),
     ("M-S-t", namedScratchpadAction scratchpads "telegram"),
+    ("M-S-k", namedScratchpadAction scratchpads "keepassxc"),
     ("M-<Tab>", toggleWS' ["NSP"]),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")

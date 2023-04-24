@@ -11,6 +11,7 @@ let
   nixservePort = 7100;
   syncthingPort = 9000;
   transmissionPort = 10000;
+  transmissionPrivPort = 10001;
 in
 {
   imports =
@@ -22,6 +23,9 @@ in
       ((import ../containers/mediawiki) (args // {
         port = mediawikiPort;
       }))
+      ((import ../containers/transmission/private.nix) (args // {
+        port = transmissionPrivPort;
+      }))
       ((import ../containers/transmission) (args // {
         port = transmissionPort;
       }))
@@ -32,9 +36,7 @@ in
 
       ../services/fail2ban
       ((import ../services/gitea) (args // {
-        giteaPort = giteaPort;
-        giteaSshPort = giteaSshPort;
-        postgresPort = postgresPort;
+        inherit giteaPort giteaSshPort postgresPort;
       }))
       (
         (import ../services/hydra {
@@ -42,6 +44,8 @@ in
           dbPort = postgresPort;
         })
       )
+
+      ((import ../services/acme) args)
       ((import ../services/nix-serve (args // { port = nixservePort; })))
       ((import ../services/postgresql { port = postgresPort; }))
       ((import ../services/openssh) args)
@@ -63,6 +67,7 @@ in
           [ "nix-cache" nixservePort true ]
           [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
+          [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]
         ];
       }))

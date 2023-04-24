@@ -16,37 +16,37 @@ in
     ports = [ "${toString port}:9091" ];
     extraOptions = [ "--cap-add=NET_ADMIN" ];
     environment =
-    {
-      GLOBAL_APPLY_PERMISSIONS = "false";
-      LOCAL_NETWORK= "192.168.1.0/24";
-      OPENVPN_PROVIDER = "custom";
-      OPENVPN_PASSWORD = "**None**";
-      OPENVPN_USERNAME = "**None**";
-      PGID = builtins.toString config.users.groups."users".gid;
-      PUID = builtins.toString config.users.users."pengu".uid;
-      GITHUB_CONFIG_SOURCE_REPO = "rubbish domain";
+      {
+        GLOBAL_APPLY_PERMISSIONS = "false";
+        LOCAL_NETWORK = "192.168.10.0/24";
+        OPENVPN_PROVIDER = "custom";
+        OPENVPN_PASSWORD = "**None**";
+        OPENVPN_USERNAME = "**None**";
+        PGID = builtins.toString config.users.groups."users".gid;
+        PUID = builtins.toString config.users.users."pengu".uid;
+        GITHUB_CONFIG_SOURCE_REPO = "rubbish domain";
 
-      TRANSMISSION_DOWNLOAD_DIR = "/Downloaded";
-      TRANSMISSION_DOWNLOAD_QUEUE_ENABLED = "true";
-      TRANSMISSION_DOWNLOAD_QUEUE_SIZE = "20";
-      TRANSMISSION_HOME = dir;
-      TRANSMISSION_INCOMPLETE_DIR = "/Downloads";
-      TRANSMISSION_INCOMPLETE_DIR_ENABLED = "true";
-      TRANSMISSION_PEER_PORT_RANDOM_ON_START = "true";
-      TRANSMISSION_QUEUE_STALLED_ENABLED = "true";
-      TRANSMISSION_QUEUE_STALLED_MINUTES = "10";
-      TRANSMISSION_RATIO_LIMIT = "1";
-      TRANSMISSION_RATIO_LIMIT_ENABLED = "true";
-      TRANSMISSION_RPC_AUTHENTICATION_REQUIRED = "true";
-      TRANSMISSION_RPC_HOST_WHITELIST = "*.home.com,*.jiaxiaodong.com";
-      TRANSMISSION_RPC_PASSWORD = "pengu";
-      TRANSMISSION_RPC_USERNAME = "pengu";
-      TRANSMISSION_RPC_WHITELIST = "192.168.1.*,127.0.0.1";
-      TRANSMISSION_WEB_UI = "flood-for-transmission";
-    };
+        TRANSMISSION_DOWNLOAD_DIR = "/Downloaded";
+        TRANSMISSION_DOWNLOAD_QUEUE_ENABLED = "true";
+        TRANSMISSION_DOWNLOAD_QUEUE_SIZE = "20";
+        TRANSMISSION_HOME = dir;
+        TRANSMISSION_INCOMPLETE_DIR = "/Downloads";
+        TRANSMISSION_INCOMPLETE_DIR_ENABLED = "true";
+        TRANSMISSION_PEER_PORT_RANDOM_ON_START = "true";
+        TRANSMISSION_QUEUE_STALLED_ENABLED = "true";
+        TRANSMISSION_QUEUE_STALLED_MINUTES = "10";
+        TRANSMISSION_RATIO_LIMIT = "1";
+        TRANSMISSION_RATIO_LIMIT_ENABLED = "true";
+        TRANSMISSION_RPC_AUTHENTICATION_REQUIRED = "true";
+        TRANSMISSION_RPC_HOST_WHITELIST = "*.home.lan,*.jiaxiaodong.com";
+        TRANSMISSION_RPC_PASSWORD = "pengu";
+        TRANSMISSION_RPC_USERNAME = "pengu";
+        TRANSMISSION_RPC_WHITELIST = "192.168.10.*,127.0.0.1";
+        TRANSMISSION_WEB_UI = "flood-for-transmission";
+      };
   };
 
-  sops.secrets."openvpn-credentials" = {};
+  sops.secrets."openvpn-credentials" = { };
   sops.secrets."openvpn-config" = { sopsFile = ../../secrets/secrets-misc.yaml; };
-  sops.secrets."transmission-credentials" = {};
+  sops.secrets."transmission-credentials" = { };
 }

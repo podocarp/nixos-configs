@@ -42,8 +42,7 @@ in
     ]))
     stress
     sysstat
-    kube3d
-    kubectl
+    yt-dlp
   ];
 }
 

@@ -37,7 +37,7 @@
 
   fileSystems."/network/smb" =
     {
-      device = "//192.168.1.107/public";
+      device = "//obsidian/public";
       fsType = "cifs";
       options = [
         "_netdev"
@@ -74,6 +74,7 @@
   # Some hardware acceleration things.
   hardware.opengl = {
     enable = true;
+    driSupport32Bit = true;
     extraPackages = with pkgs; [
       nvidia-vaapi-driver
       vaapiVdpau
@@ -104,7 +105,10 @@
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "pengu" ];
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+  };
   virtualisation.oci-containers.backend = "docker";
 
   home-manager.users.pengu = import ../home-manager/desktop.nix;

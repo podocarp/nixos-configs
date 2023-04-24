@@ -294,34 +294,90 @@ lua require('gitsigns').setup()
 """"""Misc
 lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
 
-" "Plug 'scrooloose/nerdtree'
-"
-" nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
-" let NERDTreeShowHidden=1
-" let g:NERDTreeDirArrowExpandable = '+'
-" let g:NERDTreeDirArrowCollapsible = '-'
-" let g:NERDTreeNodeDelimiter = "\u00a0"
-"
-" nmap <leader>f :NERDTreeFind<cr>
-
+" Disable netrw
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>f :NvimTreeFindFile<CR>
+
 lua << EOF
+local function on_attach(bufnr)
+  local api = require('nvim-tree.api')
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+  local function edit_or_open()
+    local node = api.tree.get_node_under_cursor()
+
+    if node.nodes ~= nil then
+      -- expand or collapse folder
+      api.node.open.edit()
+    else
+      -- open file
+      api.node.open.edit()
+      -- Close the tree if file was opened
+      api.tree.close()
+    end
+  end
+
+  -- open as vsplit on current node
+  local function vsplit_preview()
+    local node = api.tree.get_node_under_cursor()
+
+    if node.nodes ~= nil then
+      -- expand or collapse folder
+      api.node.open.edit()
+    else
+      -- open file as vsplit
+      api.node.open.vertical()
+    end
+
+    -- Finally refocus on tree if it was lost
+    api.tree.focus()
+  end
+
+  vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts('Up'))
+  vim.keymap.set("n", "l", edit_or_open,          opts("Edit Or Open"))
+  vim.keymap.set("n", "L", vsplit_preview,        opts("Vsplit Preview"))
+  vim.keymap.set("n", "h", api.node.navigate.parent_close,        opts("Close"))
+  vim.keymap.set("n", "H", api.tree.collapse_all, opts("Collapse All"))
+
+end
+
+local HEIGHT_RATIO = 0.8  -- You can change this
+local WIDTH_RATIO = 0.5   -- You can change this too
+
 require("nvim-tree").setup({
+  on_attach=on_attach,
   view = {
-    mappings = {
-      list = {
-        { key = "u", action = "dir_up" },
-      },
+    float = {
+      enable = true,
+      open_win_config = function()
+        local screen_w = vim.opt.columns:get()
+        local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+        local window_w = screen_w * WIDTH_RATIO
+        local window_h = screen_h * HEIGHT_RATIO
+        local window_w_int = math.floor(window_w)
+        local window_h_int = math.floor(window_h)
+        local center_x = (screen_w - window_w) / 2
+        local center_y = ((vim.opt.lines:get() - window_h) / 2)
+                         - vim.opt.cmdheight:get()
+        return {
+          border = 'rounded',
+          relative = 'editor',
+          row = center_y,
+          col = center_x,
+          width = window_w_int,
+          height = window_h_int,
+        }
+        end,
     },
+    width = function()
+      return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+    end,
   },
-  git = {
-    enable = true,
-    ignore = false,
-  },
-  remove_keymaps = {"s"},
 })
 EOF
 

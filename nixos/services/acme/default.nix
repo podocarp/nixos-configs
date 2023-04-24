@@ -1,31 +1,19 @@
-{ dir, ... }:
+{ config, ... }:
 {
   security.acme = {
-    email = "xdjiaxd@gmail.com";
     acceptTerms = true;
+    defaults.email = "xdjiaxd@gmail.com";
 
-    certs = {
-      "hs.jiaxiaodong.com" = {
-        email = "xdjiaxd@gmail.com";
-        keyType = "rsa2048";
-      };
+    certs."wildcard-jiaxiaodong-com" = {
+      domain = "*.jiaxiaodong.com";
+      dnsProvider = "cloudflare";
+      credentialsFile = config.sops.secrets.acme-credentials.path;
+      dnsPropagationCheck = true;
+      enableDebugLogs = true;
     };
   };
 
-  services.httpd.virtualHosts."root"= {
-    hostName = "hs.jiaxiaodong.com";
-    documentRoot = dir;
-    enableACME = true;
-    extraConfig = ''
-      <Directory ${dir}>
-        Options FollowSymLinks
-        AllowOverride None
-        Require all granted
-      </Directory>
-    '';
+  sops.secrets.acme-credentials = {
+    owner = "acme";
   };
-
-  systemd.tmpfiles.rules = [
-    "d ${dir} 0777 acme acme"
-  ];
 }

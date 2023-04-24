@@ -26,27 +26,34 @@ in
         };
 
         # Maps a list [name, port, public] into a config that we want
-        configgen = (host: isPublic: xs:
+        configgen = (host: isPublicDomain: xs:
           let
             name = builtins.elemAt xs 0;
             port = toString (builtins.elemAt xs 1);
-            skip =
-              if isPublic
-              then !(builtins.elemAt xs 2)
-              else false;
+            openToPublic = builtins.elemAt xs 2;
+            # skip if it's a public domain and you don't want it open to public
+            skip = if isPublicDomain then !openToPublic else false;
           in
           {
             name = "${name}.${host}";
-            value = if skip then { } else {
+            value = if skip then { } else
+            {
               locations."/" = {
                 proxyPass = "http://localhost:${port}";
                 proxyWebsockets = true;
                 priority = 1000; # lower is higher
               };
-              addSSL = true;
-              sslCertificate = config.sops.secrets.tls_cert.path;
-              sslCertificateKey = config.sops.secrets.tls_key.path;
-            };
+              forceSSL = true;
+              # addSSL = true;
+            } // (
+              if isPublicDomain then {
+                enableACME = true;
+              } else {
+                enableACME = false;
+                sslCertificate = config.sops.secrets.tls_cert.path;
+                sslCertificateKey = config.sops.secrets.tls_key.path;
+              }
+            );
           }
         );
         publicHosts = builtins.listToAttrs (

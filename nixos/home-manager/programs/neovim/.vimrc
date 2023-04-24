@@ -338,6 +338,8 @@ local function on_attach(bufnr)
     api.tree.focus()
   end
 
+  api.config.mappings.default_on_attach(bufnr)
+
   vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts('Up'))
   vim.keymap.set("n", "l", edit_or_open,          opts("Edit Or Open"))
   vim.keymap.set("n", "L", vsplit_preview,        opts("Vsplit Preview"))

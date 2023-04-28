@@ -161,8 +161,8 @@ myKeys =
     ("M-f", spawn "rofi-pass"),
     ("M-p", spawn "autorandr -c"),
     ("M-o", namedScratchpadAction scratchpads "xterm"),
-    ("M-S-t", namedScratchpadAction scratchpads "telegram"),
-    ("M-S-k", namedScratchpadAction scratchpads "keepassxc"),
+    ("M-C-t", namedScratchpadAction scratchpads "telegram"),
+    ("M-C-k", namedScratchpadAction scratchpads "keepassxc"),
     ("M-<Tab>", toggleWS' ["NSP"]),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")

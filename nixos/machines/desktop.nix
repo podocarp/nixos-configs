@@ -30,9 +30,8 @@
 
   fileSystems."/shared" =
     {
-      device = "/dev/disk/by-uuid/D2A2317CA23165DF";
+      device = "/dev/disk/by-uuid/D84453A4445383E2";
       fsType = "ntfs";
-      options = [ "rw" "uid=1000" ];
     };
 
   fileSystems."/network/smb" =

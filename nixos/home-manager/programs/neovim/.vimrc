@@ -446,6 +446,9 @@ augroup END
 inoremap <C-v> <ESC>"+pa
 " dictionary completion
 inoremap <C-k> <C-x><C-x><C-k>
+" allow us to undo accidental ctrl-u
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
 
 """"""""""""""""""""""""NORMAL MODE MAPS"""""""""""""""""""
 " Sends things away without overwriting the register

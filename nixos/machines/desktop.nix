@@ -16,26 +16,29 @@
     kernelModules = [ "kvm-amd" ];
   };
 
-  fileSystems."/" =
-    {
+  sops = {
+    defaultSopsFile = ../secrets/secrets.yaml;
+    gnupg.sshKeyPaths = [ ];
+    age.keyFile = "/var/lib/sops/age/keys.txt";
+  };
+
+  fileSystems = {
+    "/" = {
       device = "/dev/disk/by-uuid/06fa2c05-663a-4b3b-9f3f-7d1627190338";
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    {
+    "/boot" = {
       device = "/dev/disk/by-uuid/1618-9A73";
       fsType = "vfat";
     };
 
-  fileSystems."/shared" =
-    {
+    "/shared" = {
       device = "/dev/disk/by-uuid/D84453A4445383E2";
       fsType = "ntfs";
     };
 
-  fileSystems."/network/smb" =
-    {
+    "/network/smb" = {
       device = "//obsidian/public";
       fsType = "cifs";
       options = [
@@ -48,23 +51,39 @@
         "x-systemd.idle-timeout=10min"
         "x-systemd.device-timeout=5s"
         "x-systemd.mount-timeout=5s"
-        "username=fileshare"
-        "password=fileshare"
         "cache=loose"
+        "credentials=${config.sops.secrets.smb-public-credentials.path}"
       ];
     };
+
+    "/network/private" = {
+      device = "//obsidian-local/private";
+      fsType = "cifs";
+      options = [
+        "_netdev"
+        "user"
+        "uid=1000"
+        "gid=100"
+        "forceuid"
+        "forcegid"
+        "x-systemd.automount"
+        "x-systemd.mount-timeout=5s"
+        "x-systemd.idle-timeout=10min"
+        "x-systemd.device-timeout=5s"
+        "x-systemd.mount-timeout=5s"
+        "cache=loose"
+        "credentials=${config.sops.secrets.smb-private-credentials.path}"
+      ];
+    };
+  };
+
+  sops.secrets.smb-public-credentials = { };
+  sops.secrets.smb-private-credentials = { };
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/d9fbd022-c7d0-4ee3-95a1-bbab0e3585f0"; }];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
-
-  sops = {
-    defaultSopsFile = ../secrets/secrets.yaml;
-    gnupg.sshKeyPaths = [ ];
-    age.keyFile = "/var/lib/sops/age/keys.txt";
-  };
-
 
   networking.hostName = "desktop"; # Define your hostname.
 

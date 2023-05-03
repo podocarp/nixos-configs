@@ -216,7 +216,7 @@ myManageHook =
             "Open Folder",
             "Picture in picture",
             "Picture-in-Picture",
-            "net-runelite-client-RuneLite",
+            "net-runelite-launcher-Launcher",
             "Volume Control",
             "dialog",
             "plasmashell",

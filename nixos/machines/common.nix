@@ -42,6 +42,10 @@
     lm_sensors
   ];
 
+  environment.variables = {
+    "NIXPKGS_ALLOW_UNFREE" = 1;
+  };
+
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
 

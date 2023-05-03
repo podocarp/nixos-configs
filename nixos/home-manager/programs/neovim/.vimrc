@@ -388,7 +388,7 @@ nnoremap <F1> :UndotreeToggle<CR>
 let g:undotree_SetFocusWhenToggle = 1
 
 "Plug 'junegunn/fzf.vim'
-nnoremap <leader>t :GFiles<CR>
+nnoremap <leader>t :GFiles --cached --others --exclude-standard<CR>
 nnoremap <leader>s :Rg<CR>
 
 "Plug 'vim-airline/vim-airline'

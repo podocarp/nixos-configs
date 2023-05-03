@@ -4,13 +4,13 @@
     autoStart = true;
     image = "stashapp/stash";
     volumes = [
-      "/tank/private/stash:/media"
+      "/tank/private/:/media"
       "/tank/local/stashapp:/root/.stash"
     ];
     ports = [ "${toString port}:${toString port}" ];
     environment = {
-      STASH_STASH= "/media/";
-      STASH_PORT=toString port;
+      STASH_STASH = "/media/";
+      STASH_PORT = toString port;
     };
   };
 }

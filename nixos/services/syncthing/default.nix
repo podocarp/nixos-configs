@@ -48,10 +48,9 @@
 
     extraOptions = {
       gui = {
+        enabled = true;
         insecureSkipHostcheck = true;
         insecureAdminAccess = false;
-        user = "syncthing";
-        password = "$2y$12$P/sRGMoWp29Q/UveX7MDkepWQoEecl5ABF3W97UVIXCtm1T1XpuZm";
       };
 
       options = {

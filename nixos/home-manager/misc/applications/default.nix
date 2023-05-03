@@ -14,10 +14,10 @@
     bind # for nslookup
     entr
     ffmpeg
+    file-rename
     gnumake
     highlight
     iftop
-    imagemagick
     inetutils # telnet
     iotop
     jq

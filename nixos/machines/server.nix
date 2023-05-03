@@ -9,6 +9,7 @@ let
   mealiePort = 6000;
   mediawikiPort = 7000;
   nixservePort = 7100;
+  stashPort = 8000;
   syncthingPort = 9000;
   transmissionPort = 10000;
   transmissionPrivPort = 10001;
@@ -22,6 +23,9 @@ in
       ((import ../containers/jellyfin) { port = jellyfinPort; })
       ((import ../containers/mediawiki) (args // {
         port = mediawikiPort;
+      }))
+      ((import ../containers/stashapp) (args // {
+        port = stashPort;
       }))
       ((import ../containers/transmission/private.nix) (args // {
         port = transmissionPrivPort;
@@ -66,6 +70,7 @@ in
           # [ "mealie" mealiePort true ]
           [ "nix-cache" nixservePort true ]
           [ "sync" syncthingPort false ]
+          [ "stash" stashPort true ]
           [ "torrents" transmissionPort false ]
           [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]

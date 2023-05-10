@@ -26,6 +26,7 @@
     lsof
     maim
     neofetch
+    nix-index
     nmap
     nomacs
     openvpn

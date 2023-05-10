@@ -6,9 +6,6 @@ in
   services.gitea = {
     enable = true;
     stateDir = "/tank/local/gitea/";
-    domain = "gitea.jiaxiaodong.com";
-    rootUrl = "https://gitea.jiaxiaodong.com";
-    httpPort = giteaPort;
 
     lfs.enable = true;
 
@@ -22,6 +19,9 @@ in
 
     settings = {
       server = {
+        ROOT_URL = "https://gitea.jiaxiaodong.com";
+        HTTP_PORT = giteaPort;
+        DOMAIN = "gitea.jiaxiaodong.com";
         START_SSH_SERVER = true;
         SSH_DOMAIN = "ssh.gitea.jiaxiaodong.com";
         LANDING_PAGE = "login";

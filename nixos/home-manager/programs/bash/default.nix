@@ -7,6 +7,7 @@
       PATH = "$PATH:~/.scripts:~/Scripts:~/go/bin";
       GPG_TTY = "$(tty)";
       SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
+      NIXPKGS_ALLOW_UNFREE = "1";
     };
     historyControl = [ "ignoredups" ];
     historyIgnore = [ "exit" "ls" "cd" "lla" "la" ];

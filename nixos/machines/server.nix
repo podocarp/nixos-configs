@@ -18,12 +18,13 @@ in
   imports =
     [
       ./common.nix
+      ./nvidia.nix
 
       ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
-      ((import ../containers/mediawiki) (args // {
-        port = mediawikiPort;
-      }))
+      # ((import ../containers/mediawiki) (args // {
+      #   port = mediawikiPort;
+      # }))
       ((import ../containers/stashapp) (args // {
         port = stashPort;
       }))

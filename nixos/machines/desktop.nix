@@ -3,6 +3,7 @@
 {
   imports = [
     ./common.nix
+    ./nvidia.nix
     ../misc/xserver.nix
   ];
 
@@ -87,27 +88,6 @@
 
   networking.hostName = "desktop"; # Define your hostname.
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  # Some hardware acceleration things.
-  hardware.opengl = {
-    enable = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      nvidia-vaapi-driver
-      vaapiVdpau
-    ];
-  };
-
-  hardware.nvidia = {
-    powerManagement.enable = true;
-  };
-
-  environment.variables = {
-    "LIBVA_DRIVER_NAME" = "vdpau";
-    "VDPAU_DRIVER" = "nvidia";
-  };
-
   systemd.services.fix_acpi_wakeup = {
     serviceConfig = {
       Type = "oneshot";
@@ -125,7 +105,6 @@
 
   virtualisation.docker = {
     enable = true;
-    enableNvidia = true;
   };
   virtualisation.oci-containers.backend = "docker";
 
@@ -133,6 +112,4 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  nixpkgs.config.cudaSupport = true;
 }

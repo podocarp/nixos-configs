@@ -19,6 +19,7 @@ in
     ./programs/fzf
     ./programs/git
     ./programs/gpg
+    ./programs/htop
     ./programs/neovim
     ((import ./programs/password-store) {
       homeDir = homeDir;

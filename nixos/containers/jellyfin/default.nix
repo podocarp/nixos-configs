@@ -13,5 +13,6 @@
     environment = {
       JELLYFIN_LOG_DIR = "/log";
     };
+    extraOptions = [ "--gpus=all,capabilities=video" "--runtime=nvidia" ];
   };
 }

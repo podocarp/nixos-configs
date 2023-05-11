@@ -112,7 +112,7 @@
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
       substituters = [
-        "https://cache.nixos.org?priority=10"
+        "https://cache.nixos.org"
         "http://nix-cache.jiaxiaodong.com?priority=20"
       ];
       trusted-public-keys = [

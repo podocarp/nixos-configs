@@ -29,9 +29,9 @@
     nix-index
     nmap
     nomacs
-    openvpn
+    # openvpn
     p7zip
-    poppler_utils
+    # poppler_utils
     reptyr
     ripgrep
     syncthing

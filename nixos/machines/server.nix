@@ -18,7 +18,7 @@ in
   imports =
     [
       ./common.nix
-      ./nvidia.nix
+      ../misc/nvidia.nix
 
       ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
@@ -217,6 +217,8 @@ in
       sandbox = "relaxed";
     };
   };
+
+  services.xserver.enable = false;
 
   services.cron = {
     enable = false;

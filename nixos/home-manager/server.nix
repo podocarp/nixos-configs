@@ -19,17 +19,12 @@ in
     ./programs/fzf
     ./programs/git
     ./programs/gpg
-    ./programs/htop
+    ((import ./programs/htop) { inherit config; })
     ./programs/neovim
-    ((import ./programs/password-store) {
-      homeDir = homeDir;
-    })
+    ((import ./programs/password-store) { inherit homeDir; })
     ./programs/readline
     ./programs/tmux
-    ((import ./programs/vifm) {
-      pkgs = pkgs;
-      myTerm = myTerm;
-    })
+    ((import ./programs/vifm) { inherit pkgs myTerm; })
 
     ./services/gpg-agent
 

@@ -1,7 +1,4 @@
 { giteaPort, giteaSshPort, postgresPort, ... }:
-let
-  pwdfilePath = "/tmp/password";
-in
 {
   services.gitea = {
     enable = true;

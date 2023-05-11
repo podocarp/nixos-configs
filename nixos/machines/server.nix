@@ -6,7 +6,9 @@ let
   jellyfinPort = 5000;
   wireguardPort = 5333;
   postgresPort = 5432;
-  mealiePort = 6000;
+  prometheusPort = 6000;
+  nodeExporterPort = 6001;
+  grafanaPort = 6110;
   mediawikiPort = 7000;
   nixservePort = 7100;
   stashPort = 8000;
@@ -39,20 +41,21 @@ in
         wireguardPort = wireguardPort;
       }))
 
+      ((import ../services/acme) args)
       ../services/fail2ban
       ((import ../services/gitea) (args // {
         inherit giteaPort giteaSshPort postgresPort;
       }))
-      (
-        (import ../services/hydra {
-          port = hydraPort;
-          dbPort = postgresPort;
-        })
-      )
-
-      ((import ../services/acme) args)
+      (import ../services/grafana { inherit config grafanaPort postgresPort; })
+      (import ../services/hydra {
+        port = hydraPort;
+        dbPort = postgresPort;
+      })
       ((import ../services/nix-serve (args // { port = nixservePort; })))
       ((import ../services/postgresql { port = postgresPort; }))
+      (import ../services/prometheus {
+        inherit prometheusPort nodeExporterPort;
+      })
       ((import ../services/openssh) args)
       ../services/samba
       ((import ../services/syncthing) (args // {
@@ -64,14 +67,14 @@ in
         portMap = [
           # format: [host port openToPublic?]
           [ "error" 65500 true ]
-          # ["firefly" fireflyPort]
           [ "gitea" giteaPort true ]
+          [ "grafana" grafanaPort false ]
           [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
-          # [ "mealie" mealiePort true ]
           [ "nix-cache" nixservePort true ]
-          [ "sync" syncthingPort false ]
+          [ "prometheus" prometheusPort false ]
           [ "stash" stashPort true ]
+          [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
           [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]

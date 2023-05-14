@@ -8,5 +8,6 @@ pkgs.mkShell {
       hp.regex-posix
     ]))
     sops
+    prometheus.cli
   ];
 }

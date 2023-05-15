@@ -26,6 +26,10 @@
       "usbhid"
       "xhci_pci"
     ];
+
+    extraModprobeConfig = ''
+      options zfs spa_slop_shift=6
+    '';
   };
 
 
@@ -112,8 +116,7 @@
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
       substituters = [
-        "https://cache.nixos.org"
-        "http://nix-cache.jiaxiaodong.com?priority=20"
+        "http://nix-cache.jiaxiaodong.com?priority=100"
       ];
       trusted-public-keys = [
         "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="

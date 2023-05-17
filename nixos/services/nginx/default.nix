@@ -15,6 +15,13 @@ in
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
     clientMaxBodySize = "5000m";
+    statusPage = true;
+
+    commonHttpConfig = ''
+      log_format custom '[$time_local] $remote_addr - $remote_user '
+      '"$request" $status $body_bytes_sent $request_time $request_length '
+      '$upstream_response_time "$http_referer"';
+    '';
 
     virtualHosts =
       let
@@ -42,6 +49,9 @@ in
                 proxyPass = "http://localhost:${port}";
                 proxyWebsockets = true;
                 priority = 1000; # lower is higher
+                extraConfig = ''
+                  access_log /var/log/nginx/access.log custom;
+                '';
               };
               forceSSL = true;
               # addSSL = true;

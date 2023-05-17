@@ -2,17 +2,27 @@ args@{ config, pkgs, lib, ... }:
 let
   giteaPort = 3001;
   giteaSshPort = 3002;
+
   hydraPort = 4000;
   jellyfinPort = 5000;
-  wireguardPort = 5333;
-  postgresPort = 5432;
-  mealiePort = 6000;
   mediawikiPort = 7000;
   nixservePort = 7100;
-  stashPort = 8000;
-  syncthingPort = 9000;
+  stashPort = 7200;
+  syncthingPort = 7300;
+  wireguardPort = 7400;
+
   transmissionPort = 10000;
   transmissionPrivPort = 10001;
+
+  postgresPort = 5432;
+
+  prometheusPort = 6000;
+  nodeExporterPort = 6001;
+  zfsExporterPort = 6002;
+  nginxExporterPort = 6003;
+  nginxLogExporterPort = 6004;
+  grafanaPort = 6100;
+  lokiPort = 6200;
 in
 {
   imports =
@@ -39,20 +49,26 @@ in
         wireguardPort = wireguardPort;
       }))
 
+      ((import ../services/acme) args)
       ../services/fail2ban
       ((import ../services/gitea) (args // {
         inherit giteaPort giteaSshPort postgresPort;
       }))
-      (
-        (import ../services/hydra {
-          port = hydraPort;
-          dbPort = postgresPort;
-        })
-      )
-
-      ((import ../services/acme) args)
+      (import ../services/hydra {
+        port = hydraPort;
+        dbPort = postgresPort;
+      })
       ((import ../services/nix-serve (args // { port = nixservePort; })))
       ((import ../services/postgresql { port = postgresPort; }))
+
+      (import ../services/prometheus {
+        inherit prometheusPort nodeExporterPort zfsExporterPort
+          nginxExporterPort nginxLogExporterPort;
+      })
+      (import ../services/grafana { inherit config grafanaPort postgresPort; })
+      (import ../services/loki { inherit lokiPort; })
+      (import ../services/promtail { inherit lokiPort; })
+
       ((import ../services/openssh) args)
       ../services/samba
       ((import ../services/syncthing) (args // {
@@ -64,14 +80,15 @@ in
         portMap = [
           # format: [host port openToPublic?]
           [ "error" 65500 true ]
-          # ["firefly" fireflyPort]
           [ "gitea" giteaPort true ]
+          [ "grafana" grafanaPort true ]
           [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
-          # [ "mealie" mealiePort true ]
+          [ "loki" lokiPort true ]
           [ "nix-cache" nixservePort true ]
-          [ "sync" syncthingPort false ]
+          [ "prometheus" prometheusPort false ]
           [ "stash" stashPort true ]
+          [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
           [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]
@@ -116,6 +133,15 @@ in
     # Internet facing
     interfaces.enp36s0 = {
       useDHCP = true;
+      ipv4.routes = [
+        {
+          address = "192.168.10.1";
+          prefixLength = 32;
+          options = {
+            dev = "enp36s0";
+          };
+        }
+      ];
     };
 
     # Local
@@ -203,18 +229,17 @@ in
   nix = {
     settings = {
       allowed-users = [
+        "*"
+      ];
+      trusted-users = [
         "@hydra"
         "@nixbld"
         "@wheel"
-        "nix-serve"
+        "@nix-serve"
         "root"
       ];
-      trusted-users = [
-        "@nixbld"
-        "@wheel"
-        "root"
-      ];
-      sandbox = "relaxed";
+      # sandbox = "relaxed";
+      substituters = [ "daemon?priority=50" ];
     };
   };
 

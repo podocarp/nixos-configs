@@ -17,10 +17,17 @@
           "DATABASE gitea" = "ALL PRIVILEGES";
         };
       }
+      {
+        name = "grafana";
+        ensurePermissions = {
+          "DATABASE grafana" = "ALL PRIVILEGES";
+        };
+      }
     ];
     ensureDatabases = [
       "hydra"
       "gitea"
+      "grafana"
     ];
     authentication = ''
       #TYPE     DATABASE      USER      ADDRESS     METHOD

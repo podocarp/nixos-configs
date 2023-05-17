@@ -73,6 +73,8 @@
       XTerm*termName: st-256color
       XTerm*trimSelection: true
       XTerm*ttyModes: erase ^?
+      XTerm*allowWindowOps: true
+      XTerm*selectToClipboard: true
     '';
 
   gtk = {

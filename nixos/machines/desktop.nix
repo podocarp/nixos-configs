@@ -3,7 +3,7 @@
 {
   imports = [
     ./common.nix
-    ./nvidia.nix
+    ../misc/nvidia.nix
     ../misc/xserver.nix
   ];
 

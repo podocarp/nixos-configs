@@ -1,8 +1,9 @@
 { prometheusPort
 , nodeExporterPort
-, zfsExporterPort
 , nginxExporterPort
 , nginxLogExporterPort
+, zfsExporterPort
+, otherScrapePorts
 , ...
 }:
 {
@@ -12,7 +13,7 @@
     exporters = {
       node = {
         enable = true;
-        enabledCollectors = [ "systemd" ];
+        enabledCollectors = [ "systemd" "processes" ];
         port = nodeExporterPort;
       };
 
@@ -50,12 +51,15 @@
       {
         job_name = "obsidian";
         static_configs = [{
-          targets = [
-            "localhost:${toString nodeExporterPort}"
-            "localhost:${toString zfsExporterPort}"
-            "localhost:${toString nginxExporterPort}"
-            "localhost:${toString nginxLogExporterPort}"
-          ];
+          targets =
+            let
+              allScrapePorts = otherScrapePorts ++ [
+                nodeExporterPort
+                nginxExporterPort
+                nginxLogExporterPort
+              ];
+            in
+            map (x: "localhost:${toString x}") allScrapePorts;
         }];
       }
       {

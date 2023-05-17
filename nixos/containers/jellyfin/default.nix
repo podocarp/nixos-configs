@@ -12,7 +12,9 @@
     ports = [ "${toString port}:8096" ];
     environment = {
       JELLYFIN_LOG_DIR = "/log";
+      NVIDIA_VISIBLE_DEVICES = "all";
+      NVIDIA_DRIVER_CAPABILITIES = "all";
     };
-    extraOptions = [ "--gpus=all,capabilities=video" "--runtime=nvidia" ];
+    extraOptions = [ "--runtime=nvidia" ];
   };
 }

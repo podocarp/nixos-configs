@@ -2,7 +2,7 @@
 {
   virtualisation.oci-containers.containers."stashapp" = {
     autoStart = true;
-    image = "stashapp/stash";
+    image = "stashapp/stash:latest";
     volumes = [
       "/tank/private/:/media"
       "/tank/local/stashapp:/root/.stash"

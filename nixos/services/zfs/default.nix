@@ -14,5 +14,9 @@
       pools = [ "tank" ];
       interval = "monthly";
     };
+    trim = {
+      enable = true;
+      interval = "weekly";
+    };
   };
 }

@@ -9,25 +9,13 @@ in
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    allowSFTP = true;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };
-    extraConfig = ''
-      Match Group sftp
-        ForceCommand internal-sftp
-        AllowTcpForwarding no
-    '';
   };
 
   users.users.pengu.openssh.authorizedKeys.keys = [
-    mykey
-    surface
-    latitudekey
-    phonekey
-  ];
-  users.users.pengu-sftp.openssh.authorizedKeys.keys = [
     mykey
     surface
     latitudekey

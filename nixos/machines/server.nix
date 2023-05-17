@@ -21,6 +21,7 @@ let
   zfsExporterPort = 6002;
   nginxExporterPort = 6003;
   nginxLogExporterPort = 6004;
+  dcgmExporterPort = 6005;
   grafanaPort = 6100;
   lokiPort = 6200;
 in
@@ -30,7 +31,8 @@ in
       ./common.nix
       ../misc/nvidia.nix
 
-      ((import ../containers/elasticsearch) { })
+      ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
+      # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
       # ((import ../containers/mediawiki) (args // {
       #   port = mediawikiPort;
@@ -62,10 +64,15 @@ in
       ((import ../services/postgresql { port = postgresPort; }))
 
       (import ../services/prometheus {
-        inherit prometheusPort nodeExporterPort zfsExporterPort
-          nginxExporterPort nginxLogExporterPort;
+        inherit prometheusPort nodeExporterPort nginxExporterPort
+          nginxLogExporterPort zfsExporterPort;
+        otherScrapePorts = [
+          dcgmExporterPort
+        ];
       })
-      (import ../services/grafana { inherit config grafanaPort postgresPort; })
+      (import ../services/grafana {
+        inherit config grafanaPort postgresPort;
+      })
       (import ../services/loki { inherit lokiPort; })
       (import ../services/promtail { inherit lokiPort; })
 
@@ -106,7 +113,9 @@ in
 
   # Use the GRUB 2 boot loader.
   boot = {
-    initrd.supportedFilesystems = [ "zfs" ];
+    initrd = {
+      supportedFilesystems = [ "zfs" ];
+    };
     kernelModules = [ "kvm-amd" ];
     supportedFilesystems = [ "zfs" ];
     zfs = {
@@ -188,17 +197,11 @@ in
     users.pengu = import ../home-manager/server.nix;
   };
 
-  # This is a public user made available to NFS and Samba
   users.users = {
     pengu = {
       extraGroups = [ config.users.groups.keys.name ];
     };
-    pengu-sftp = {
-      isNormalUser = true;
-      home = "/tank/public/sftp";
-      shell = "/run/current-system/sw/bin/nologin";
-      group = "sftp";
-    };
+    # This is a public user made available to NFS and Samba
     fileshare = {
       isSystemUser = true;
       group = "users";
@@ -207,7 +210,6 @@ in
 
   users.groups = {
     users = { gid = 100; };
-    sftp = { };
   };
 
   environment.systemPackages = with pkgs; [
@@ -288,8 +290,10 @@ in
       fsType = "vfat";
     };
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/8064cf73-931b-4c5b-8d94-16b4f9272181"; }];
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+  };
 
   system.stateVersion = "22.11";
 }

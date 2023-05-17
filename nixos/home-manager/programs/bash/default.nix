@@ -2,6 +2,7 @@
 {
   programs.bash = {
     enable = true;
+    enableCompletion = true;
     sessionVariables = {
       EDITOR = "nvim";
       PATH = "$PATH:~/.scripts:~/Scripts:~/go/bin";

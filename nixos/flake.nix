@@ -6,9 +6,11 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
+    flake-utils.url = "github:numtide/flake-utils";
+
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, sops-nix, ... }: {
+  outputs = inputs@{ nixpkgs, home-manager, sops-nix, flake-utils, ... }: {
     nixosConfigurations = {
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -39,6 +41,12 @@
           sops-nix.nixosModules.sops
         ];
       };
+    };
+
+    legacyPackages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux;
+
+    devShell.x86_64-linux = import ./shell.nix {
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
     };
   };
 }

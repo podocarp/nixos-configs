@@ -1,7 +1,6 @@
-with import <nixpkgs> { };
-
+{ pkgs }:
 pkgs.mkShell {
-  nativeBuildInputs = [
+  nativeBuildInputs = with pkgs; [
     (haskellPackages.ghcWithPackages (hp: [
       hp.xmonad
       hp.xmonad-contrib

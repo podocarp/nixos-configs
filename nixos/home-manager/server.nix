@@ -36,6 +36,7 @@ in
     (python3.withPackages (p: with p; [
       requests
     ]))
+    imagemagick # for vifm
     stress
     sysstat
     yt-dlp

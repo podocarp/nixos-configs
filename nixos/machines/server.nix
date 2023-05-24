@@ -87,6 +87,8 @@ in
         portMap = [
           # format: [host port openToPublic?]
           [ "error" 65500 true ]
+          [ "test" 7860 true ]
+
           [ "gitea" giteaPort true ]
           [ "grafana" grafanaPort true ]
           [ "hydra" hydraPort true ]
@@ -146,9 +148,6 @@ in
         {
           address = "192.168.10.1";
           prefixLength = 32;
-          options = {
-            dev = "enp36s0";
-          };
         }
       ];
     };
@@ -160,9 +159,6 @@ in
         {
           address = "192.168.10.0";
           prefixLength = 24;
-          options = {
-            dev = "enp35s0";
-          };
         }
       ];
     };

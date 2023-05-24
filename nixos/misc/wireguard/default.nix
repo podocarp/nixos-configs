@@ -7,7 +7,7 @@
   };
 
   networking.wireguard.interfaces.wg0 = {
-    ips = [ "10.0.0.1/24" ];
+    ips = [ "10.0.1.1/24" ];
     listenPort = wireguardPort;
 
     # This allows the wireguard server to route your traffic to the internet and hence be like a VPN
@@ -24,12 +24,12 @@
     peers = [
       {
         publicKey = "9eGuXZvzgd4F2FOnQd/4nNx2xXlxUzSM1BbRs0/nIy8=";
-        allowedIPs = [ "10.0.0.10/32" ];
+        allowedIPs = [ "10.0.1.10/32" ];
       }
       {
         # phone
         publicKey = "IT3dP+pfiR7PYZJBqpjQ3LiJH5edfZYeZX0wjT62uAc=";
-        allowedIPs = [ "10.0.0.15/32" ];
+        allowedIPs = [ "10.0.1.15/32" ];
       }
     ];
   };

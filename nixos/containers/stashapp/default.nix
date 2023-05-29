@@ -11,6 +11,7 @@
     environment = {
       STASH_STASH = "/media/";
       STASH_PORT = toString port;
+      STASH_EXTERNAL_HOST = "https://stash.home.lan";
     };
   };
 }

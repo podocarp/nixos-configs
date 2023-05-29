@@ -47,9 +47,9 @@ in
         port = transmissionPort;
       }))
 
-      ((import ../misc/wireguard) (args // {
-        wireguardPort = wireguardPort;
-      }))
+      # ((import ../misc/wireguard) (args // {
+      #   wireguardPort = wireguardPort;
+      # }))
 
       ((import ../services/acme) args)
       ../services/fail2ban

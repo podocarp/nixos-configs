@@ -15,6 +15,7 @@
       gitsigns-nvim
       nvim-dap
       nvim-dap-ui
+      nvim-dap-python
       nvim-tree-lua
       nvim-web-devicons
       papercolor-theme

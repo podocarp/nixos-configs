@@ -36,7 +36,6 @@ with lib;
     git
   ];
 
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -87,5 +86,45 @@ with lib;
   security.pki.certificateFiles = [
     "/opt/orbstack-guest/run/extra-certs.crt"
   ];
+
+  security.sudo = {
+    enable = true;
+    wheelNeedsPassword = false;
+  };
+
+  krb5 = {
+    enable = true;
+    libdefaults = {
+      default_realm = "BYTEDANCE.COM";
+      dns_lookup_realm = false;
+      dns_lookup_kdc = false;
+      kdc_timesync = 1;
+      ccache_type = 4;
+      forwardable = true;
+      proxiable = true;
+      ticket_lifetime = "24h";
+      renew_time = "7d";
+      rdns = false;
+      ignore_acceptor_hostname = true;
+    };
+
+    realms."BYTEDANCE.COM" = {
+      kdc = [
+        "krb5auth.byted.org"
+        "krb5auth1.byted.org"
+        "krb5auth2.byted.org"
+        "krb5auth3.byted.org"
+        "krb5auth.byted.org"
+      ];
+      master_kdc = "krb5auth.byted.org";
+      admin_server = "krb5auth.byted.org";
+      default_domain = "byted.org";
+    };
+
+    domain_realm = {
+      ".byted.org" = "BYTEDANCE.COM";
+      "byted.org" = "BYTEDANCE.COM";
+    };
+  };
 }
 

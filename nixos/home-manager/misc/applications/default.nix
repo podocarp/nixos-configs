@@ -36,6 +36,7 @@
     sysstat # iostat
     tldr
     unzip
+    unrar
     usbutils # for lsusb
     xterm
     zip

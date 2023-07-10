@@ -39,14 +39,14 @@ args@{ config, pkgs, lib, ... }:
   ];
 
   programs.bash = {
-    sessionVariables = {
-      GOPRIVATE = "*.byted.org,*.everphoto.cn,git.smartisan.com";
-    };
+    sessionVariables = { };
   };
 
   programs.go = {
     enable = true;
-    package = pkgs.go_1_18;
+    goPrivate = [
+      "*.byted.org"
+    ];
   };
 
   programs.git = {

@@ -99,7 +99,7 @@ dap.adapters.python = function(cb, config)
     })
   end
 end
-local dap = require('dap')
+
 dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap
@@ -449,6 +449,7 @@ let g:airline_theme='papercolor'
 let g:PaperColor_Theme_Options = {
     \ 'theme': {
     \   'default.light': {
+    \     'transparent_background': 0,
     \     'override' : {
     \       'color00' : ['#ffffff', '255'],
     \       'linenumber_fg' : ['#000000', '255'],
@@ -460,6 +461,7 @@ let g:PaperColor_Theme_Options = {
 \ }
 colorscheme PaperColor
 highlight CocMenuSel guibg=#13354A guifg=#ffffff gui=bold
+highlight link NvimTreeNormalFloat Normal
 
 " No line numbers in terminal (this breaks in vanilla vim)
 autocmd TermOpen * setlocal nonumber norelativenumber

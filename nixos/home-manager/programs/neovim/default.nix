@@ -72,6 +72,8 @@
       let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
     '';
 
+    extraLuaConfig = (builtins.readFile ./init.lua);
+
     coc.enable = true;
     # can override in local dir's .vim/coc-settings.json
     coc.settings = {

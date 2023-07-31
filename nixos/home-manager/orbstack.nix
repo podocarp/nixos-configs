@@ -29,6 +29,8 @@ args@{ config, pkgs, lib, ... }:
   home.packages = with pkgs; [
     gcc
     wpa_supplicant
+    poppler_utils
+    imagemagick
 
     (python3.withPackages (p: with p; [
       autopep8

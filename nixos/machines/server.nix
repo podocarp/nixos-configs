@@ -3,7 +3,8 @@ let
   giteaPort = 3001;
   giteaSshPort = 3002;
 
-  hydraPort = 4000;
+  devboxPort = 4001;
+  # hydraPort = 4000;
   jellyfinPort = 5000;
   mediawikiPort = 7000;
   nixservePort = 7100;
@@ -31,6 +32,7 @@ in
       ./common.nix
       ../misc/nvidia.nix
 
+      ((import ../containers/devbox) ({ inherit devboxPort; }))
       ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
@@ -56,10 +58,10 @@ in
       ((import ../services/gitea) (args // {
         inherit giteaPort giteaSshPort postgresPort;
       }))
-      (import ../services/hydra {
-        port = hydraPort;
-        dbPort = postgresPort;
-      })
+      # (import ../services/hydra {
+      #   port = hydraPort;
+      #   dbPort = postgresPort;
+      # })
       ((import ../services/nix-serve (args // { port = nixservePort; })))
       ((import ../services/postgresql { port = postgresPort; }))
 
@@ -87,11 +89,14 @@ in
         portMap = [
           # format: [host port openToPublic?]
           [ "error" 65500 true ]
-          [ "test" 7860 true ]
+          [ "test" 7860 false ]
+          [ "play" 7861 true ]
+
+          [ "devbox" devboxPort true ]
 
           [ "gitea" giteaPort true ]
           [ "grafana" grafanaPort true ]
-          [ "hydra" hydraPort true ]
+          # [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
           [ "loki" lokiPort true ]
           [ "nix-cache" nixservePort true ]

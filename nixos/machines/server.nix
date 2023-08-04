@@ -100,7 +100,7 @@ in
           [ "gitea" giteaPort true ]
           [ "jellyfin" jellyfinPort true ]
           [ "sync" syncthingPort false ]
-          [ "torrents" transmissionPort true ]
+          [ "torrents" transmissionPort false ]
           [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]
 

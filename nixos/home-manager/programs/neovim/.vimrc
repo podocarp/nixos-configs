@@ -47,114 +47,6 @@ let g:UltiSnipsEditSplit="vertical"
 
 "Plug 'mfussenegger/nvim-dap'
 "Plug 'rcarriga/nvim-dap-ui'
-nnoremap <silent> <F5> <Cmd>lua require'dap'.continue()<CR>
-nnoremap <silent> <F6> <Cmd>lua require'dap'.step_over()<CR>
-nnoremap <silent> <F7> <Cmd>lua require'dap'.step_into()<CR>
-nnoremap <silent> <F8> <Cmd>lua require'dap'.step_out()<CR>
-nnoremap <silent> <F12> <Cmd>lua require'dap'.terminate()<CR>
-nnoremap <silent> <Leader>dt <Cmd>lua require'dap'.toggle_breakpoint()<CR>
-nnoremap <silent> <Leader>dc <Cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
-nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
-nnoremap <silent> <Leader>dr <Cmd>lua require'dap'.repl.open()<CR>
-nnoremap <silent> <Leader>dl <Cmd>lua require'dap'.run_last()<CR>
-
-lua << EOF
-local dap = require('dap')
-vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointCondition', {	text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapLogPoint', {text='', texthl='', linehl='', numhl=''})
-
-dap.adapters.go = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = 'dlv',
-    args = {'dap', '-l', '127.0.0.1:${port}'},
-    }
-  }
-
-require('dap.ext.vscode').load_launchjs(nil, {})
-
-require("dapui").setup({
-  mappings = {
-    expand = {"<CR>", "<2-LeftMouse>"},
-    open = {"o"},
-    remove = "d",
-    edit = "e",
-    repl = "r",
-    toggle = "t",
-  },
-  layouts = {
-    {
-      elements = {
-        { id = "breakpoints", size = 0.1 },
-        { id = "scopes", size = 0.6 },
-        { id = "stacks", size = 0.15 },
-        { id = "watches", size = 0.15 },
-      },
-      size = 40,
-      position = "left",
-    },
-    {
-      elements = {
-        "repl",
-      },
-      size = 0.20,
-      position = "bottom",
-    },
-  }
-})
-local dapui = require("dapui")
-
-local debug_win = nil
-local debug_tab = nil
-local function open_in_tab()
-  if debug_win and vim.api.nvim_win_is_valid(debug_win) then
-    vim.api.nvim_set_current_win(debug_win)
-    return
-  end
-
-  vim.cmd('tabedit %')
-  debug_win = vim.fn.win_getid()
-  debug_tab = vim.api.nvim_win_get_tabpage(debug_win)
-
-  dapui.open()
-end
-
-local function close_tab()
-  dapui.close()
-
-  if debug_tab and vim.api.nvim_tabpage_is_valid(debug_tab) then
-    local debug_tabnr = vim.api.nvim_tabpage_get_number(debug_tab)
-    vim.api.nvim_exec('tabclose ' .. debug_tabnr, false)
-  end
-
-  debug_win = nil
-  debug_tab = nil
-end
-
-dap.listeners.after.event_initialized['dapui_config'] = function()
-  open_in_tab()
-end
-dap.listeners.before.event_terminated['dapui_config'] = function()
-  close_tab()
-end
-dap.listeners.before.event_exited['dapui_config'] = function()
-  close_tab()
-end
-
--- dap.listeners.after.event_initialized["dapui_config"] = function()
---   dapui.open()
--- end
--- dap.listeners.before.event_terminated["dapui_config"] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_exited["dapui_config"] = function()
---   dapui.close()
--- end
-
-EOF
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
@@ -287,101 +179,14 @@ let g:vimtex_indent_on_ampersands = 0
 
 nnoremap <leader>c :VimtexTocToggle<CR><c-w><c-h>
 
-""""""Git
-lua require('gitsigns').setup()
-
 
 """"""Misc
-lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
 
 " Disable netrw
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>f :NvimTreeFindFile<CR>
-
-lua << EOF
-local function on_attach(bufnr)
-  local api = require('nvim-tree.api')
-
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-  local function edit_or_open()
-    local node = api.tree.get_node_under_cursor()
-
-    if node.nodes ~= nil then
-      -- expand or collapse folder
-      api.node.open.edit()
-    else
-      -- open file
-      api.node.open.edit()
-      -- Close the tree if file was opened
-      api.tree.close()
-    end
-  end
-
-  -- open as vsplit on current node
-  local function vsplit_preview()
-    local node = api.tree.get_node_under_cursor()
-
-    if node.nodes ~= nil then
-      -- expand or collapse folder
-      api.node.open.edit()
-    else
-      -- open file as vsplit
-      api.node.open.vertical()
-    end
-
-    -- Finally refocus on tree if it was lost
-    api.tree.focus()
-  end
-
-  api.config.mappings.default_on_attach(bufnr)
-
-  vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts('Up'))
-  vim.keymap.set("n", "l", edit_or_open,          opts("Edit Or Open"))
-  vim.keymap.set("n", "L", vsplit_preview,        opts("Vsplit Preview"))
-  vim.keymap.set("n", "h", api.node.navigate.parent_close,        opts("Close"))
-  vim.keymap.set("n", "H", api.tree.collapse_all, opts("Collapse All"))
-
-end
-
-local HEIGHT_RATIO = 0.8  -- You can change this
-local WIDTH_RATIO = 0.5   -- You can change this too
-
-require("nvim-tree").setup({
-  on_attach=on_attach,
-  view = {
-    float = {
-      enable = true,
-      open_win_config = function()
-        local screen_w = vim.opt.columns:get()
-        local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-        local window_w = screen_w * WIDTH_RATIO
-        local window_h = screen_h * HEIGHT_RATIO
-        local window_w_int = math.floor(window_w)
-        local window_h_int = math.floor(window_h)
-        local center_x = (screen_w - window_w) / 2
-        local center_y = ((vim.opt.lines:get() - window_h) / 2)
-                         - vim.opt.cmdheight:get()
-        return {
-          border = 'rounded',
-          relative = 'editor',
-          row = center_y,
-          col = center_x,
-          width = window_w_int,
-          height = window_h_int,
-        }
-        end,
-    },
-    width = function()
-      return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
-    end,
-  },
-})
-EOF
 
 "Plug 'mbbill/undotree'
 nnoremap <F1> :UndotreeToggle<CR>
@@ -412,6 +217,7 @@ let g:airline_theme='papercolor'
 let g:PaperColor_Theme_Options = {
     \ 'theme': {
     \   'default.light': {
+    \     'transparent_background': 0,
     \     'override' : {
     \       'color00' : ['#ffffff', '255'],
     \       'linenumber_fg' : ['#000000', '255'],
@@ -423,6 +229,7 @@ let g:PaperColor_Theme_Options = {
 \ }
 colorscheme PaperColor
 highlight CocMenuSel guibg=#13354A guifg=#ffffff gui=bold
+highlight link NvimTreeNormalFloat Normal
 
 " No line numbers in terminal (this breaks in vanilla vim)
 autocmd TermOpen * setlocal nonumber norelativenumber

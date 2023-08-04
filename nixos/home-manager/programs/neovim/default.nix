@@ -15,6 +15,8 @@
       gitsigns-nvim
       nvim-dap
       nvim-dap-ui
+      nvim-dap-python
+      nvim-dap-go
       nvim-tree-lua
       nvim-web-devicons
       papercolor-theme
@@ -69,6 +71,8 @@
     extraConfig = (builtins.readFile ./.vimrc) + ''
       let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
     '';
+
+    extraLuaConfig = (builtins.readFile ./init.lua);
 
     coc.enable = true;
     # can override in local dir's .vim/coc-settings.json

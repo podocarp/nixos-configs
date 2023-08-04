@@ -31,11 +31,11 @@
         ];
       };
 
-      work = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      orbstack = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = inputs;
         modules = [
-          ./machines/work-laptop.nix
+          ./machines/orbstack.nix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
         ];
@@ -46,6 +46,9 @@
 
     devShell.x86_64-linux = import ./shell.nix {
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    };
+    devShell.aarch64-linux = import ./shell.nix {
+      pkgs = nixpkgs.legacyPackages.aarch64-linux;
     };
   };
 }

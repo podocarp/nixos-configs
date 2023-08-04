@@ -7,7 +7,8 @@ in
 {
   imports = [
     ((import ../../services/network-bridge/default.nix) {
-      name = "firefly-net"; pkgs = pkgs;
+      name = "firefly-net";
+      pkgs = pkgs;
     })
   ];
 
@@ -50,6 +51,6 @@ in
     extraOptions = [ "--network=firefly-net" "--name=mysql" ];
   };
 
-  sops.secrets."fireflydb-password" = {};
-  sops.secrets."fireflydb-appkey" = {};
+  sops.secrets."fireflydb-password" = { };
+  sops.secrets."fireflydb-appkey" = { };
 }

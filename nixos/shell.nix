@@ -10,4 +10,6 @@ pkgs.mkShell {
     prometheus.cli
     wireguard-tools
   ];
+  shellHook = ''
+  '';
 }

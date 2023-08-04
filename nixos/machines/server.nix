@@ -4,11 +4,14 @@ let
   giteaSshPort = 3002;
 
   devboxPort = 4001;
+  devboxSSHPort = 4002;
+  testPort = 7860;
+  test2Port = 7861;
+
   # hydraPort = 4000;
   jellyfinPort = 5000;
   mediawikiPort = 7000;
-  nixservePort = 7100;
-  stashPort = 7200;
+  # nixservePort = 7100;
   syncthingPort = 7300;
   wireguardPort = 7400;
 
@@ -25,6 +28,9 @@ let
   dcgmExporterPort = 6005;
   grafanaPort = 6100;
   lokiPort = 6200;
+
+  minioPort = 6450;
+  minioUIPort = 6451;
 in
 {
   imports =
@@ -32,16 +38,15 @@ in
       ./common.nix
       ../misc/nvidia.nix
 
-      ((import ../containers/devbox) ({ inherit devboxPort; }))
+      ((import ../containers/devbox) (args // {
+        inherit devboxPort testPort;
+      }))
       ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
       # ((import ../containers/mediawiki) (args // {
       #   port = mediawikiPort;
       # }))
-      ((import ../containers/stashapp) (args // {
-        port = stashPort;
-      }))
       ((import ../containers/transmission/private.nix) (args // {
         port = transmissionPrivPort;
       }))
@@ -62,7 +67,7 @@ in
       #   port = hydraPort;
       #   dbPort = postgresPort;
       # })
-      ((import ../services/nix-serve (args // { port = nixservePort; })))
+      ((import ../services/minio) (args // { inherit minioPort minioUIPort; }))
       ((import ../services/postgresql { port = postgresPort; }))
 
       (import ../services/prometheus {
@@ -88,24 +93,23 @@ in
       ((import ../services/nginx) (args // {
         portMap = [
           # format: [host port openToPublic?]
-          [ "error" 65500 true ]
-          [ "test" 7860 false ]
-          [ "play" 7861 true ]
-
+          [ "test" testPort false ]
+          [ "test2" test2Port false ]
           [ "devbox" devboxPort true ]
 
           [ "gitea" giteaPort true ]
-          [ "grafana" grafanaPort true ]
-          # [ "hydra" hydraPort true ]
           [ "jellyfin" jellyfinPort true ]
-          [ "loki" lokiPort true ]
-          [ "nix-cache" nixservePort true ]
-          [ "prometheus" prometheusPort false ]
-          [ "stash" stashPort true ]
           [ "sync" syncthingPort false ]
-          [ "torrents" transmissionPort false ]
+          [ "torrents" transmissionPort true ]
           [ "transmission" transmissionPrivPort false ]
           [ "wiki" mediawikiPort true ]
+
+          [ "grafana" grafanaPort true ]
+          [ "loki" lokiPort false ]
+          [ "prometheus" prometheusPort false ]
+
+          [ "minio" minioUIPort false ]
+          [ "s3" minioPort true ]
         ];
       }))
     ];

@@ -26,9 +26,9 @@ in
     virtualHosts =
       let
         customConfigs = {
-          "*.jiaxiaodong.com".locations."/" = {
+          "error.jiaxiaodong.com".locations."/" = {
             return = "404";
-            priority = 10000;
+            priority = 1;
           };
         };
 

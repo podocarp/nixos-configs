@@ -49,15 +49,18 @@ in
     ];
 
   home.packages = with pkgs; [
+    cudatoolkit
     ddcutil
+    godot
     handbrake
+    imagemagick
     inkscape
     jellyfin-media-player
     keepassxc
     libreoffice-fresh
+    poppler_utils
     runelite
     tdesktop
-    cudatoolkit
 
     (python311.withPackages (p: with p; [
       pygments

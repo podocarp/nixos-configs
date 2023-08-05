@@ -16,13 +16,6 @@ with lib;
   networking.hostName = "nixos";
   networking.interfaces.eth0.useDHCP = true;
 
-  time.timeZone = "Asia/Singapore";
-  i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
-
   users.users.bytedance = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];

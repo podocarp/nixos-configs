@@ -9,6 +9,7 @@
       GPG_TTY = "$(tty)";
       SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
       NIXPKGS_ALLOW_UNFREE = "1";
+      NIXPKGS_ALLOW_INSECURE = "1";
     };
     historyControl = [ "ignoredups" ];
     historyIgnore = [ "exit" "ls" "cd" "lla" "la" ];
@@ -25,9 +26,11 @@
     initExtra = ''
       stty -ixon
       set -o vi
-      HISTCONTROL=ignoreboth
 
+      HISTCONTROL=ignoreboth
       PS1="\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\] "
+
+      bind 'TAB: menu-complete'
     '';
   };
 }

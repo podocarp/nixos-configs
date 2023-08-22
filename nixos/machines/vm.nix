@@ -20,9 +20,6 @@
 
   networking.hostName = "vm"; # Define your hostname.
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_SG.utf8";
-
   home-manager.users.pengu = import ../home-manager/vm.nix;
 
   users.users.pengu = {

@@ -6,7 +6,6 @@
       timeout = 5;
       grub = {
         enable = true;
-        version = 2;
         gfxmodeEfi = "640x480";
         gfxmodeBios = "640x480";
         configurationLimit = 5;
@@ -32,19 +31,30 @@
     '';
   };
 
+  i18n.defaultLocale = "en_SG.UTF-8";
+  i18n.extraLocaleSettings = {
+    LANGUAGE = "en_SG.UTF-8";
+    LC_ALL = "en_SG.UTF-8";
+  };
+
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
 
   # Packages we want system-wide. Git is essential to obtain this repo before
   # installing home-manager. The others are optional.
-  environment.systemPackages = with pkgs; [
-    git
-    pciutils # for lspci
-    sof-firmware # some audio devices need this
-    tmux
-    vim
-    wget
-    hdparm
-    lm_sensors
-  ];
+  environment.systemPackages = with pkgs;
+    [
+      git
+      pciutils # for lspci
+      sof-firmware # some audio devices need this
+      tmux
+      vim
+      wget
+      hdparm
+      lm_sensors
+    ];
 
   # Set your time zone.
   time.timeZone = "Asia/Singapore";

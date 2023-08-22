@@ -40,7 +40,6 @@ in
     stress
     sysstat
     yt-dlp
-    nodejs-16_x
   ];
 }
 

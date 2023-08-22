@@ -8,5 +8,8 @@ pkgs.mkShell {
     ]))
     sops
     prometheus.cli
+    wireguard-tools
   ];
+  shellHook = ''
+  '';
 }

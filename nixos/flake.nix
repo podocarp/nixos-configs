@@ -7,7 +7,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
     flake-utils.url = "github:numtide/flake-utils";
-
   };
 
   outputs = inputs@{ nixpkgs, home-manager, sops-nix, flake-utils, ... }: {

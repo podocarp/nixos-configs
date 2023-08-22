@@ -8,6 +8,7 @@
       coc-json
       coc-nvim
       coc-pyright
+      coc-sh
       coc-snippets
       coc-tsserver
       coc-vimtex
@@ -30,7 +31,6 @@
       vim-obsession
       vim-sleuth
       vim-surround
-      vimwiki
       vimtex
 
       (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: [

@@ -7,7 +7,6 @@
       EDITOR = "nvim";
       PATH = "$PATH:~/.scripts:~/Scripts:~/go/bin";
       GPG_TTY = "$(tty)";
-      SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
       NIXPKGS_ALLOW_UNFREE = "1";
       NIXPKGS_ALLOW_INSECURE = "1";
     };
@@ -26,6 +25,10 @@
     initExtra = ''
       stty -ixon
       set -o vi
+
+      if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+        export SSH_AUTH_SOCK="$HOME/.gnupg/S.gpg-agent.ssh"
+      fi
 
       HISTCONTROL=ignoreboth
       PS1="\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\] "

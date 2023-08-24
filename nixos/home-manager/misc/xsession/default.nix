@@ -15,6 +15,7 @@
   home.packages = with pkgs;
     [
       xclip
+      xdotool # for synctex
       xorg.xev
       xorg.xkill
       xorg.xprop

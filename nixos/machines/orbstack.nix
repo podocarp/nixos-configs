@@ -30,8 +30,6 @@ args@{ modulesPath, config, pkgs, lib, ... }:
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
 
-  environment.noXlibs = false;
-
   environment.shellInit = ''
     . /opt/orbstack-guest/etc/profile-early
     # add your customizations here

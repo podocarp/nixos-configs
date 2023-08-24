@@ -11,8 +11,7 @@
     keyMap = "us";
   };
 
-  # Packages we want system-wide. Git is essential to obtain this repo before
-  # installing home-manager. The others are optional.
+  # Packages we want system-wide.
   environment.systemPackages = with pkgs;
     [
       git

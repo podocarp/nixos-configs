@@ -55,7 +55,6 @@
       ripgrep # for cocsearch
       rnix-lsp
       watchman # for coc
-      xdotool # for synctex
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.

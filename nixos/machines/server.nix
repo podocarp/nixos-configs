@@ -35,7 +35,8 @@ in
 {
   imports =
     [
-      ./common.nix
+      ./common/boot.nix
+      ./common/common.nix
       ../misc/nvidia.nix
 
       ((import ../containers/devbox) (args // {

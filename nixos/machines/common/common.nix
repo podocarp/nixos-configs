@@ -1,36 +1,5 @@
-{ config, pkgs, libs, ... }:
-
+{ config, pkgs, ... }:
 {
-  boot = {
-    loader = {
-      timeout = 5;
-      grub = {
-        enable = true;
-        gfxmodeEfi = "640x480";
-        gfxmodeBios = "640x480";
-        configurationLimit = 5;
-      };
-    };
-
-    kernel.sysctl = {
-      "kernel.nmi_watchdog" = 0;
-      "vm.dirty_writeback_centisecs" = 6000;
-    };
-
-    initrd.kernelModules = [
-      "ahci"
-      "nvme"
-      "sd_mod"
-      "usb_storage"
-      "usbhid"
-      "xhci_pci"
-    ];
-
-    extraModprobeConfig = ''
-      options zfs spa_slop_shift=6
-    '';
-  };
-
   i18n.defaultLocale = "en_SG.UTF-8";
   i18n.extraLocaleSettings = {
     LANGUAGE = "en_SG.UTF-8";
@@ -74,6 +43,14 @@
   };
 
   powerManagement.cpuFreqGovernor = "schedutil";
+
+  documentation = {
+    enable = true;
+    man.enable = true;
+    nixos.enable = true;
+    doc.enable = true;
+    dev.enable = true;
+  };
 
   # Add a user that can sudo.
   users.users.pengu = {
@@ -125,22 +102,6 @@
     settings = {
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
-      substituters = [
-        "http://nix-cache.jiaxiaodong.com?priority=100"
-      ];
-      trusted-public-keys = [
-        "nix-cache.jiaxiaodong.com:bsab+bLnjqrpcTZUk9c8runIntQhoa1dE2sggCQ+nlE="
-      ];
     };
-
-    extraOptions = ''
-      !include ${config.sops.secrets.nix-access-tokens.path}
-    '';
   };
-
-  sops.secrets.nix-access-tokens = {
-    sopsFile = ../secrets/secrets.yaml;
-  };
-
-  system.stateVersion = "22.11";
 }

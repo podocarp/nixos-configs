@@ -32,6 +32,8 @@ in
     ./scripts
   ];
 
+  programs.man.enable = false;
+
   home.packages = with pkgs; [
     (python3.withPackages (p: with p; [
       requests

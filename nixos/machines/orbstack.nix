@@ -2,15 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ modulesPath, config, pkgs, lib, ... }:
-
-with lib;
+args@{ modulesPath, config, pkgs, lib, ... }:
 
 {
   imports =
     [
       # Include the default lxd configuration.
       "${modulesPath}/virtualisation/lxc-container.nix"
+      ((import ./common/common.nix) args)
     ];
 
   networking.hostName = "nixos";
@@ -20,14 +19,8 @@ with lib;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
   };
-  home-manager.users.bytedance = import ../home-manager/orbstack.nix;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-  ];
+  home-manager.users.bytedance = import ../home-manager/orbstack.nix;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -37,23 +30,19 @@ with lib;
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
 
-  # As this is intended as a standalone image, undo some of the minimal profile stuff
-  documentation.enable = true;
-  documentation.nixos.enable = true;
   environment.noXlibs = false;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.shellInit = ''
     . /opt/orbstack-guest/etc/profile-early
-
     # add your customizations here
-
     . /opt/orbstack-guest/etc/profile-late
   '';
+
   networking.dhcpcd.extraConfig = ''
     noarp
     noipv6
   '';
+
   systemd.services."systemd-oomd".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-resolved".serviceConfig.WatchdogSec = 0;
   systemd.services."systemd-userdbd".serviceConfig.WatchdogSec = 0;

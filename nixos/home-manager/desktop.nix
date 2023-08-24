@@ -66,4 +66,6 @@ in
       pygments
     ]))
   ];
+
+  programs.man.enable = false;
 }

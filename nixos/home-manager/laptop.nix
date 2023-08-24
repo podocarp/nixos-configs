@@ -52,5 +52,7 @@ in
     wpa_supplicant
   ];
 
+  programs.man.enable = false;
+
   xresources.extraConfig = "XTerm*faceSize: 11";
 }

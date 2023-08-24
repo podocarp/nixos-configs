@@ -16,7 +16,6 @@ args@{ config, pkgs, lib, ... }:
       ./programs/lazygit
       ./programs/readline
       ./programs/tmux
-      ./programs/vscode
       ((import ./programs/vifm) (args // { myTerm = "xterm"; }))
 
       ./services/gpg-agent
@@ -39,6 +38,8 @@ args@{ config, pkgs, lib, ... }:
       requests
     ]))
   ];
+
+  programs.man.enable = false;
 
   programs.bash = {
     sessionVariables = { };

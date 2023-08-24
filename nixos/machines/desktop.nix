@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ./common.nix
+    ./common/boot.nix
+    ./common/common.nix
     ../misc/nvidia.nix
     ../misc/xserver.nix
   ];
@@ -78,11 +79,11 @@
     };
   };
 
-  sops.secrets.smb-public-credentials = { };
-  sops.secrets.smb-private-credentials = { };
-
   swapDevices =
     [{ device = "/dev/disk/by-uuid/d9fbd022-c7d0-4ee3-95a1-bbab0e3585f0"; }];
+
+  sops.secrets.smb-public-credentials = { };
+  sops.secrets.smb-private-credentials = { };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
 
@@ -112,4 +113,6 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
+
+  system.stateVersion = "22.11";
 }

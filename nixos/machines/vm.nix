@@ -4,7 +4,8 @@
   imports =
     [
       <home-manager/nixos>
-      ./common.nix
+      ./common/boot.nix
+      ./common/common.nix
       ../misc/xserver.nix
     ];
 

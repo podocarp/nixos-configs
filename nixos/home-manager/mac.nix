@@ -18,6 +18,7 @@ in
 
       ./programs/bash
       ./programs/direnv
+      ./programs/fzf
       ./programs/git
       ./programs/mpv
       ./programs/neovim
@@ -56,7 +57,70 @@ in
     zip
   ];
 
+  programs.man.enable = false;
+
+  programs.bash = {
+    sessionVariables = {
+      CLICOLOR = "1";
+      LSCOLORS = "Exfxcxdxbxegedabagacad";
+    };
+    initExtra = ''
+      [ -f "$HOME/.bytebm/config/config.sh" ] && . "$HOME/.bytebm/config/config.sh"
+    '';
+  };
+
+  programs.go = {
+    enable = true;
+    goPrivate = [
+      "*.byted.org"
+    ];
+  };
+
+  programs.git = {
+    userName = lib.mkForce "xiaodong.jia";
+    userEmail = lib.mkForce "xiaodong.jia@bytedance.com";
+    extraConfig = {
+      url = {
+        "ssh://xiaodong.jia@git.byted.org:29418" = {
+          insteadOf = [
+            "https://git.byted.org"
+            "https://review.byted.org"
+          ];
+        };
+        "git@code.byted.org:" = {
+          insteadOf = "https://code.byted.org";
+        };
+      };
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      Host *
+          GSSAPIAuthentication yes
+          GSSAPIDelegateCredentials no
+          HostKeyAlgorithms +ssh-rsa
+          PubkeyAcceptedKeyTypes +ssh-rsa
+          PubkeyAcceptedAlgorithms +ssh-rsa
+      Host git.byted.org
+          Hostname git.byted.org
+          Port 29418
+          User xiaodong.jia
+      Host review.byted.org
+          Hostname git.byted.org
+          Port 29418
+          User xiaodong.jia
+      Host *.byted.org
+          GSSAPIAuthentication yes
+          User xiaodong.jia
+      Host devbox
+          HostName 10.37.83.176
+          User xiaodong.jia
+          GSSAPIAuthentication yes
+    '';
+  };
+
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = true;
-  programs.man.enable = false;
 }

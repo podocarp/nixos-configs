@@ -20,6 +20,7 @@
       la = "ls -a";
       lla = "ls -la";
       t = "tmux -u";
+      vim = "nvim";
       v = "nvim -S";
       # The trailing space makes the shell try alias expansion on the next word
       sudo = "sudo ";

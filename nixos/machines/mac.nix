@@ -1,8 +1,5 @@
 { config, pkgs, lib, ... }:
 {
-  imports = [
-  ];
-
   users.users.bytedance = {
     home = "/Users/bytedance";
   };
@@ -11,6 +8,10 @@
 
   environment.systemPackages = with pkgs; [
   ];
+
+  environment.variables = {
+    LC_ALL = "en_SG.UTF-8";
+  };
 
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
@@ -112,5 +113,11 @@
       alt - t : yabai -m window --toggle float;\
                 yabai -m window --grid 4:4:1:1:2:2
     '';
+  };
+
+  nix = {
+    settings = {
+      experimental-features = [ "flakes" "nix-command" ];
+    };
   };
 }

@@ -54,6 +54,7 @@
       haskellPackages.hlint
       ripgrep # for cocsearch
       rnix-lsp
+      tree-sitter
       watchman # for coc
     ];
 

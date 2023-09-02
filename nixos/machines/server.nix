@@ -39,9 +39,9 @@ in
       ./common/common.nix
       ../misc/nvidia.nix
 
-      # ((import ../containers/devbox) (args // {
-      #   inherit devboxPort testPort;
-      # }))
+      ((import ../containers/devbox) (args // {
+        inherit devboxPort testPort;
+      }))
       ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })

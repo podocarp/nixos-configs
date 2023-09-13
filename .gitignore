@@ -3,5 +3,5 @@ wireless.nix
 configuration.nix
 tinode.conf
 wireless.nix
-*.vim
+Session.vim
 .direnv/

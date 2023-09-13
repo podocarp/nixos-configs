@@ -114,10 +114,29 @@ in
       Host *.byted.org
           GSSAPIAuthentication yes
           User xiaodong.jia
-      Host devbox
+
+      Host jump-proxy-sg
+          HostName jump-proxy-sg.byted.org
+      Host jump-proxy-us
+          HostName jump-us.itbyted.org
+
+      Host devbox-cn
           HostName 10.37.83.176
           User xiaodong.jia
           GSSAPIAuthentication yes
+      Host devbox-us
+          HostName 10.36.183.242
+          User xiaodong.jia
+          GSSAPIAuthentication yes
+
+      Host devbox-ads-sg
+          HostName 10.244.53.109
+          User xiaodong.jia
+          ProxyCommand ssh -qW %h:%p jump-proxy-sg
+      Host devbox-ads-us
+          HostName 10.190.149.154
+          User xiaodong.jia
+          ProxyCommand ssh -qW %h:%p jump-proxy-us
     '';
   };
 

@@ -34,10 +34,13 @@
       vimtex
 
       (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: [
+        plugins.tree-sitter-c
         plugins.tree-sitter-go
-        plugins.tree-sitter-vim
+        plugins.tree-sitter-lua
         plugins.tree-sitter-nix
+        plugins.tree-sitter-vim
       ]))
+      nvim-treesitter-textobjects
     ];
 
     extraPython3Packages = p: with p; [
@@ -66,13 +69,6 @@
     withNodeJs = true;
     withPython3 = true;
     withRuby = true;
-
-    # Unfortunately having the snippets file RO is too troublesome.
-    extraConfig = (builtins.readFile ./.vimrc) + ''
-      let g:UltiSnipsSnippetDirectories=['${toString ./ultisnips}']
-    '';
-
-    extraLuaConfig = (builtins.readFile ./init.lua);
 
     coc.enable = true;
     # can override in local dir's .vim/coc-settings.json
@@ -127,11 +123,16 @@
           "filetypes" = [ "nix" ];
         };
       };
-      "snippets.ultisnips.enable" = false;
+      "snippets.ultisnips.enable" = true;
     };
   };
 
   home.packages = [ pkgs.neovim-remote ];
+
+  xdg.configFile.nvim = {
+    source = ./configs;
+    recursive = true;
+  };
 
   # Used for a snippet.
   xdg.configFile.inkscapeTemplate = {
@@ -145,3 +146,4 @@
   # custom tex conceal
   # xdg.configFile."nvim/after/syntax/tex.vim".source = ./syntax/tex.vim;
 }
+

@@ -21,6 +21,7 @@
       s = "status";
       unstage = "reset HEAD --";
     };
+
     extraConfig = {
       pull.rebase = false;
       init.defaultBranch = "master";
@@ -30,6 +31,33 @@
         prompt = false;
         conflictstyle = "diff3";
       };
+      color = {
+        ui = true;
+        diff = {
+          meta = "black bold";
+          commit = "green";
+          frag = "magenta";
+          func = "cyan";
+          old = "red";
+          new = "green";
+          whitespace = "red reverse";
+        };
+        diff-highlight = {
+          oldNormal = "red";
+          oldHighlight = "red bold 52";
+          newNormal = "green";
+          newHighlight = "green bold 22";
+        };
+        branch = {
+          current = "yellow reverse";
+          local = "yellow";
+          remote = "green";
+        };
+      };
+    };
+
+    diff-so-fancy = {
+      enable = true;
     };
   };
 }

@@ -241,6 +241,9 @@ require("nvim-tree").setup({
 })
 
 require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+  },
   textobjects = {
     select = {
       enable = true,
@@ -286,7 +289,7 @@ require'nvim-treesitter.configs'.setup {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
-        ["]m"] = "@function.outer",
+        ["]f"] = "@function.outer",
         ["]]"] = { query = "@class.outer", desc = "Next class start" },
         --
         -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
@@ -298,15 +301,15 @@ require'nvim-treesitter.configs'.setup {
         ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
       },
       goto_next_end = {
-        ["]M"] = "@function.outer",
+        ["]F"] = "@function.outer",
         ["]["] = "@class.outer",
       },
       goto_previous_start = {
-        ["[m"] = "@function.outer",
+        ["[f"] = "@function.outer",
         ["[["] = "@class.outer",
       },
       goto_previous_end = {
-        ["[M"] = "@function.outer",
+        ["[F"] = "@function.outer",
         ["[]"] = "@class.outer",
       },
       -- Below will go to either the start or the end, whichever is closer.

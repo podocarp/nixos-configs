@@ -5,6 +5,7 @@
     enable = true;
     plugins = with pkgs.vimPlugins; [
       coc-css
+      coc-go
       coc-json
       coc-nvim
       coc-pyright
@@ -96,6 +97,12 @@
           "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces" = true;
         };
       };
+      "go" = {
+        "goplsOptions" = {
+          templateExtensions = [ "go.tmpl" "tmpl" ];
+        };
+        "goplsPath" = "${pkgs.gopls}/bin/gopls";
+      };
       "tsserver.useLocalTsdk" = true;
       "languageserver" = {
         "haskell" = {
@@ -109,14 +116,6 @@
             "hie.yaml"
           ];
           "filetypes" = [ "haskell" "lhaskell" ];
-        };
-        "golang" = {
-          "command" = "gopls";
-          "rootPatterns" = [ "go.mod" ];
-          "filetypes" = [ "go" ];
-          "initializationOptions" = {
-            "usePlaceholders" = true;
-          };
         };
         "nix" = {
           "command" = "rnix-lsp";

@@ -68,14 +68,32 @@
 
       legacyPackages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux;
 
-      devShell.x86_64-linux = import ./shell.nix {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      };
-      devShell.aarch64-linux = import ./shell.nix {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
-      };
-      devShell.aarch64-darwin = import ./shell.nix {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-      };
+      devShell =
+        let
+          shell = { pkgs }: pkgs.mkShell {
+            nativeBuildInputs = with pkgs; [
+              # (haskellPackages.ghcWithPackages (hp: [
+              #   hp.xmonad
+              #   hp.xmonad-contrib
+              #   hp.regex-posix
+              # ]))
+              sops
+              prometheus.cli
+              wireguard-tools
+            ];
+            shellHook = '' '';
+          };
+        in
+        {
+          x86_64-linux = shell {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          };
+          aarch64-linux = shell {
+            pkgs = nixpkgs.legacyPackages.aarch64-linux;
+          };
+          aarch64-darwin = shell {
+            pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+          };
+        };
     };
 }

@@ -51,7 +51,7 @@ in
   home.packages = with pkgs; [
     cudatoolkit
     ddcutil
-    godot
+    godot_4
     handbrake
     imagemagick
     inkscape

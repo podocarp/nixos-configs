@@ -76,6 +76,12 @@ in
       publicHosts // privateHosts // customConfigs;
   };
 
-  sops.secrets.tls_cert.owner = nginxUsername;
-  sops.secrets.tls_key.owner = nginxUsername;
+  sops.secrets.tls_cert = {
+    owner = nginxUsername;
+    sopsFile = ../../secrets/secrets-certs.yaml;
+  };
+  sops.secrets.tls_key = {
+    owner = nginxUsername;
+    sopsFile = ../../secrets/secrets-certs.yaml;
+  };
 }

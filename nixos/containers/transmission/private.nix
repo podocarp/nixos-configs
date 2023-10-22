@@ -47,6 +47,6 @@ in
   };
 
   sops.secrets."openvpn-credentials" = { };
-  sops.secrets."openvpn-config" = { sopsFile = ../../secrets/secrets-misc.yaml; };
+  sops.secrets."openvpn-config" = { sopsFile = ../../secrets/secrets-certs.yaml; };
   sops.secrets."transmission-credentials" = { };
 }

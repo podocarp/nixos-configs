@@ -19,6 +19,11 @@
       runUsingSystemd = false;
     };
 
+    # stops tearing?
+    screenSection = ''
+      Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
+    '';
+
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager = {
       session = [

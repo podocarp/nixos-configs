@@ -79,6 +79,10 @@
     };
   };
 
+  security.pki.certificateFiles = [
+    config.sops.secrets.tls_cert.path
+  ];
+
   # Kills hanging services faster.
   systemd.extraConfig = ''
     DefaultTimeoutStopSec=30s
@@ -102,5 +106,9 @@
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
     };
+  };
+
+  sops.secrets.tls_cert = {
+    sopsFile = ../../secrets/secrets-certs.yaml;
   };
 }

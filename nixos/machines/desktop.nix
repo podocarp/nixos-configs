@@ -38,6 +38,7 @@
     "/shared" = {
       device = "/dev/disk/by-uuid/D84453A4445383E2";
       fsType = "ntfs";
+      options = [ "rw" "uid=${toString config.users.users.pengu.uid}" ];
     };
 
     "/network/smb" = {

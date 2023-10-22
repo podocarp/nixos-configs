@@ -102,6 +102,12 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
+" line text object
+xnoremap il g_o^
+onoremap il :normal vil<CR>
+xnoremap al $o0
+onoremap al :normal val<CR>
+
 imap <C-j> <Plug>(coc-snippets-expand-jump)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.

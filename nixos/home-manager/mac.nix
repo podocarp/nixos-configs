@@ -49,6 +49,11 @@ in
     nmap
     nomacs
     p7zip
+    (python3.withPackages (p: with p; [
+      requests
+      flake8
+      autopep8
+    ]))
     ripgrep
     syncthing
     tldr
@@ -63,6 +68,9 @@ in
     sessionVariables = {
       CLICOLOR = "1";
       LSCOLORS = "Exfxcxdxbxegedabagacad";
+    };
+    shellAliases = {
+      bs = "byteshell --idc i18n --pod";
     };
     initExtra = ''
       [ -f "$HOME/.bytebm/config/config.sh" ] && . "$HOME/.bytebm/config/config.sh"

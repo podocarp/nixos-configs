@@ -42,12 +42,9 @@ in
       ((import ../containers/devbox) (args // {
         inherit devboxPort testPort;
       }))
-      ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
-      # ((import ../containers/mediawiki) (args // {
-      #   port = mediawikiPort;
-      # }))
+
       ((import ../containers/transmission/private.nix) (args // {
         port = transmissionPrivPort;
       }))
@@ -55,22 +52,16 @@ in
         port = transmissionPort;
       }))
 
-      # ((import ../misc/wireguard) (args // {
-      #   wireguardPort = wireguardPort;
-      # }))
-
       ((import ../services/acme) args)
       ../services/fail2ban
       ((import ../services/gitea) (args // {
         inherit giteaPort giteaSshPort postgresPort;
       }))
-      # (import ../services/hydra {
-      #   port = hydraPort;
-      #   dbPort = postgresPort;
-      # })
-      ((import ../services/minio) (args // { inherit minioPort minioUIPort; }))
+
+      # ((import ../services/minio) (args // { inherit minioPort minioUIPort; }))
       ((import ../services/postgresql { port = postgresPort; }))
 
+      ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       (import ../services/prometheus {
         inherit prometheusPort nodeExporterPort nginxExporterPort
           nginxLogExporterPort zfsExporterPort;

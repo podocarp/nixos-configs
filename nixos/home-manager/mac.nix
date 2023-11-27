@@ -12,10 +12,6 @@ in
 
   imports =
     [
-      ((import ./programs/password-store) {
-        homeDir = homeDir;
-      })
-
       ./programs/bash
       ./programs/direnv
       ./programs/fzf
@@ -44,6 +40,7 @@ in
     iftop
     inetutils # telnet
     jq
+    keepassxc
     lsof
     nix-index
     nmap
@@ -74,6 +71,7 @@ in
     };
     initExtra = ''
       [ -f "$HOME/.bytebm/config/config.sh" ] && . "$HOME/.bytebm/config/config.sh"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
     '';
   };
 

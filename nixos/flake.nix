@@ -78,7 +78,6 @@
               #   hp.regex-posix
               # ]))
               sops
-              prometheus.cli
               wireguard-tools
             ];
             shellHook = '' '';

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   users.users.bytedance = {
     home = "/Users/bytedance";
@@ -21,6 +21,12 @@
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
+    package = pkgs.yabai.overrideAttrs {
+      src = pkgs.fetchzip {
+        url = "https://github.com/koekeishiya/yabai/releases/download/v6.0.1/yabai-v6.0.1.tar.gz";
+        sha256 = "sha256-CXkGVoJcGSkooxe7eIhwaM6FkOI45NVw5jdLJAzgFBM=";
+      };
+    };
     config = {
       focus_follows_mouse = "autofocus";
       active_window_border_color = "0xffff0000";
@@ -33,6 +39,10 @@
       mouse_drop_action = "swap";
       layout = "bsp";
     };
+    extraConfig = ''
+      yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+      sudo yabai --load-sa
+    '';
   };
 
   services.skhd = {
@@ -59,16 +69,16 @@
       shift + alt - 0 : yabai -m space --balance
 
       # fast focus desktop
-      alt - 1 : yabai -m space --focus 1
-      alt - 2 : yabai -m space --focus 2
-      alt - 3 : yabai -m space --focus 3
-      alt - 4 : yabai -m space --focus 4
-      alt - 5 : yabai -m space --focus 5
-      alt - 6 : yabai -m space --focus 6
-      alt - 7 : yabai -m space --focus 7
-      alt - 8 : yabai -m space --focus 8
-      alt - 9 : yabai -m space --focus 9
-      alt - 0 : yabai -m space --focus 10
+      # alt - 1 : yabai -m space --focus 1
+      # alt - 2 : yabai -m space --focus 2
+      # alt - 3 : yabai -m space --focus 3
+      # alt - 4 : yabai -m space --focus 4
+      # alt - 5 : yabai -m space --focus 5
+      # alt - 6 : yabai -m space --focus 6
+      # alt - 7 : yabai -m space --focus 7
+      # alt - 8 : yabai -m space --focus 8
+      # alt - 9 : yabai -m space --focus 9
+      # alt - 0 : yabai -m space --focus 10
 
       # send window to desktop and follow focus
       shift + alt - 1 : yabai -m window --space  1

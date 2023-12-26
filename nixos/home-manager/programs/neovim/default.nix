@@ -1,4 +1,4 @@
-{ pkgs, configDir, ... }:
+{ pkgs, ... }:
 
 {
   programs.neovim = {
@@ -9,7 +9,6 @@
       coc-json
       coc-nvim
       coc-pyright
-      coc-sh
       coc-snippets
       coc-tsserver
       coc-vimtex
@@ -24,17 +23,15 @@
       papercolor-theme
       ultisnips
       undotree
-      vifm-vim
       vim-airline
       vim-airline-themes
       vim-fugitive
-      vim-nix
       vim-obsession
       vim-sleuth
       vim-surround
       vimtex
 
-      (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: [
+      (nvim-treesitter.withPlugins (plugins: [
         plugins.tree-sitter-c
         plugins.tree-sitter-go
         plugins.tree-sitter-lua
@@ -52,12 +49,13 @@
     ];
 
     extraPackages = with pkgs; [
+      nil # nix lsp
+      nixpkgs-fmt
       delve # go debugger
       gopls # go language server
       haskell-language-server
       haskellPackages.hlint
       ripgrep # for cocsearch
-      rnix-lsp
       tree-sitter
       watchman # for coc
     ];
@@ -96,6 +94,7 @@
           "semicolons" = "insert";
           "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces" = true;
         };
+        "preferences.importModuleSpecifier" = "project-relative";
       };
       "go" = {
         "goplsOptions" = {
@@ -103,6 +102,7 @@
         };
         "goplsPath" = "${pkgs.gopls}/bin/gopls";
       };
+
       "tsserver.useLocalTsdk" = true;
       "languageserver" = {
         "haskell" = {
@@ -118,8 +118,16 @@
           "filetypes" = [ "haskell" "lhaskell" ];
         };
         "nix" = {
-          "command" = "rnix-lsp";
+          "command" = "nil";
           "filetypes" = [ "nix" ];
+          "rootPatterns" = [ "flake.nix" ];
+          "settings" = {
+            "nil" = {
+              "formatting" = {
+                "command" = [ "nixpkgs-fmt" ];
+              };
+            };
+          };
         };
       };
       "snippets.ultisnips.enable" = true;

@@ -51,16 +51,11 @@ let g:UltiSnipsEditSplit="vertical"
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
 inoremap <silent><expr> <c-c> coc#refresh()
-nmap <silent> gd :call CocAction('jumpDefinition', 'tab drop')<CR>
-nmap <silent> gy :call CocAction('jumpTypeDefinition', 'vsplit')<CR>
+nmap <silent> gd :call CocActionAsync('jumpDefinition', 'tab drop')<CR>
+nmap <silent> gy :call CocActionAsync('jumpTypeDefinition', 'vsplit')<CR>
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr :call CocAction('jumpUsed')<CR>
-nmap <silent> gh :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('definitionHover')
-  endif
-endfunction
+nmap <silent> gr :call CocActionAsync('jumpUsed')<CR>
+nmap <silent> gh :call CocActionAsync('doHover')<cr>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <F2> <Plug>(coc-rename)
@@ -81,8 +76,6 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
@@ -130,7 +123,9 @@ command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OI   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+autocmd BufWritePre *.go :OI
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -154,9 +149,6 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-" Auto import on go files
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
 " keyword for scss
 autocmd FileType scss setl iskeyword+=@-@

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   users.users.bytedance = {
     home = "/Users/bytedance";
@@ -21,6 +21,13 @@
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
+    package = pkgs.yabai.overrideAttrs {
+      version = "6.0.2";
+      src = pkgs.fetchzip {
+        url = "https://github.com/koekeishiya/yabai/releases/download/v6.0.2/yabai-v6.0.2.tar.gz";
+        sha256 = "sha256-aFM0rtHrHsLEziDWhRwqeCy70dSAOAX4HDpqHqvnoWs=";
+      };
+    };
     config = {
       focus_follows_mouse = "autofocus";
       active_window_border_color = "0xffff0000";
@@ -33,6 +40,10 @@
       mouse_drop_action = "swap";
       layout = "bsp";
     };
+    extraConfig = ''
+      yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+      sudo yabai --load-sa
+    '';
   };
 
   services.skhd = {

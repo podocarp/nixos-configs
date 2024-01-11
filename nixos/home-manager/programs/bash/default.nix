@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   programs.bash = {
     enable = true;
@@ -9,7 +9,7 @@
       HISTCONTROL = "ignoreboth";
       NIXPKGS_ALLOW_INSECURE = "1";
       NIXPKGS_ALLOW_UNFREE = "1";
-      PATH = "$PATH:~/.scripts:~/Scripts:~/go/bin";
+      PATH = "$PATH:~/.scripts:~/.npm-global/bin:~/go/bin";
     };
     historyControl = [ "ignoredups" ];
     historyIgnore = [ "exit" "ls" "cd" "lla" "la" ];

@@ -53,6 +53,7 @@
       nixpkgs-fmt
       delve # go debugger
       gopls # go language server
+      gofumpt # go fmt replacement
       haskell-language-server
       haskellPackages.hlint
       ripgrep # for cocsearch
@@ -97,8 +98,12 @@
         "preferences.importModuleSpecifier" = "project-relative";
       };
       "go" = {
+        goplsEnv = {
+          "GOFUMPT_SPLIT_LONG_LINES" = "on";
+        };
         "goplsOptions" = {
           templateExtensions = [ "go.tmpl" "tmpl" ];
+          gofumpt = true;
         };
         "goplsPath" = "${pkgs.gopls}/bin/gopls";
       };

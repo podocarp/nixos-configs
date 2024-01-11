@@ -123,7 +123,7 @@ command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OI   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OI   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 autocmd BufWritePre *.go :OI
 

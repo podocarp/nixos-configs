@@ -3,43 +3,44 @@
 {
   programs.neovim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [
-      coc-css
-      coc-go
-      coc-json
-      coc-nvim
-      coc-pyright
-      coc-snippets
-      coc-tsserver
-      coc-vimtex
-      fzf-vim
-      gitsigns-nvim
-      nvim-dap
-      nvim-dap-ui
-      nvim-dap-python
-      nvim-dap-go
-      nvim-tree-lua
-      nvim-web-devicons
-      papercolor-theme
-      ultisnips
-      undotree
-      vim-airline
-      vim-airline-themes
-      vim-fugitive
-      vim-obsession
-      vim-sleuth
-      vim-surround
-      vimtex
+    plugins = with pkgs.vimPlugins;
+      [
+        coc-css
+        coc-go
+        coc-json
+        coc-nvim
+        coc-pyright
+        coc-snippets
+        coc-tsserver
+        coc-vimtex
+        fzf-vim
+        gitsigns-nvim
+        nvim-dap
+        nvim-dap-ui
+        nvim-dap-python
+        nvim-dap-go
+        nvim-tree-lua
+        nvim-web-devicons
+        papercolor-theme
+        ultisnips
+        undotree
+        vim-airline
+        vim-airline-themes
+        vim-fugitive
+        vim-obsession
+        vim-sleuth
+        vim-surround
+        vimtex
 
-      (nvim-treesitter.withPlugins (plugins: [
-        plugins.tree-sitter-c
-        plugins.tree-sitter-go
-        plugins.tree-sitter-lua
-        plugins.tree-sitter-nix
-        plugins.tree-sitter-vim
-      ]))
-      nvim-treesitter-textobjects
-    ];
+        (nvim-treesitter.withPlugins (plugins: [
+          plugins.tree-sitter-c
+          plugins.tree-sitter-go
+          plugins.tree-sitter-lua
+          plugins.tree-sitter-nix
+          plugins.tree-sitter-vim
+        ]))
+        nvim-treesitter-textobjects
+      ];
 
     extraPython3Packages = p: with p; [
       # note: python lsps will use the current interpreter, and so will not see
@@ -57,6 +58,7 @@
       haskell-language-server
       haskellPackages.hlint
       ripgrep # for cocsearch
+      tailwindcss-language-server
       tree-sitter
       watchman # for coc
     ];
@@ -113,6 +115,7 @@
         "haskell" = {
           "command" = "haskell-language-server-wrapper";
           "args" = [ "--lsp" ];
+          "filetypes" = [ "haskell" "lhaskell" ];
           "rootPatterns" = [
             "*.cabal"
             "stack.yaml"
@@ -120,7 +123,6 @@
             "package.yaml"
             "hie.yaml"
           ];
-          "filetypes" = [ "haskell" "lhaskell" ];
         };
         "nix" = {
           "command" = "nil";
@@ -133,6 +135,12 @@
               };
             };
           };
+        };
+        "tailwindcss" = {
+          "command" = "tailwindcss-language-server";
+          "args" = [ "--stdio" ];
+          "filetypes" = [ "javascriptreact" "typescriptreact" ];
+          "rootPatterns" = [ "tailwind.config.js" ];
         };
       };
       "snippets.ultisnips.enable" = true;

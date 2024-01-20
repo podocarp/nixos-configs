@@ -12,6 +12,7 @@ set lazyredraw
 set list
 set mouse=a
 set nobackup
+set backupdir=~/.local/share/nvim/backup
 set nojoinspaces
 set nowrapscan
 set number

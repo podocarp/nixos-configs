@@ -6,9 +6,11 @@
     plugins = with pkgs.vimPlugins;
       [
         coc-css
+        coc-eslint
         coc-go
         coc-json
         coc-nvim
+        coc-prettier
         coc-pyright
         coc-snippets
         coc-tsserver
@@ -97,7 +99,10 @@
           "semicolons" = "insert";
           "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces" = true;
         };
-        "preferences.importModuleSpecifier" = "project-relative";
+        "preferences" = {
+          "importModuleSpecifier" = "project-relative";
+          "quoteStyle" = "single";
+        };
       };
       "go" = {
         goplsEnv = {
@@ -140,7 +145,7 @@
           "command" = "tailwindcss-language-server";
           "args" = [ "--stdio" ];
           "filetypes" = [ "javascriptreact" "typescriptreact" ];
-          "rootPatterns" = [ "tailwind.config.js" ];
+          "rootPatterns" = [ "tailwind.config.js" "tailwind.config.ts" ];
         };
       };
       "snippets.ultisnips.enable" = true;

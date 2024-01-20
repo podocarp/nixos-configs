@@ -3,8 +3,7 @@
 {
   programs.neovim = {
     enable = true;
-    <<<<<<< HEAD
-      plugins = with pkgs.vimPlugins;
+    plugins = with pkgs.vimPlugins;
       [
         coc-css
         coc-eslint

@@ -51,16 +51,22 @@ in
   home.packages = with pkgs; [
     cudatoolkit
     ddcutil
-    godot_4
     handbrake
     imagemagick
     inkscape
     jellyfin-media-player
     keepassxc
+
     libreoffice-fresh
     poppler_utils
     runelite
     tdesktop
+
+    kicad
+    openscad
+    prusa-slicer
+
+    godot_4
 
     (python311.withPackages (p: with p; [
       pygments

@@ -28,6 +28,11 @@
           publicKey = "9eGuXZvzgd4F2FOnQd/4nNx2xXlxUzSM1BbRs0/nIy8=";
           allowedIPs = [ "10.0.1.10/32" ];
         }
+        # surface
+        {
+          publicKey = "/22wpNGb4A6t6HWo9XtMZ63sCo+iSa2pZezoUdKuiks=";
+          allowedIPs = [ "10.0.1.11/32" ];
+        }
         {
           # phone
           publicKey = "IT3dP+pfiR7PYZJBqpjQ3LiJH5edfZYeZX0wjT62uAc=";

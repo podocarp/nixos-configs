@@ -2,9 +2,9 @@
 {
   virtualisation.oci-containers.containers."stashapp" = {
     autoStart = true;
-    image = "stashapp/stash:latest";
+    image = "stashapp/stash:v0.23.1";
     volumes = [
-      "/tank/private/:/media"
+      "/tank/private/sets:/media"
       "/tank/local/stashapp:/root/.stash"
     ];
     ports = [ "${toString port}:${toString port}" ];

@@ -112,8 +112,8 @@
       options = [ "rw" "uid=${toString config.users.users.pengu.uid}" ];
     };
 
-    "/network/smb" = {
-      device = "//obsidian/public";
+    "/network/public" = {
+      device = "//obsidian-local/public";
       fsType = "cifs";
       options = [
         "_netdev"
@@ -122,6 +122,7 @@
         "gid=100"
         "forceuid"
         "forcegid"
+        "x-systemd.automount"
         "x-systemd.idle-timeout=10min"
         "x-systemd.device-timeout=5s"
         "x-systemd.mount-timeout=5s"

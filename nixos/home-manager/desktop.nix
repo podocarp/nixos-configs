@@ -56,7 +56,7 @@ in
     inkscape
     jellyfin-media-player
     keepassxc
-
+    krita
     libreoffice-fresh
     poppler_utils
     runelite

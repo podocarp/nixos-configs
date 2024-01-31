@@ -40,7 +40,4 @@
       };
     };
   };
-
-  # Allows HM gnome configs.
-  programs.dconf.enable = false;
 }

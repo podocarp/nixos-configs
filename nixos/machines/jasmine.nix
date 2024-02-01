@@ -5,14 +5,11 @@ args@{ pkgs, ... }:
     ../services/skhd
   ];
 
-  users.users.bytedance = {
-    home = "/Users/bytedance";
+  users.users.jxd = {
+    home = "/Users/jxd";
   };
 
-  home-manager.users.bytedance = import ../home-manager/mac.nix;
-
-  environment.systemPackages = with pkgs; [
-  ];
+  home-manager.users.jxd = import ../home-manager/jasmine.nix;
 
   environment.variables = {
     LC_ALL = "en_US.UTF-8";
@@ -22,8 +19,6 @@ args@{ pkgs, ... }:
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
   nix.useDaemon = true;
-
-
 
   nix = {
     settings = {

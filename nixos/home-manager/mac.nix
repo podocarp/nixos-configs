@@ -48,8 +48,6 @@ in
     p7zip
     (python3.withPackages (p: with p; [
       requests
-      flake8
-      autopep8
     ]))
     ripgrep
     syncthing

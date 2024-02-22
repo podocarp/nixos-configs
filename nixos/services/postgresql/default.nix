@@ -24,7 +24,7 @@
         };
       }
     ];
-    ensureDatabases = [
+    ensureDBOwnership = [
       "hydra"
       "gitea"
       "grafana"

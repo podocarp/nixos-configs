@@ -4,12 +4,12 @@ let
   giteaSshPort = 3002;
 
   devboxPort = 4001;
-  devboxSSHPort = 4002;
   testPort = 7860;
   test2Port = 7861;
 
   # hydraPort = 4000;
   jellyfinPort = 5000;
+  stashPort = 5001;
   mediawikiPort = 7000;
   # nixservePort = 7100;
   syncthingPort = 7300;
@@ -51,6 +51,9 @@ in
       ((import ../containers/transmission) (args // {
         port = transmissionPort;
       }))
+      ((import ../containers/stashapp) (args // {
+        port = stashPort;
+      }))
 
       ((import ../services/acme) args)
       ../services/fail2ban
@@ -91,6 +94,7 @@ in
 
           [ "gitea" giteaPort true ]
           [ "jellyfin" jellyfinPort true ]
+          [ "stash" stashPort false ]
           [ "sync" syncthingPort false ]
           [ "torrents" transmissionPort false ]
           [ "transmission" transmissionPrivPort false ]

@@ -43,16 +43,6 @@
             sops-nix.nixosModules.sops
           ];
         };
-
-        orbstack = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/orbstack.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
       };
 
       darwinConfigurations = {
@@ -61,6 +51,13 @@
           specialArgs = inputs;
           modules = [
             ./machines/mac.nix
+            home-manager.darwinModules.home-manager
+          ];
+        };
+        jasmine = nix-darwin.lib.darwinSystem {
+          specialArgs = inputs;
+          modules = [
+            ./machines/jasmine.nix
             home-manager.darwinModules.home-manager
           ];
         };

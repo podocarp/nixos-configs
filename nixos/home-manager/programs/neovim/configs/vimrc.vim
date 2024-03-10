@@ -43,6 +43,7 @@ let g:vimsyn_embed='l'
 "Plug 'SirVer/ultisnips'
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/UltiSnips"]
 
 "Plug 'honza/vim-snippets'
 

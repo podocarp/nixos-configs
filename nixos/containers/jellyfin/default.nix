@@ -2,7 +2,7 @@
 {
   virtualisation.oci-containers.containers."jellyfin" = {
     autoStart = true;
-    image = "jellyfin/jellyfin";
+    image = "jellyfin/jellyfin:10.8.13";
     volumes = [
       "/tank/local/jellyfin/config:/config"
       "/tank/local/jellyfin/cache:/cache"
@@ -15,6 +15,5 @@
       NVIDIA_VISIBLE_DEVICES = "all";
       NVIDIA_DRIVER_CAPABILITIES = "all";
     };
-    extraOptions = [ "--runtime=nvidia" ];
   };
 }

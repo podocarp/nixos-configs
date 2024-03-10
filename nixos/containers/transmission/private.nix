@@ -1,21 +1,23 @@
-{ config, lib, port, ... }:
+{ config, port, ... }:
 let
   configDir = "/config";
+  completeDir = "/Downloaded";
+  incompleteDir = "/Downloads";
 in
 {
   virtualisation.oci-containers.containers."transmission_private" = {
     autoStart = true;
-    image = "haugene/transmission-openvpn:latest";
+    image = "haugene/transmission-openvpn:5.3.1";
     volumes = [
       "/tank/local/transmission_priv:${configDir}"
-      "/tank/private/Downloads:/Downloads"
-      "/tank/private/Downloaded:/Downloaded"
-      "${config.sops.secrets.openvpn-credentials.path}:${configDir}/openvpn-credentials.txt"
-      "/tank/local/transmission_priv/openvpn:/etc/openvpn/custom/"
-      "${config.sops.secrets.openvpn-config.path}:/etc/openvpn/custom/default.ovpn"
+      "/tank/private/Downloads:${incompleteDir}"
+      "/tank/private/Downloaded:${completeDir}"
     ];
     ports = [ "${toString port}:9091" ];
     extraOptions = [ "--cap-add=NET_ADMIN" ];
+    environmentFiles = [
+      config.sops.secrets.openvpn-credentials.path
+    ];
     environment =
       {
         GLOBAL_APPLY_PERMISSIONS = "false";
@@ -23,19 +25,17 @@ in
         CREATE_TUN_DEVICE = "true";
         PEER_DNS = "true";
         PEER_DNS_PIN_ROUTES = "true";
-        ENABLE_UFW = "true";
 
-        OPENVPN_PROVIDER = "custom";
-        OPENVPN_PASSWORD = "**None**";
-        OPENVPN_USERNAME = "**None**";
+        OPENVPN_PROVIDER = "SURFSHARK";
+        OPENVPN_CONFIG = "ch-zur.prod.surfshark.com_udp,fr-mrs.prod.surfshark.com_udp";
         PGID = builtins.toString config.users.groups."users".gid;
         PUID = builtins.toString config.users.users."pengu".uid;
 
-        TRANSMISSION_DOWNLOAD_DIR = "/Downloaded";
+        TRANSMISSION_DOWNLOAD_DIR = completeDir;
         TRANSMISSION_DOWNLOAD_QUEUE_ENABLED = "true";
         TRANSMISSION_DOWNLOAD_QUEUE_SIZE = "20";
-        TRANSMISSION_HOME = configDir;
-        TRANSMISSION_INCOMPLETE_DIR = "/Downloads";
+        TRANSMISSION_HOME = configDir + "/transmission-home";
+        TRANSMISSION_INCOMPLETE_DIR = incompleteDir;
         TRANSMISSION_INCOMPLETE_DIR_ENABLED = "true";
         TRANSMISSION_PEER_PORT_RANDOM_ON_START = "true";
         TRANSMISSION_QUEUE_STALLED_ENABLED = "true";
@@ -51,7 +51,7 @@ in
       };
   };
 
-  sops.secrets."openvpn-credentials" = { };
-  sops.secrets."openvpn-config" = { sopsFile = ../../secrets/secrets-certs.yaml; };
-  sops.secrets."transmission-credentials" = { };
+  sops.secrets."openvpn-credentials" = {
+    owner = config.users.users."pengu".name;
+  };
 }

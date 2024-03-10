@@ -6,26 +6,15 @@
     dataDir = "/tank/local/postgresql";
     ensureUsers = [
       {
-        name = "hydra";
-        ensurePermissions = {
-          "DATABASE hydra" = "ALL PRIVILEGES";
-        };
-      }
-      {
         name = "gitea";
-        ensurePermissions = {
-          "DATABASE gitea" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }
       {
         name = "grafana";
-        ensurePermissions = {
-          "DATABASE grafana" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }
     ];
     ensureDatabases = [
-      "hydra"
       "gitea"
       "grafana"
     ];

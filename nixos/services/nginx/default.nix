@@ -60,7 +60,7 @@ in
                 enableACME = true;
               } else {
                 enableACME = false;
-                sslCertificate = config.sops.secrets.tls_cert.path;
+                sslCertificate = ./cert.txt;
                 sslCertificateKey = config.sops.secrets.tls_key.path;
               }
             );
@@ -76,10 +76,12 @@ in
       publicHosts // privateHosts // customConfigs;
   };
 
-  sops.secrets.tls_cert = {
-    owner = nginxUsername;
-    sopsFile = ../../secrets/secrets-certs.yaml;
-  };
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+
+  security.pki.certificateFiles = [
+    ./cert.txt
+  ];
+
   sops.secrets.tls_key = {
     owner = nginxUsername;
     sopsFile = ../../secrets/secrets-certs.yaml;

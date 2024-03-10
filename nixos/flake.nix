@@ -34,21 +34,20 @@
           ];
         };
 
+        server-min = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./machines/server_min.nix
+            home-manager.nixosModules.home-manager
+          ];
+        };
+
         desktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
           modules = [
             ./machines/desktop.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
-
-        orbstack = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/orbstack.nix
             home-manager.nixosModules.home-manager
             sops-nix.nixosModules.sops
           ];

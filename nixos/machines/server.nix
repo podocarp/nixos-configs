@@ -3,7 +3,6 @@ let
   giteaPort = 3001;
   giteaSshPort = 3002;
 
-  devboxPort = 4001;
   testPort = 7860;
   test2Port = 7861;
 
@@ -13,7 +12,6 @@ let
   mediawikiPort = 7000;
   # nixservePort = 7100;
   syncthingPort = 7300;
-  wireguardPort = 7400;
 
   transmissionPort = 10000;
   transmissionPrivPort = 10001;
@@ -25,7 +23,6 @@ let
   zfsExporterPort = 6002;
   nginxExporterPort = 6003;
   nginxLogExporterPort = 6004;
-  dcgmExporterPort = 6005;
   grafanaPort = 6100;
   lokiPort = 6200;
 
@@ -37,11 +34,7 @@ in
     [
       ./common/boot.nix
       ./common/common.nix
-      ../misc/nvidia.nix
 
-      ((import ../containers/devbox) (args // {
-        inherit devboxPort testPort;
-      }))
       # ((import ../containers/elasticsearch) { })
       ((import ../containers/jellyfin) { port = jellyfinPort; })
 
@@ -64,12 +57,10 @@ in
       # ((import ../services/minio) (args // { inherit minioPort minioUIPort; }))
       ((import ../services/postgresql { port = postgresPort; }))
 
-      ((import ../containers/dcgm-exporter) ({ inherit dcgmExporterPort; }))
       (import ../services/prometheus {
         inherit prometheusPort nodeExporterPort nginxExporterPort
           nginxLogExporterPort zfsExporterPort;
         otherScrapePorts = [
-          dcgmExporterPort
         ];
       })
       (import ../services/grafana {
@@ -90,7 +81,6 @@ in
           # format: [host port openToPublic?]
           [ "test" testPort false ]
           [ "test2" test2Port false ]
-          [ "devbox" devboxPort true ]
 
           [ "gitea" giteaPort true ]
           [ "jellyfin" jellyfinPort true ]
@@ -117,19 +107,24 @@ in
   };
 
   virtualisation.oci-containers.backend = "docker";
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "overlay2";
+  };
 
   # Use the GRUB 2 boot loader.
   boot = {
     initrd = {
       supportedFilesystems = [ "zfs" ];
     };
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ "kvm-amd" "amdgpu" ];
     supportedFilesystems = [ "zfs" ];
     zfs = {
       requestEncryptionCredentials = true;
       extraPools = [ "tank" ];
     };
     loader.grub = {
+      memtest86.enable = true;
       efiInstallAsRemovable = true;
       efiSupport = true;
       device = "nodev";
@@ -147,43 +142,19 @@ in
     hostId = "492A28F4";
 
     # Internet facing
-    interfaces.enp36s0 = {
+    interfaces.enp8s0 = {
       useDHCP = true;
-      ipv4.routes = [
-        {
-          address = "192.168.10.1";
-          prefixLength = 32;
-        }
-      ];
-    };
-
-    # Local
-    interfaces.enp35s0 = {
-      useDHCP = true;
-      ipv4.routes = [
-        {
-          address = "192.168.10.0";
-          prefixLength = 24;
-        }
-      ];
     };
 
     nat = {
       # Remap container traffic to use external IP address
       enable = true;
       internalInterfaces = [ "ve-+" ];
-      externalInterface = "enp36s0";
+      externalInterface = "enp8s0";
     };
 
     firewall = {
       enable = true;
-      checkReversePath = "loose";
-      allowedTCPPorts = [
-        80
-        443
-      ];
-      allowedUDPPorts = [
-      ];
     };
   };
 
@@ -235,7 +206,7 @@ in
         "root"
       ];
       # sandbox = "relaxed";
-      substituters = [ "daemon?priority=50" ];
+      # substituters = [ "daemon?priority=50" ];
     };
   };
 

@@ -19,6 +19,7 @@
       l = "log --graph --author-date-order --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(green)%an%C(reset)%C(bold yellow)%d%C(reset) - %s'";
       p = "push";
       s = "status";
+      stash-all = "stash --include-untracked";
       unstage = "reset HEAD --";
     };
 

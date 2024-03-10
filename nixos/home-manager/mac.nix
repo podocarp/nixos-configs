@@ -14,7 +14,7 @@ in
     [
       ./programs/bash
       ./programs/direnv
-      ./programs/fzf
+      ./programs/atuin
       ./programs/git
       ./programs/mpv
       ./programs/neovim

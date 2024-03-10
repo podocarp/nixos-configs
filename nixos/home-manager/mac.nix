@@ -14,7 +14,7 @@ in
     [
       ./programs/bash
       ./programs/direnv
-      ./programs/fzf
+      ./programs/atuin
       ./programs/git
       ./programs/mpv
       ./programs/neovim
@@ -48,8 +48,6 @@ in
     p7zip
     (python3.withPackages (p: with p; [
       requests
-      flake8
-      autopep8
     ]))
     ripgrep
     syncthing

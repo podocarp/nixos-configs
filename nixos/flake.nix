@@ -63,6 +63,13 @@
             home-manager.darwinModules.home-manager
           ];
         };
+        jasmine = nix-darwin.lib.darwinSystem {
+          specialArgs = inputs;
+          modules = [
+            ./machines/jasmine.nix
+            home-manager.darwinModules.home-manager
+          ];
+        };
       };
 
       legacyPackages.x86_64-linux.default = nixpkgs.legacyPackages.x86_64-linux;

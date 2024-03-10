@@ -49,6 +49,9 @@
       # vim extra python packages
       inotify-simple # ultisnips needs this
       unidecode # ultisnips needs this
+      black
+      mypy
+      flake8
     ];
 
     extraPackages = with pkgs; [
@@ -89,11 +92,13 @@
         "separator" = "▸";
         "subseparator" = "▹";
       };
-      "python" = {
-        "formatting.provider" = "autopep8";
-        "linting.flake8Enabled" = true;
-        "linting.mypyEnabled" = true;
-      };
+
+      # the pyright plugin doesn't like nested json for some reason...
+      "python.pythonPath" = "nvim-python3";
+      "python.formatting.provider" = "black";
+      "python.linting.flake8Enabled" = true;
+      "python.linting.mypyEnabled" = true;
+
       "typescript" = {
         "format" = {
           "semicolons" = "insert";

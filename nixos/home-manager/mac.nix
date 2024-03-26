@@ -1,4 +1,4 @@
-args@{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   myTerm = "iterm";
   homeDir = "/Users/bytedance";

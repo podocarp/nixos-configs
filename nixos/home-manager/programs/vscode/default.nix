@@ -10,8 +10,8 @@
       {
         name = "activitusbar";
         publisher = "Gruntfuggly";
-        version = "0.0.46";
-        sha256 = "sha256-sJEB9IJKIfBlSuhtecMHXlCeJFqh4+fWtOKJlzJ1t+A=";
+        version = "0.0.47";
+        sha256 = "sha256-hLjkC8hFnRyUaMM2/nN1gKfmT7OlWzmwxfXbxoC0Kpo=";
       }
     ];
     userSettings = {
@@ -37,7 +37,10 @@
       ];
 
       "jupyter.widgetScriptSources" = [ "jsdelivr.com" "unpkg.com" ];
-      "jupyter.askForKernelRestart" = "false";
+      "jupyter.askForKernelRestart" = false;
+
+      "eslint.format.enable" = true;
+      "eslint.lintTask.enable" = true;
     };
     keybindings = [
       {

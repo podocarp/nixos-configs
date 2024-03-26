@@ -1,6 +1,5 @@
-args@{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 let
-  myTerm = "iterm";
   homeDir = "/Users/jxd";
 in
 {

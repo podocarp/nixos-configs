@@ -3,11 +3,11 @@
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
-    package = pkgs.yabai.overrideAttrs {
-      version = "6.0.2";
+    package = pkgs.yabai.overrideAttrs rec {
+      version = "7.0.3";
       src = pkgs.fetchzip {
-        url = "https://github.com/koekeishiya/yabai/releases/download/v6.0.2/yabai-v6.0.2.tar.gz";
-        sha256 = "sha256-aFM0rtHrHsLEziDWhRwqeCy70dSAOAX4HDpqHqvnoWs=";
+        url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
+        sha256 = "sha256-EvtKYYjEmLkJTnc9q6f37hMD1T3DBO+I1LfBvPjCgfc=";
       };
     };
     config = {

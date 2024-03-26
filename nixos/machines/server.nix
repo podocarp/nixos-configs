@@ -140,10 +140,10 @@ in
     hostName = "obsidian";
     # Random 8 digit hex string for ZFS
     hostId = "492A28F4";
-
     # Internet facing
     interfaces.enp8s0 = {
       useDHCP = true;
+      wakeOnLan.enable = true;
     };
 
     nat = {

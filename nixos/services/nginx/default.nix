@@ -25,26 +25,15 @@ in
 
     virtualHosts =
       let
-        customConfigs = {
-          "error.jiaxiaodong.com".locations."/" = {
-            return = "404";
-            priority = 1;
-          };
-        };
-
         # Maps a list [name, port, public] into a config that we want
         configgen = (host: isPublicDomain: xs:
           let
             name = builtins.elemAt xs 0;
             port = toString (builtins.elemAt xs 1);
-            openToPublic = builtins.elemAt xs 2;
-            # skip if it's a public domain and you don't want it open to public
-            skip = if isPublicDomain then !openToPublic else false;
           in
           {
             name = "${name}.${host}";
-            value = if skip then { } else
-            {
+            value = {
               locations."/" = {
                 proxyPass = "http://localhost:${port}";
                 proxyWebsockets = true;
@@ -53,36 +42,26 @@ in
                   access_log /var/log/nginx/access.log custom;
                 '';
               };
-              forceSSL = true;
-              # addSSL = true;
-            } // (
-              if isPublicDomain then {
-                enableACME = true;
-              } else {
-                enableACME = false;
-                sslCertificate = ./cert.txt;
-                sslCertificateKey = config.sops.secrets.tls_key.path;
-              }
-            );
+              forceSSL = false;
+              addSSL = true;
+              sslCertificate = config.sops.secrets.home-lan-cert.path;
+              sslCertificateKey = config.sops.secrets.home-lan-key.path;
+            };
           }
         );
-        publicHosts = builtins.listToAttrs (
-          map (configgen "jiaxiaodong.com" true) portMap
-        );
-        privateHosts = builtins.listToAttrs (
-          map (configgen "home.lan" false) portMap
-        );
       in
-      publicHosts // privateHosts // customConfigs;
+      builtins.listToAttrs (
+        map (configgen "home.lan" false) portMap
+      );
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-  security.pki.certificateFiles = [
-    ./cert.txt
-  ];
-
-  sops.secrets.tls_key = {
+  sops.secrets.home-lan-key = {
+    owner = nginxUsername;
+    sopsFile = ../../secrets/secrets-certs.yaml;
+  };
+  sops.secrets.home-lan-cert = {
     owner = nginxUsername;
     sopsFile = ../../secrets/secrets-certs.yaml;
   };

@@ -1,4 +1,4 @@
-args@{ config, pkgs, lib, ... }:
+args@{ config, pkgs, ... }:
 let
   giteaPort = 3001;
   giteaSshPort = 3002;
@@ -48,7 +48,7 @@ in
         port = stashPort;
       }))
 
-      ((import ../services/acme) args)
+      # ((import ../services/acme) args)
       ../services/fail2ban
       ((import ../services/gitea) (args // {
         inherit giteaPort giteaSshPort postgresPort;

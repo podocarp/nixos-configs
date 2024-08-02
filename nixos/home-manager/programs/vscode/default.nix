@@ -14,34 +14,36 @@
         sha256 = "sha256-hLjkC8hFnRyUaMM2/nN1gKfmT7OlWzmwxfXbxoC0Kpo=";
       }
     ];
-    userSettings = {
-      "editor.minimap.enabled" = false;
-      "editor.mouseWheelZoom" = false;
-      "keyboard.dispatch" = "keyCode";
-      "editor.lineNumbers" = "relative";
-      "editor.acceptSuggestionOnCommitCharacter" = false;
-      "workbench.activityBar.visible" = false;
-      "workbench.colorTheme" = "Default Light+";
+    userSettings =
+      {
+        "editor.minimap.enabled" = false;
+        "editor.mouseWheelZoom" = false;
+        "keyboard.dispatch" = "keyCode";
+        "editor.lineNumbers" = "relative";
+        "editor.acceptSuggestionOnCommitCharacter" = false;
+        "workbench.activityBar.visible" = false;
+        "workbench.colorTheme" = "Default Light+";
 
-      "git.confirmSync" = false;
+        "git.confirmSync" = false;
 
-      "C_Cpp.default.cppStandard" = "c++17";
+        "C_Cpp.default.cppStandard" = "c++17";
 
-      "python.analysis.typeCheckingMode" = "basic";
+        "python.analysis.typeCheckingMode" = "basic";
 
-      "vim.normalModeKeyBindings" = [
-        {
-          "before" = [ "<Esc>" ];
-          "commands" = [ "workbench.action.files.save" ];
-        }
-      ];
+        "vim.normalModeKeyBindings" = [
+          {
+            "before" = [ "<Esc>" ];
+            "commands" = [ "workbench.action.files.save" ];
+          }
+        ];
 
-      "jupyter.widgetScriptSources" = [ "jsdelivr.com" "unpkg.com" ];
-      "jupyter.askForKernelRestart" = false;
+        "jupyter.widgetScriptSources" = [ "jsdelivr.com" "unpkg.com" ];
+        "jupyter.askForKernelRestart" = false;
 
-      "eslint.format.enable" = true;
-      "eslint.lintTask.enable" = true;
-    };
+        "eslint.format.enable" = true;
+        "eslint.lintTask.enable" = true;
+      };
+
     keybindings = [
       {
         key = "ctrl+tab";

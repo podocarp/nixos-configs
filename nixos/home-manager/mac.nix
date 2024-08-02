@@ -65,7 +65,7 @@ in
       LSCOLORS = "Exfxcxdxbxegedabagacad";
     };
     shellAliases = {
-      bs = "byteshell --idc i18n --pod";
+      bs = "byteshell --idc i18n --psm";
     };
     initExtra = ''
       [ -f "$HOME/.bytebm/config/config.sh" ] && . "$HOME/.bytebm/config/config.sh"
@@ -101,6 +101,21 @@ in
   programs.ssh = {
     enable = true;
     extraConfig = ''
+      Include "/Users/bytedance/.byted-ide/ssh_config"
+      Include "/Users/bytedance/Library/Application Support/cloudide-cli/*/ssh.d/*"
+
+      Host cloudide-portal
+        HostName ws5fa4b31587b88416
+        User byteide
+        ProxyCommand /Users/bytedance/.local/bin/cloudide-cli --log-level info --apiserver-baseurl https://ide-us.tiktok-row.org --tenant-name bytedance workspace ssh proxy --id %h
+        StrictHostKeyChecking no
+
+      Host cloudide-robin
+        HostName wsa518ae3fae96a94c
+        User byteide
+        ProxyCommand /Users/bytedance/.local/bin/cloudide-cli --log-level info --apiserver-baseurl https://ide-us.tiktok-row.org --tenant-name bytedance workspace ssh proxy --id %h
+        StrictHostKeyChecking no
+
       Host *
           GSSAPIAuthentication yes
           GSSAPIDelegateCredentials no
@@ -123,25 +138,16 @@ in
           HostName jump-proxy-sg.byted.org
       Host jump-proxy-us
           HostName jump-us.itbyted.org
-
-      Host devbox-cn
-          HostName 10.37.83.176
-          User xiaodong.jia
-          GSSAPIAuthentication yes
-      Host devbox-us
-          HostName 10.36.183.242
-          User xiaodong.jia
-          GSSAPIAuthentication yes
-
-      Host devbox-ads-sg
-          HostName 10.244.53.109
-          User xiaodong.jia
-          ProxyCommand ssh -qW %h:%p jump-proxy-sg
-      Host devbox-ads-us
-          HostName 10.190.149.154
-          User xiaodong.jia
-          ProxyCommand ssh -qW %h:%p jump-proxy-us
     '';
+  };
+
+  programs.vscode.userSettings = {
+    "extensions.supportUntrustedWorkspaces" = {
+      "byted-ide.dev-environment-manager" = {
+        "supported" = true;
+      };
+    };
+    "remote.SSH.defaultExtensions" = [ "byted-ide.gallery" ];
   };
 
   nixpkgs.config.allowUnfree = true;

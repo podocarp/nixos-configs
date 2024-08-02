@@ -32,7 +32,7 @@
     askPassword = "";
     # disable checking for home network
     extraConfig = ''
-      Host *.home.com
+      Host *.home.lan
         StrictHostKeyChecking no
 
       Host *

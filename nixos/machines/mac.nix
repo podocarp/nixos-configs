@@ -26,12 +26,11 @@ args@{ pkgs, ... }:
         "10.0.0.20/32"
       ];
       dns = [ "192.168.1.1" ];
-      # ArmHlIa/tastlR0PuC0GQJjr7k4wyyhaIkbnVUCNWRo=
-      privateKeyFile = "/tmp/test.txt";
+      privateKeyFile = "/etc/wg.txt";
       peers = [
         {
           allowedIPs = [
-            "0.0.0.0/0"
+            "192.168.1.1/24"
           ];
           endpoint = "hs.jiaxiaodong.com:4500";
           publicKey = "1LIxpQZck/+GR9G675ijuGEFAF4AK0/sApE84yTcQS0=";

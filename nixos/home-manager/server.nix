@@ -19,7 +19,7 @@ in
     ./programs/fzf
     ./programs/git
     ./programs/gpg
-    ((import ./programs/htop) { inherit config; })
+    ./programs/htop
     ./programs/neovim
     ((import ./programs/password-store) { inherit homeDir; })
     ./programs/readline

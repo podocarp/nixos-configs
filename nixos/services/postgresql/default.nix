@@ -2,8 +2,10 @@
 {
   services.postgresql = {
     enable = true;
-    port = port;
     dataDir = "/tank/local/postgresql";
+    settings = {
+      port = port;
+    };
     ensureUsers = [
       {
         name = "gitea";

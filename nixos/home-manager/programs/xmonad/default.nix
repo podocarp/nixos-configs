@@ -9,8 +9,8 @@
       (
         (builtins.readFile ./xmonad.hs) +
         ''
-        myTerm = "${myTerm}"
-        myBorderWidth = ${toString myBorderWidth}
+          myTerm = "xterm"
+          myBorderWidth = 3
         ''
       );
   };

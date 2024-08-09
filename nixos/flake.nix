@@ -52,6 +52,21 @@
             sops-nix.nixosModules.sops
           ];
         };
+
+        t420 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./machines/t420.nix
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ({ ... }: {
+              nix.registry = {
+                nixpkgs.flake = nixpkgs;
+              };
+            })
+          ];
+        };
       };
 
       darwinConfigurations = {
@@ -84,6 +99,7 @@
               #   hp.regex-posix
               # ]))
               sops
+              age
               wireguard-tools
             ];
             shellHook = '' '';

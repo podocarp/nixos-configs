@@ -32,7 +32,7 @@
     driSupport32Bit = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       vaapiVdpau
       libvdpau-va-gl
     ];
@@ -42,8 +42,6 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  fonts.fontconfig.subpixel.rgba = "rgb";
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {
@@ -60,12 +58,12 @@
 
   services.thinkfan.enable = true;
   services.thinkfan.levels = [
-    [0     0      55]
-    [1     50     58]
-    [2     55     60]
-    [3     60     70]
-    [6     63     73]
-    [7     67     76]
-    [127   70     32767]
+    [ 0 0 55 ]
+    [ 1 50 58 ]
+    [ 2 55 60 ]
+    [ 3 60 70 ]
+    [ 6 63 73 ]
+    [ 7 67 76 ]
+    [ 127 70 32767 ]
   ];
 }

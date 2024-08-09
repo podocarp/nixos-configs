@@ -58,7 +58,6 @@ in
     keepassxc
     krita
     libreoffice-fresh
-    poppler_utils
     runelite
     tdesktop
 

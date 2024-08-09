@@ -3,8 +3,8 @@
   xsession = {
     enable = true;
     initExtra = ''
-      kwriteconfig5 --file startkderc --group General --key systemdBoot false
-      export KDEWM=xmonad
+      # kwriteconfig5 --file startkderc --group General --key systemdBoot false
+      # export KDEWM=xmonad
     '';
     profileExtra = ''
       xset r rate 200 30
@@ -20,9 +20,7 @@
       xorg.xkill
       xorg.xprop
     ];
-
-  xsession.windowManager.command = lib.mkForce
-    "startplasma-x11";
+  # xsession.windowManager.command = lib.mkForce "startplasma-x11";
 
   xresources.extraConfig =
     ''
@@ -79,7 +77,6 @@
     '';
 
   gtk = {
-    # Note: this requires programs.dconf.enable = true.
     enable = false;
     iconTheme = {
       name = "Breeze";

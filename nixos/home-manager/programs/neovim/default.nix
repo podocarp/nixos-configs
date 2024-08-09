@@ -12,7 +12,7 @@
         coc-nvim
         coc-prettier
         coc-pyright
-        coc-snippets
+        coc-ultisnips
         coc-tsserver
         coc-vimtex
         fzf-vim

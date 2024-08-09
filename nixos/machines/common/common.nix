@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   i18n.defaultLocale = "en_SG.UTF-8";
   i18n.extraLocaleSettings = {
@@ -41,7 +41,37 @@
     '';
   };
 
-  powerManagement.cpuFreqGovernor = "schedutil";
+  fonts = {
+    packages = with pkgs; [
+      liberation_ttf
+      corefonts
+      (nerdfonts.override {
+        fonts = [ "DroidSansMono" ];
+      })
+    ];
+
+    fontconfig = {
+      enable = true;
+      antialias = true;
+
+      hinting = {
+        enable = true;
+        style = "slight";
+        autohint = false;
+      };
+
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "default";
+      };
+
+      defaultFonts = {
+        serif = [ "Liberation Serif" "DejaVu Serif" ];
+        sansSerif = [ "Liberation Sans" "DejaVu Sans" ];
+        monospace = [ "DroidSansM Nerd Font Mono" "Liberation Mono" ];
+      };
+    };
+  };
 
   documentation = {
     enable = true;
@@ -103,5 +133,4 @@
       experimental-features = [ "flakes" "nix-command" ];
     };
   };
-
 }

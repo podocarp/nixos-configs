@@ -8,7 +8,7 @@ in
   # Sound is taken from KDE repo.
   home.file."${soundpath}/boop.ogg".source = builtins.fetchurl {
     url = "https://invent.kde.org/plasma/oxygen-sounds/-/raw/master/sounds/Oxygen-Sys-App-Message.ogg";
-    sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
+    sha256 = "1kr06mzn59c0w4g52pkwxgbhds912a08fwsmg0fsmf0c66bmx8w2";
   };
   home.file."${soundpath}/boop.sh" = {
     text = "${pkgs.pulseaudio}/bin/paplay ${homeDir}/${soundpath}/boop.ogg";

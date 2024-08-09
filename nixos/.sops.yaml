@@ -1,9 +1,17 @@
 keys:
-  - &jxd 30CF6934C4F4E449BEB008BE66F51163C8069D35
   - &jxd_age age1jk6jh5wxv0au84ffhlkd7sd2v3ny8kyxjacvwxtxzgv932c5gf7s76ay8z
+  - &t420_age age1tsv55k00fmkyvj2zaduzhvkgtnyqjneyycfxh8nj529xz2yyrehsgk5ld2
   - &server_age age12ccgpfkz5tvz5jyqv5ykqmvg93l0glruexwkclguf3pvg6pegdus4jhavn
 creation_rules:
-  - path_regex: secrets/secrets.*?.yaml
+  - path_regex: secrets/secrets-network.yaml
+    key_groups:
+      - age:
+          - *t420_age
+  - path_regex: secrets/secrets.yaml
     key_groups:
       - age:
           - *jxd_age
+  - path_regex: secrets/secrets-certs.yaml
+    key_groups:
+      - age:
+          - *server_age

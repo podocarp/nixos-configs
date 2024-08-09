@@ -15,7 +15,7 @@
     };
 
     desktopManager.plasma5 = {
-      enable = true;
+      enable = false;
       runUsingSystemd = false;
     };
 

@@ -1,13 +1,45 @@
 #!/usr/bin/env bash 
 
 msgTag="changevolume"
-amixer sset Master "$@" > /dev/null
 
-# Query amixer for the current volume and whether or not the speaker is muted
-volume="$(amixer get Master | tail -1 | cut -d " " -f 7 | sed 's/[^0-9]*//g')"
-on="$(amixer get Master | tail -1 | cut -d " " -f 8 | sed 's/[^a-z]*//g')"
-if [[ "$on" == "off" ]]; then
-    dunstify -a "changevolume" -u low -i audio-volume-muted -h string:x-dunst-stack-tag:$msgTag "静音🔇"
+volume () {
+    pactl get-sink-volume @DEFAULT_SINK@ | \
+        awk '{print substr($5, 1, length($5)-1)}'
+}
+
+muted () {
+    res=$(pactl get-sink-mute @DEFAULT_SINK@)
+    if [[ "$res" == "Mute: yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+case "$1" in
+  "toggle")
+      pactl set-sink-mute @DEFAULT_SINK@ toggle
+    ;;
+  "inc")
+      pactl set-sink-mute @DEFAULT_SINK@ 0
+      if (( "$(volume)" < "145" )); then
+        pactl set-sink-volume @DEFAULT_SINK@ +5%
+      else
+        pactl set-sink-volume @DEFAULT_SINK@ 150%
+      fi
+    ;;
+  "dec")
+      pactl set-sink-mute @DEFAULT_SINK@ 0
+      pactl set-sink-volume @DEFAULT_SINK@ -5%
+    ;;
+  *)
+esac
+
+if muted; then
+    dunstify -a "changevolume" -u low -i audio-volume-muted \
+    -h string:x-dunst-stack-tag:$msgTag "静音🔇"
 else
-    dunstify -a "changevolume" -u low -i audio-volume-high -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "音量"
+    dunstify -a "changevolume" -u low -i audio-volume-high \
+    -h string:x-dunst-stack-tag:$msgTag -h int:value:"$(volume)" "音量"
 fi

@@ -1,4 +1,4 @@
-{ pkgs, lib, myTerm, ... }:
+{ pkgs, ... }:
 {
   xsession = {
     enable = true;
@@ -77,7 +77,7 @@
     '';
 
   gtk = {
-    enable = false;
+    enable = true;
     iconTheme = {
       name = "Breeze";
       package = pkgs.breeze-icons;
@@ -88,8 +88,8 @@
     };
   };
   qt = {
-    enable = false;
-    platformTheme = "gnome";
+    enable = true;
+    platformTheme.name = "adwaita";
     style = {
       name = "Breeze";
       package = pkgs.breeze-qt5;

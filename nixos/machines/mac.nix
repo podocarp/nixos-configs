@@ -1,4 +1,4 @@
-args@{ pkgs, ... }:
+args@{ ... }:
 {
   imports = [
     ((import ../services/yabai) args)
@@ -10,9 +10,6 @@ args@{ pkgs, ... }:
   };
 
   home-manager.users.bytedance = import ../home-manager/mac.nix;
-
-  environment.systemPackages = with pkgs; [
-  ];
 
   environment.variables = {
     LC_ALL = "en_US.UTF-8";

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-
+{ ... }:
 {
   home.file.".scripts" = {
     source = ./.;

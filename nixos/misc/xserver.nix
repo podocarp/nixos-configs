@@ -4,20 +4,10 @@
     ./fcitx.nix
   ];
 
+  programs.dconf.enable = true; # needed for all kinds of gnome things
+
   services.xserver = {
     enable = true;
-
-    windowManager.xmonad = {
-      enable = true;
-      config = ./xmonad/xmonad.hs;
-      enableConfiguredRecompile = true;
-      enableContribAndExtras = true;
-    };
-
-    desktopManager.plasma5 = {
-      enable = false;
-      runUsingSystemd = false;
-    };
 
     # stops tearing?
     screenSection = ''

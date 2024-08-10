@@ -111,7 +111,7 @@
 
   # Kills hanging services faster.
   systemd.extraConfig = ''
-    DefaultTimeoutStopSec=30s
+    DefaultTimeoutStopSec=60s
   '';
 
   nixpkgs.config.allowUnfree = true;

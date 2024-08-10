@@ -34,7 +34,7 @@ in
       ((import ./programs/vifm) { pkgs = pkgs; myTerm = myTerm; })
       ./programs/zathura
 
-      ((import ./services/dunst) (args // { homeDir = homeDir; }))
+      ((import ./services/dunst) args)
       ./services/gpg-agent
       ./services/syncthing
 

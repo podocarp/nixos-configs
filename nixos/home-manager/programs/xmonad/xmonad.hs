@@ -1,5 +1,5 @@
 import Control.Monad (liftM2, void)
-import qualified Data.Text as T
+import Data.Semigroup (All)
 import System.Exit (exitSuccess)
 import System.IO ()
 import System.Posix.Process (executeFile)
@@ -8,7 +8,6 @@ import XMonad
   ( Default (def),
     ManageHook,
     Query,
-    ScreenId,
     Window,
     X,
     XConfig
@@ -23,27 +22,27 @@ import XMonad
         terminal,
         workspaces
       ),
+    appName,
     className,
     composeAll,
     doFloat,
+    doIgnore,
     io,
     kill,
     mod4Mask,
-    runQuery,
     sendMessage,
     spawn,
     stringProperty,
-    title,
     windows,
-    withWindowSet,
     xfork,
     xmonad,
     (-->),
+    (<&&>),
     (<+>),
     (=?),
     (|||),
   )
-import XMonad.Actions.CycleWS (toggleWS)
+import XMonad.Actions.CycleWS (toggleWS, toggleWS')
 import XMonad.Actions.GridSelect
   ( GSConfig (gs_cellheight, gs_cellwidth),
     goToSelected,
@@ -55,8 +54,11 @@ import XMonad.Actions.PhysicalScreens
   )
 import XMonad.Actions.UpdatePointer (updatePointer)
 import XMonad.Config.Desktop (desktopConfig)
-import XMonad.Hooks.EwmhDesktops (ewmhFullscreen)
-import XMonad.Hooks.ManageDocks ()
+import XMonad.Config.Kde (kdeConfig)
+import XMonad.Config.Prime (ScreenId)
+import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
+import XMonad.Hooks.ManageHelpers (isInProperty)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -87,17 +89,22 @@ import XMonad.Layout.IndependentScreens
     onCurrentScreen,
     withScreens,
   )
+import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ResizableThreeColumns
   ( MirrorResize (MirrorExpand, MirrorShrink),
     ResizableThreeCol (ResizableThreeColMid),
   )
 import XMonad.Layout.ResizableTile (ResizableTall (ResizableTall))
+import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
 import XMonad.Prompt (XPConfig (font, height))
 import XMonad.Prompt.ConfirmPrompt (confirmPrompt)
-import qualified XMonad.StackSet as W
+import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.NamedScratchpad (NamedScratchpad (NS), NamedScratchpads, customFloating, defaultFloating, namedScratchpadAction, namedScratchpadManageHook)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.WorkspaceCompare (getSortByTag)
+
+myTerm = "xterm"
 
 myXPConfig :: XPConfig
 myXPConfig =
@@ -117,6 +124,25 @@ myGsConfig =
 myWorkspaces :: [VirtualWorkspace]
 myWorkspaces = map show [1 .. 9]
 
+scratchpads :: NamedScratchpads
+scratchpads =
+  [ NS
+      "xterm"
+      "xterm -name scratch"
+      (appName =? "scratch") -- position: 2/3 width from the left 1/2 height from the top, dimensions: 1/3 width by 1/2 height
+      (customFloating $ W.RationalRect (2 / 3) (1 / 2) (1 / 3) (1 / 2)),
+    NS
+      "telegram"
+      "telegram-desktop"
+      (className =? "TelegramDesktop")
+      defaultFloating,
+    NS
+      "keepassxc"
+      "keepassxc"
+      (className =? "KeePassXC")
+      defaultFloating
+  ]
+
 -- This is needed to run scripts, because `spawn` uses `sh` which does not read
 -- `.bashrc` and so does not know about any user defined `$PATH`.
 myspawn x = void $ spawnPID x
@@ -127,6 +153,7 @@ myKeys :: [(String, X ())]
 myKeys =
   [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess),
     ("M-S-q", kill), -- close focused window
+    ("M-q", spawn "xmonad --restart"), -- don't recompile, nix does it for us
     ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix
     ("M-S-h", sendMessage MirrorShrink), -- shrink slave size
     ("M-S-l", sendMessage MirrorExpand), -- expand slave size
@@ -134,32 +161,33 @@ myKeys =
     ("M-d", spawn "rofi -show combi"),
     ("M-f", spawn "rofi-pass"),
     ("M-p", spawn "autorandr -c"),
-    ("M-<Tab>", toggleWS), -- exclude those on other screens
+    ("M-o", namedScratchpadAction scratchpads "xterm"),
+    ("M-C-t", namedScratchpadAction scratchpads "telegram"),
+    ("M-C-k", namedScratchpadAction scratchpads "keepassxc"),
+    ("M-<Tab>", toggleWS' ["NSP"]),
     -- screenshot and copies to clipboard
     ("<Print>", spawn "maim -s | xclip -selection clipboard -t image/png")
   ]
+    -- M-Shift-[z,x,c] moves windows to screens
+    -- M-[z,x,c] views screens
     ++ [ ("M-" ++ mask ++ key, f scr)
-         | (key, scr) <- zip ["w", "e", "r"] [0 ..],
-           (f, mask) <- [(viewScreen horizontalScreenOrderer, ""), (sendToScreen horizontalScreenOrderer, "S-")]
+         | (key, scr) <- zip ["z", "x", "c"] [0 ..],
+           (f, mask) <-
+             [ (viewScreen horizontalScreenOrderer, ""),
+               (sendToScreen horizontalScreenOrderer, "S-")
+             ]
        ]
     ++
     -- M-Shift-[1-9] moves windows to workspaces
-    -- M-[1-9] greedyviews workspaces
+    -- M-[1-9] views workspaces
     [ ("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)
       | (key, i) <- zip [1 .. 9] myWorkspaces,
-        (f, mask) <- [(W.greedyView, ""), (W.shift, "S-")]
+        (f, mask) <- [(W.view, ""), (W.shift, "S-")]
     ]
-
--- ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
--- ("<XF86AudioRaiseVolume>", myspawn "changevolume 5%+"),
--- ("<XF86AudioLowerVolume>", myspawn "changevolume 5%-"),
--- ("<XF86AudioMute>", spawn "echo -e 'sset Master toggle' | amixer -s")
--- , ("<XF86AudioRaiseVolume>", spawn "echo -e 'sset Master 5%+' | amixer -s")
--- , ("<XF86AudioLowerVolume>", spawn "echo -e 'sset Master 5%-' | amixer -s")
--- Brightness controls
--- ("<XF86MonBrightnessUp>", spawn "brightnessctl s 5%+"),
--- ("<XF86MonBrightnessDown>", spawn "brightnessctl s 5%-")
--- ]
+    ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
+         ("<XF86AudioRaiseVolume>", myspawn "changevolume inc"),
+         ("<XF86AudioLowerVolume>", myspawn "changevolume dec")
+       ]
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches
 (=?~) :: Query String -> String -> Query Bool
@@ -171,61 +199,21 @@ q =?~ regex = fmap (matchRegex regex) q
 myManageHook :: ManageHook
 myManageHook =
   composeAll $
-    [ title =? name --> doFloat
+    [ className =? name --> doFloat
       | name <-
-          [ "Volume Control",
-            "Open Folder"
+          [ "About",
+            "Open Folder",
+            "Picture in picture",
+            "Picture-in-Picture",
+            "net-runelite-launcher-Launcher",
+            "Volume Control",
+            "dialog",
+            "plasmashell",
+            "zoom"
           ]
     ]
-      -- ++ [ title =?~ name --> doFloat
-      --      | name <-
-      --          [ ".?zoom.?" -- zoom modals
-      --          ]
-      --   ]
-      ++ [ className =? name --> doFloat
-           | name <-
-               [ "About",
-                 "Image Lounge", -- nomacs
-                 "Picture in picture",
-                 "Picture-in-Picture",
-                 "TelegramDesktop",
-                 "RuneLite Launcher",
-                 "dialog",
-                 "krunner",
-                 "plasmashell"
-               ]
-         ]
-      ++ [ stringProperty "WM_WINDOW_ROLE" =? name --> doFloat
-           | name <-
-               [ "pop-up"
-               ]
-         ]
-
--- This gives the hidden workspaces and the master window in those workspaces
--- as a string.
-myExtras :: [X (Maybe String)]
-myExtras = [withWindowSet (fmap safeUnpack . extraFormatting . getNames . W.hidden)]
-  where
-    -- Gets the master window's (if any) name in the workspace
-    ripName (W.Workspace i _ (Just stack)) =
-      liftM2 (\x y -> concat [header, x, dash, y]) c t
-      where
-        header = i ++ ":"
-        dash = " - "
-        fshorten :: X String -> X String
-        fshorten = fmap (shorten 10)
-        t = fshorten (runQuery title (W.focus stack))
-        c = fshorten (runQuery className (W.focus stack))
-    ripName _ = return ""
-
-    -- Given a stack of workspaces, return a list of names as per above
-    getNames ws = foldl (liftM2 (++)) (return "") (map ripName ws)
-    extraFormatting = fmap (\s -> front ++ s ++ back)
-      where
-        front = "<fc=lightgray>"
-        back = "</fc>"
-    -- Gets the Maybe String out.
-    safeUnpack s = if s == "" then Nothing else Just s
+      ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
+      ++ [className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR" --> doIgnore]
 
 myLogHook =
   xmobarPP
@@ -233,14 +221,9 @@ myLogHook =
       ppCurrent = xmobarColor "green" "" . wrap "[" "]",
       ppVisible = xmobarColor "lightgreen" "" . wrap "[" "]",
       ppHidden = xmobarColor "gray" "" . wrap "(" ")",
-      ppTitle = xmobarColor "cyan" "" . shorten 100, -- window title format
+      ppTitle = xmobarColor "cyan" "" . shorten 50, -- window title format
       ppSort = getSortByTag,
       ppOrder = \(ws : layout : wt : extra) -> [layout, ws, wt] ++ extra
-    }
-
-myLogHookSecondary =
-  myLogHook
-    { ppTitle = xmobarColor "lightblue" "" . shorten 100
     }
 
 xmobarMain =
@@ -249,37 +232,25 @@ xmobarMain =
     "xmobar -x 0 ~/.config/xmobar/xmobarrc"
     (pure myLogHook)
 
-xmobarSecondary =
-  statusBarPropTo
-    "_XMONAD_LOG_1"
-    "xmobar -x 1 ~/.config/xmobar/xmobarrc_unfocused"
-    (pure myLogHookSecondary)
-
 barSpawner :: ScreenId -> IO StatusBarConfig
 barSpawner 0 = pure xmobarMain
-barSpawner 1 = pure xmobarSecondary
 barSpawner _ = mempty
 
-myLayoutHook =
-  refocusLastLayoutHook $
-    ResizableTall 1 (1 / 100) (1 / 2) []
-      ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
+myLayoutHook = ResizableTall 1 (1 / 100) (1 / 2) [] ||| ResizableThreeColMid 1 (1 / 100) (30 / 100) []
 
-myConfig =
+myConfig nScreens =
   desktopConfig
     { terminal = myTerm,
       modMask = mod4Mask, -- meta key
       normalBorderColor = "#999999",
       focusedBorderColor = "#FF0000",
-      borderWidth = myBorderWidth,
-      manageHook = myManageHook,
-      layoutHook = myLayoutHook,
-      -- TODO: use countscreens somehow
-      workspaces = withScreens 2 myWorkspaces,
+      borderWidth = 3,
+      manageHook = myManageHook <+> namedScratchpadManageHook scratchpads,
+      layoutHook = smartBorders $ refocusLastLayoutHook $ avoidStruts myLayoutHook,
+      workspaces = withScreens nScreens myWorkspaces,
       handleEventHook = refocusLastWhen (return True) <+> handleEventHook def
     }
+    `additionalKeysP` myKeys
 
 main :: IO ()
-main =
-  xmonad . ewmhFullscreen . dynamicEasySBs barSpawner $
-    additionalKeysP myConfig myKeys
+main = countScreens >>= \nScreens -> xmonad $ ewmhFullscreen . ewmh . dynamicEasySBs barSpawner $ docks (myConfig nScreens)

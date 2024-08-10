@@ -40,6 +40,7 @@
           plugins.tree-sitter-lua
           plugins.tree-sitter-nix
           plugins.tree-sitter-vim
+          plugins.tree-sitter-latex
         ]))
         nvim-treesitter-textobjects
       ];

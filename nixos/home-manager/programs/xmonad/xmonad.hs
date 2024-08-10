@@ -151,7 +151,7 @@ myspawn x = void $ spawnPID x
 
 myKeys :: [(String, X ())]
 myKeys =
-  [ ("M-S-c", confirmPrompt myXPConfig "exit" $ io exitSuccess),
+  [ ("M-c", io exitSuccess),
     ("M-S-q", kill), -- close focused window
     ("M-q", spawn "xmonad --restart"), -- don't recompile, nix does it for us
     ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix
@@ -159,8 +159,6 @@ myKeys =
     ("M-S-l", sendMessage MirrorExpand), -- expand slave size
     ("M-g", goToSelected myGsConfig),
     ("M-d", spawn "rofi -show combi"),
-    ("M-f", spawn "rofi-pass"),
-    ("M-p", spawn "autorandr -c"),
     ("M-o", namedScratchpadAction scratchpads "xterm"),
     ("M-C-t", namedScratchpadAction scratchpads "telegram"),
     ("M-C-k", namedScratchpadAction scratchpads "keepassxc"),
@@ -178,6 +176,15 @@ myKeys =
              ]
        ]
     ++
+    -- M-Shift-[1-9] moves windows to workspaces
+    -- M-Shift-[1-9] moves windows to workspaces
+    -- M-Shift-[1-9] moves windows to workspaces
+    -- M-Shift-[1-9] moves windows to workspaces
+    -- M-[1-9] views workspaces
+    -- M-[1-9] views workspaces
+    -- M-[1-9] views workspaces
+    -- M-[1-9] views workspaces
+
     -- M-Shift-[1-9] moves windows to workspaces
     -- M-[1-9] views workspaces
     [ ("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)

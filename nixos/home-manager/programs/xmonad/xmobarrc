@@ -1,6 +1,6 @@
 Config {
   -- appearance
-  font = "xft:Source Han Mono SC:size=9"
+  font = "DroidSansM Nerd Font Mono 9"
 , bgColor = "black"
 , fgColor = "white"
 , position = Bottom

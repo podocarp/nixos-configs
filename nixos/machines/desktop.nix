@@ -1,5 +1,4 @@
-{ config, pkgs, lib, ... }:
-
+{ config, lib, ... }:
 {
   imports = [
     ./common/boot.nix
@@ -111,52 +110,10 @@
       fsType = "ntfs";
       options = [ "rw" "uid=${toString config.users.users.pengu.uid}" ];
     };
-
-    "/network/public" = {
-      device = "//obsidian-local/public";
-      fsType = "cifs";
-      options = [
-        "_netdev"
-        "user"
-        "uid=1000"
-        "gid=100"
-        "forceuid"
-        "forcegid"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=10min"
-        "x-systemd.device-timeout=5s"
-        "x-systemd.mount-timeout=5s"
-        "cache=loose"
-        "credentials=${config.sops.secrets.smb-public-credentials.path}"
-      ];
-    };
-
-    "/network/private" = {
-      device = "//obsidian-local/private";
-      fsType = "cifs";
-      options = [
-        "_netdev"
-        "user"
-        "uid=1000"
-        "gid=100"
-        "forceuid"
-        "forcegid"
-        "x-systemd.automount"
-        "x-systemd.mount-timeout=5s"
-        "x-systemd.idle-timeout=10min"
-        "x-systemd.device-timeout=5s"
-        "x-systemd.mount-timeout=5s"
-        "cache=loose"
-        "credentials=${config.sops.secrets.smb-private-credentials.path}"
-      ];
-    };
   };
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/d9fbd022-c7d0-4ee3-95a1-bbab0e3585f0"; }];
-
-  sops.secrets.smb-public-credentials = { };
-  sops.secrets.smb-private-credentials = { };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
 

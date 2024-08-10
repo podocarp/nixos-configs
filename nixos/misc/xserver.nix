@@ -14,6 +14,8 @@
       Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
     '';
 
+    desktopManager.runXdgAutostartIfNone = true;
+
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager = {
       session = [

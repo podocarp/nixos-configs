@@ -12,6 +12,7 @@
 
   boot.extraModprobeConfig = ''
     options iwlwifi power_save=1
+    options snd_hda_intel power_save=1
     options thinkpad_acpi fan_control
   '';
   boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "usb_storage" "sd_mod" "sdhci_pci" ];
@@ -57,6 +58,8 @@
   };
 
   services.udev.extraRules = ''
+    SUBSYSTEM=="pci" KERNEL=="*" ATTR{power/control}="auto"
+    SUBSYSTEM=="" KERNEL=="ata*" ATTR{power/control}="auto"
   '';
 
   fileSystems."/" =

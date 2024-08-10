@@ -11,6 +11,7 @@ creation_rules:
     key_groups:
       - age:
           - *jxd_age
+          - *t420_age
   - path_regex: secrets/secrets-certs.yaml
     key_groups:
       - age:

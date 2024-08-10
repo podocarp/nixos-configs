@@ -66,8 +66,8 @@ in
       (import ../services/grafana {
         inherit config grafanaPort postgresPort;
       })
-      (import ../services/loki { inherit lokiPort; })
-      (import ../services/promtail { inherit lokiPort; })
+      # (import ../services/loki { inherit lokiPort; })
+      # (import ../services/promtail { inherit lokiPort; })
 
       ((import ../services/openssh) args)
       ../services/samba

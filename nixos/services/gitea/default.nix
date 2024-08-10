@@ -52,6 +52,7 @@
           nodejs
 
           gitMinimal
+          git-lfs
           gnutar
           gzip
           openssh

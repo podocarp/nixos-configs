@@ -5,8 +5,8 @@
       timeout = 5;
       grub = {
         enable = true;
-        #gfxmodeEfi = "640x480";
-        #gfxmodeBios = "640x480";
+        gfxmodeEfi = "1920x1080";
+        gfxmodeBios = "1920x1080";
         configurationLimit = 5;
       };
     };

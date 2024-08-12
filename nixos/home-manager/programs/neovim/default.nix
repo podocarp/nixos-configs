@@ -54,6 +54,10 @@
       flake8
     ];
 
+    extraLuaPackages = p: with p; [
+      nvim-nio
+    ];
+
     extraPackages = with pkgs; [
       nil # nix lsp
       nixpkgs-fmt

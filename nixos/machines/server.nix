@@ -66,8 +66,8 @@ in
       (import ../services/grafana {
         inherit config grafanaPort postgresPort;
       })
-      (import ../services/loki { inherit lokiPort; })
-      (import ../services/promtail { inherit lokiPort; })
+      # (import ../services/loki { inherit lokiPort; })
+      # (import ../services/promtail { inherit lokiPort; })
 
       ((import ../services/openssh) args)
       ../services/samba
@@ -229,6 +229,12 @@ in
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdf
     ${pkgs.hdparm}/sbin/hdparm -S 250 /dev/sdg
   '';
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
+    ACTION=="add" SUBSYSTEM=="pci" ATTR{power/control}="auto"
+  '';
+
   time.timeZone = "Asia/Singapore";
 
   fileSystems."/" =

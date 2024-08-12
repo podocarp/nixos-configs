@@ -1,4 +1,4 @@
-args@{ config, pkgs, lib, ... }:
+args@{ pkgs, ... }:
 let
   myTerm = "xterm";
   homeDir = "/home/pengu";
@@ -34,7 +34,7 @@ in
       ((import ./programs/vifm) { pkgs = pkgs; myTerm = myTerm; })
       ./programs/zathura
 
-      ((import ./services/dunst) (args // { homeDir = homeDir; }))
+      ((import ./services/dunst) args)
       ./services/gpg-agent
       ./services/syncthing
 
@@ -43,13 +43,19 @@ in
       ((import ./misc/applications) args)
       ./misc/keyboard
       ./misc/xsession
+      ./programs/xmonad
     ];
 
   home.packages = with pkgs; [
     arandr
     brightnessctl
     tdesktop
-    wpa_supplicant
+    keepassxc
+
+    (python3.withPackages (p: with p; [
+      pygments
+      requests
+    ]))
   ];
 
   programs.man.enable = false;

@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs.url = "github:podocarp/nixpkgs/jxd/add-config";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -53,6 +52,21 @@
             sops-nix.nixosModules.sops
           ];
         };
+
+        t420 = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./machines/t420.nix
+            home-manager.nixosModules.home-manager
+            sops-nix.nixosModules.sops
+            ({ ... }: {
+              nix.registry = {
+                nixpkgs.flake = nixpkgs;
+              };
+            })
+          ];
+        };
       };
 
       darwinConfigurations = {
@@ -79,12 +93,13 @@
         let
           shell = { pkgs }: pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
-              # (haskellPackages.ghcWithPackages (hp: [
-              #   hp.xmonad
-              #   hp.xmonad-contrib
-              #   hp.regex-posix
-              # ]))
+              (haskellPackages.ghcWithPackages (hp: [
+                hp.xmonad
+                hp.xmonad-contrib
+                hp.regex-posix
+              ]))
               sops
+              age
               wireguard-tools
             ];
             shellHook = '' '';

@@ -6,7 +6,7 @@
       "guioptions" = "";
       "scroll-step" = 200;
       "synctex" = true;
-      "synctex-editor-command" = "nvr --remote-silent +%{line} %{input}";
+      # "synctex-editor-command" = "nvr --remote-silent +%{line} %{input}";
     };
   };
 }

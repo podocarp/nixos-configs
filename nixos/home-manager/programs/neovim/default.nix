@@ -12,7 +12,7 @@
         coc-nvim
         coc-prettier
         coc-pyright
-        coc-snippets
+        coc-ultisnips
         coc-tsserver
         coc-vimtex
         fzf-vim
@@ -40,6 +40,7 @@
           plugins.tree-sitter-lua
           plugins.tree-sitter-nix
           plugins.tree-sitter-vim
+          plugins.tree-sitter-latex
         ]))
         nvim-treesitter-textobjects
       ];

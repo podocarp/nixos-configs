@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
@@ -40,15 +40,5 @@
     usbutils # for lsusb
     xterm
     zip
-
-    ### Fonts
-    source-han-sans
-    source-han-mono
-    (nerdfonts.override {
-      fonts = [ "DroidSansMono" ];
-    })
   ];
-
-  # This must be enabled for fonts to be installed through packages.
-  fonts.fontconfig.enable = lib.mkForce true;
 }

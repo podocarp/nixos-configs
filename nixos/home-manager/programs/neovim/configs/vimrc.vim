@@ -43,7 +43,7 @@ let g:vimsyn_embed='l'
 "Plug 'SirVer/ultisnips'
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/UltiSnips"]
+let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/ultisnips"]
 
 "Plug 'honza/vim-snippets'
 
@@ -158,9 +158,8 @@ autocmd FileType scss setl iskeyword+=@-@
 """""" Latex
 "Plug 'lervag/vimtex', {'for': 'tex'}
 let g:vimtex_view_method = 'zathura'
-" let g:vimtex_view_general_options = '--noraise --unique file:@pdf\#src:@line@tex'
 let g:vimtex_compiler_latexmk = {
-    \ 'build_dir' : "_latexmk",
+    \ 'aux_dir' : '_latexmk',
     \ 'callback' : 1,
     \ 'continuous' : 1,
     \ 'executable' : 'latexmk',

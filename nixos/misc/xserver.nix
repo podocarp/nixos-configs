@@ -4,25 +4,17 @@
     ./fcitx.nix
   ];
 
+  programs.dconf.enable = true; # needed for all kinds of gnome things
+
   services.xserver = {
     enable = true;
-
-    windowManager.xmonad = {
-      enable = true;
-      config = ./xmonad/xmonad.hs;
-      enableConfiguredRecompile = true;
-      enableContribAndExtras = true;
-    };
-
-    desktopManager.plasma5 = {
-      enable = true;
-      runUsingSystemd = false;
-    };
 
     # stops tearing?
     screenSection = ''
       Option "metamodes" "nvidia-auto-select +0+0 { ForceCompositionPipeline = On }"
     '';
+
+    desktopManager.runXdgAutostartIfNone = true;
 
     # This starts ~/.xsession, which allows home-manager to control some things.
     displayManager = {

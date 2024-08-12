@@ -167,6 +167,16 @@ filextype *.djvu
         \ {View in okular}
         \ okular %f &> /dev/null &,
 
+fileviewer *.djvu
+        \ vifmimg djvu %pw %ph %c %pd
+        \ %pc
+        \ vifmimg clear
+
+fileviewer *.epub
+        \ vifmimg epub %pw %ph %c %pd
+        \ %pc
+        \ vifmimg clear
+
 " Audio
 filetype <audio/*>
         \ {Play with MPV}
@@ -185,6 +195,7 @@ fileviewer <audio/*>
 filextype <video/*>
         \ {View using MPV}
         \ mpv %f &> /dev/null &,
+
 fileviewer <video/*>
         \ vifmimg video %pw %ph %c %pd
         \ %pc

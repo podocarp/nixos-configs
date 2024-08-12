@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   i18n.defaultLocale = "en_SG.UTF-8";
   i18n.extraLocaleSettings = {
@@ -32,7 +32,7 @@
     askPassword = "";
     # disable checking for home network
     extraConfig = ''
-      Host *.home.com
+      Host *.home.lan
         StrictHostKeyChecking no
 
       Host *
@@ -41,7 +41,37 @@
     '';
   };
 
-  powerManagement.cpuFreqGovernor = "schedutil";
+  fonts = {
+    packages = with pkgs; [
+      liberation_ttf
+      corefonts
+      (nerdfonts.override {
+        fonts = [ "DroidSansMono" ];
+      })
+    ];
+
+    fontconfig = {
+      enable = true;
+      antialias = true;
+
+      hinting = {
+        enable = true;
+        style = "slight";
+        autohint = false;
+      };
+
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "default";
+      };
+
+      defaultFonts = {
+        serif = [ "Liberation Serif" "DejaVu Serif" ];
+        sansSerif = [ "Liberation Sans" "DejaVu Sans" ];
+        monospace = [ "DroidSansM Nerd Font Mono" "Liberation Mono" ];
+      };
+    };
+  };
 
   documentation = {
     enable = true;
@@ -81,7 +111,7 @@
 
   # Kills hanging services faster.
   systemd.extraConfig = ''
-    DefaultTimeoutStopSec=30s
+    DefaultTimeoutStopSec=60s
   '';
 
   nixpkgs.config.allowUnfree = true;
@@ -104,4 +134,7 @@
     };
   };
 
+  services.timesyncd.enable = false;
+  services.ntp.enable = false;
+  services.chrony.enable = true;
 }

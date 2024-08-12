@@ -1,20 +1,19 @@
-{ pkgs, config, homeDir, ... }:
-
+{ pkgs, config, ... }:
 let
   # This should match the script
   soundpath = ".config/dunst";
+  scriptpath = "${soundpath}/boop.sh";
 in
 {
-  # Sound is taken from KDE repo.
+  # Sound is taken from Oxygen sounds repo.
   home.file."${soundpath}/boop.ogg".source = builtins.fetchurl {
-    url = "https://invent.kde.org/plasma/oxygen-sounds/-/raw/master/sounds/Oxygen-Sys-App-Message.ogg";
+    url = "https://invent.kde.org/plasma/oxygen-sounds/-/raw/master/sounds/oxygen/stereo/dialog-information.ogg?inline=false";
     sha256 = "0lsc7fn0jzf1avkx3k6dzxl1zcxvdiz5xs7c0f4d73lzw83r1sb8";
   };
-  home.file."${soundpath}/boop.sh" = {
-    text = "${pkgs.pulseaudio}/bin/paplay ${homeDir}/${soundpath}/boop.ogg";
+  home.file."${scriptpath}" = {
+    text = "${pkgs.pulseaudio}/bin/paplay ${config.home.homeDirectory}/${soundpath}/boop.ogg";
     executable = true;
   };
-
   home.packages = [ pkgs.libnotify ];
 
   services.dunst = {
@@ -62,7 +61,7 @@ in
       };
       play_sound = {
         summary = "*";
-        script = "${homeDir}/${soundpath}/boop.sh";
+        script = "${config.home.homeDirectory}/${scriptpath}";
       };
       change_volume = {
         appname = "changevolume";

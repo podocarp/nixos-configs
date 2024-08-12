@@ -6,5 +6,13 @@
     source = ./scripts;
   };
   xdg.configFile."vifm/vifmrc".source = ./vifmrc;
-  home.packages = [ pkgs.vifm pkgs.ffmpegthumbnailer ];
+  home.packages = with pkgs;
+    [
+      vifm
+      ffmpegthumbnailer
+      imagemagick
+      poppler_utils
+      djvulibre
+      epub-thumbnailer
+    ];
 }

@@ -43,15 +43,16 @@
 
         contents = with pkgs;[
           dockerTools.caCertificates
-          dockerTools.binSh
           dockerTools.fakeNss
 
           coreutils
+          bashInteractive
           nix
           # needed for many actions to run
           nodejs
 
           gitMinimal
+          git-lfs
           gnutar
           gzip
           openssh
@@ -93,7 +94,7 @@
             "USER=root"
             "GIT_SSL_CAINFO=/ca.crt"
           ];
-          Cmd = [ "/bin/bash" ];
+          Cmd = [ "/bin/sh" ];
         };
       };
     in

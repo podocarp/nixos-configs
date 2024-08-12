@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   xsession.windowManager.xmonad = {
@@ -8,6 +8,8 @@
   };
 
   xdg.configFile."xmobar/xmobarrc".source = ./xmobarrc;
+
+  home.packages = [ pkgs.alsa-utils ];
 
   programs.xmobar = {
     enable = true;

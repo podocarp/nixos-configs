@@ -1,16 +1,16 @@
 Config {
   -- appearance
-  font = "DroidSansM Nerd Font Mono 9"
+  font = "DroidSansM Nerd Font 10"
 , bgColor = "black"
 , fgColor = "white"
 , position = Bottom
-, border = NoBorder
 , persistent = False
+, textOffset = 0
 
   -- layout
 , sepChar = "%"
 , alignSep = "<>"
-, template = "%_XMONAD_LOG% <> %dynnetwork% | %coretemp% %memory% %cpu% | %battery% | %date%"
+, template = "%_XMONAD_LOG% <> | %dynnetwork% %diskio% %multicpu% %memory% %multicoretemp% %battery% %alsa:default:Master% %date%"
 
   -- plugins
   -- low color is applied below Low, high when above High, normal otherwise.
@@ -18,7 +18,7 @@ Config {
 , commands =
   [
   Run Battery [
-      "--template", "<acstatus> <left> (<timeleft>)"
+      "--template", "<acstatus><hspace=5/><box mt=1><leftvbar></box>"
     , "--Low", "30"
     , "--High", "70"
     , "--low", "red"
@@ -27,43 +27,72 @@ Config {
     , "--"
     , "-p", "blue"
     , "-P", "%"
-    , "-o", "放電"
-    , "-O", "充電"
-    , "-i", "充電"
+    , "-O", "<fc=#FFFFFF>󱐋</fc> <timeleft>"
+    , "-o", "<fc=#FFFFFF>󰁼</fc> <timeleft>"
+    , "-i", "<fc=#FFFFFF>󰁹</fc>"
+    , "-a", "notify-send -u critical 'Battery level low!'"
+    , "-A", "15"
     ] 600
-  , Run Date "%a %d/%m %H:%M" "date" 100
-  , Run CoreTemp [
-      "--template" , "温 <core0>°C"
-    , "--Low"      , "60"
-    , "--High"     , "80"
+  , Run Date "<hspace=8/>%a %d/%m %H:%M" "date" 100
+  , Run MultiCoreTemp [
+      "--template" , "<hspace=5/><box mt=1><avgvbar></box>"
+    , "--Low"      , "40"
+    , "--High"     , "70"
     , "--low"      , "green"
     , "--normal"   , "yellow"
     , "--high"     , "red"
+    , "--"
+    , "--mintemp"  , "0"
+    , "--maxtemp"  , "100"
     ] 100
   , Run Memory [
-      "--template" , "存 <usedratio>%"
+      "--template" , "<hspace=10/><box mt=1><usedvbar></box>"
     , "--Low"      , "50"
     , "--High"     , "80"
     , "--low"      , "green"
     , "--normal"   , "yellow"
     , "--high"     , "red"
     ] 100
-  , Run Cpu [
-      "--template" , "核 <total>%"
+  , Run MultiCpu [
+      "--template" , "<hspace=8/><box mt=1><autovbar></box>"
     , "--Low"      , "50"
     , "--High"     , "85"
     , "--low"      , "green"
     , "--normal"   , "yellow"
     , "--high"     , "red"
+    , "--"
+    , "--contiguous-icons"
     ] 100
   , Run DynNetwork [
-      "--template" , "<dev> <tx>↑ <rx>↓ kB/s"
+      "--template" , "<hspace=10/><box mt=1><rxvbar></box><box mt=1><txvbar></box>"
     , "--Low"      , "10000"     -- 10kbps
-    , "--High"     , "5000000"  -- 500kbps
+    , "--High"     , "1000000"   -- 1mbps
     , "--low"      , "green"
     , "--normal"   , "yellow"
     , "--high"     , "red"
+    , "-S"         , "true"
     ] 100
+  , Run DiskIO [
+      ("/", "󰋊<hspace=5/><box mt=1><readvbar></box><box mt=1><writevbar></box>")
+    ] [
+      "--Low"      , "100000"    -- 100kbps
+    , "--High"     , "1000000"   -- 1mbps
+    , "--low"      , "green"
+    , "--normal"   , "yellow"
+    , "--high"     , "red"
+    , "-S"         , "true"
+    ] 100
+  , Run Alsa "default" "Master" [
+      "--template" , "<action=`bash -c 'changevolume toggle'` button=1><status><hspace=8/><box mt=1><volumevbar></box></action>"
+    , "--Low"      , "50"
+    , "--High"     , "100"
+    , "--low"      , "green"
+    , "--normal"   , "green"
+    , "--high"     , "red"
+    , "--"
+    , "-O"         , "<fc=#FFFFFF>󰕾</fc>"
+    , "-o"         , ""
+    ]
   , Run XPropertyLog "_XMONAD_LOG"
   ]
 }

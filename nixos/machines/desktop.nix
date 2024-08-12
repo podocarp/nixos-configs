@@ -4,9 +4,9 @@
     ./common/boot.nix
     ./common/common.nix
     ./common/network_drives.nix
-    ../misc/nvidia.nix
-    ../misc/xserver.nix
-    ../misc/promicro.nix
+    ./common/nvidia.nix
+    ./common/xserver.nix
+    ./common/promicro.nix
   ];
 
   boot = {

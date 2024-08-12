@@ -21,9 +21,9 @@ cleanup() {
 image() {
     if [ -n "$TMUX" ];
     then
-        magick "$1" -thumbnail "${width}x${height}" sixel:- | sed -e $'s:^:\u1bPtmux;:' -e 's:\x1b:\x1b\x1b:g' -e $'s/$/\u1b\\\\/'
+        magick "$1" -thumbnail "${width}x${height}>" sixel:- | sed -e $'s:^:\u1bPtmux;:' -e 's:\x1b:\x1b\x1b:g' -e $'s/$/\u1b\\\\/'
     else
-        magick "$1" -thumbnail "${width}x${height}" sixel:-
+        magick "$1" -thumbnail "${width}x${height}>" sixel:-
     fi
 }
 

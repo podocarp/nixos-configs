@@ -1,5 +1,7 @@
-{ pkgs, ... }:
-
+{ pkgs, osConfig, ... }:
+let
+  hostname = osConfig.networking.hostName;
+in
 {
   xsession.windowManager.xmonad = {
     enable = true;
@@ -7,7 +9,10 @@
     config = ./xmonad.hs;
   };
 
-  xdg.configFile."xmobar/xmobarrc".source = ./xmobarrc;
+  xdg.configFile."xmobar/xmobarrc".source = {
+    "t420" = ./xmobarrc;
+    "desktop" = ./xmobarrc_desktop;
+  }."${hostname}";
 
   home.packages = [ pkgs.alsa-utils ];
 
@@ -15,3 +20,5 @@
     enable = true;
   };
 }
+
+

@@ -8,6 +8,9 @@
 
       ./programs/texlive
       ./programs/zathura
+
+      ./services/dunst
+      ./programs/xmonad
     ];
 
   home.packages = with pkgs; [

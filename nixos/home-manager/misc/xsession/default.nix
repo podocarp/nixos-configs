@@ -20,7 +20,6 @@
       xorg.xkill
       xorg.xprop
     ];
-  # xsession.windowManager.command = lib.mkForce "startplasma-x11";
 
   xresources.extraConfig =
     ''
@@ -52,6 +51,8 @@
       *.color7: #F5F5F5
       *.color15: #2D2D2C
 
+      Xcursor.size: 40
+
       XTerm*faceName: xft:DroidSansM Nerd Font Mono
       XTerm*faceSize: 10
       XTerm*forceBoxChars: false
@@ -74,7 +75,6 @@
       XTerm*ttyModes: erase ^?
       XTerm*allowWindowOps: true
       XTerm*selectToClipboard: true
-      XTerm*sixelScrolling: true
       XTerm*maxStringParse: 100000000
       XTerm*maxGraphicSize: 3000x3000
     '';

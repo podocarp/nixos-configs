@@ -29,6 +29,7 @@
 
   # Disables GUI askpass prompt
   programs.ssh = {
+    startAgent = true;
     askPassword = "";
     # disable checking for home network
     extraConfig = ''

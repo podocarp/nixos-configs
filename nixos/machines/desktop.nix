@@ -3,8 +3,9 @@
   imports = [
     ./common/boot.nix
     ./common/common.nix
-    ../misc/nvidia.nix
-    ../misc/xserver.nix
+    ./common/network_drives.nix
+    ./common/nvidia.nix
+    ./common/xserver.nix
   ];
 
   boot = {

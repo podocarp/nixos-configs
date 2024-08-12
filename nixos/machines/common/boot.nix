@@ -5,8 +5,8 @@
       timeout = 5;
       grub = {
         enable = true;
-        #gfxmodeEfi = "640x480";
-        #gfxmodeBios = "640x480";
+        gfxmodeEfi = "1366x768"; # speeds up draw time
+        gfxmodeBios = "1366x768";
         configurationLimit = 5;
       };
     };

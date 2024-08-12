@@ -151,7 +151,7 @@ myspawn x = void $ spawnPID x
 
 myKeys :: [(String, X ())]
 myKeys =
-  [ ("M-c", io exitSuccess),
+  [ ("M-C-x", confirmPrompt myXPConfig "exit" $ io exitSuccess),
     ("M-S-q", kill), -- close focused window
     ("M-q", spawn "xmonad --restart"), -- don't recompile, nix does it for us
     ("M-S-<Return>", spawn myTerm), -- myTerm is appended by Nix

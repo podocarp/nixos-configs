@@ -3,22 +3,23 @@
 {
   imports =
     [
-      ./common/common.nix
       ./common/boot.nix
-      ../misc/xserver.nix
+      ./common/common.nix
+      ./common/network_drives.nix
+      ./common/xserver.nix
     ];
 
-  boot.loader.grub.device = "/dev/sda";
+  boot = {
+    loader.grub.device = "/dev/sda";
+    extraModprobeConfig = ''
+      options iwlwifi power_save=1
+      options snd_hda_intel power_save=1
+      options thinkpad_acpi fan_control
+    '';
+    initrd.availableKernelModules = [ "ehci_pci" "ahci" "usb_storage" "sd_mod" "sdhci_pci" ];
+    kernelModules = [ "kvm-intel" ];
+  };
 
-  boot.extraModprobeConfig = ''
-    options iwlwifi power_save=1
-    options snd_hda_intel power_save=1
-    options thinkpad_acpi fan_control
-  '';
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "usb_storage" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
 
   networking.hostName = "t420"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;

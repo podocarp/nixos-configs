@@ -2,7 +2,7 @@
 {
   fileSystems = {
     "/network/public" = {
-      device = "//obsidian-local/public";
+      device = "//obsidian/public";
       fsType = "cifs";
       options = [
         "_netdev"
@@ -21,7 +21,7 @@
     };
 
     "/network/private" = {
-      device = "//obsidian-local/private";
+      device = "//obsidian/private";
       fsType = "cifs";
       options = [
         "_netdev"

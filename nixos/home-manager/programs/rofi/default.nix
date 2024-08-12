@@ -1,21 +1,21 @@
-{ myTerm, ... }:
+{ term, ... }:
 
 {
   programs.rofi = {
     enable = true;
-    terminal = myTerm;
+    terminal = term;
     theme = "Paper";
     font = "Liberation Mono 20";
     extraConfig = {
-        modi = "combi,window";
-        combi-modi = "drun,run";
-        monitor = "-1";
+      modi = "combi,window";
+      combi-modi = "drun,run";
+      monitor = "-1";
     };
     pass = {
       enable = true;
       stores = [ "~/.password-store" ];
       extraConfig = ''
-        EDITOR='${myTerm} -e vi'
+        EDITOR='${term} -e vi'
         type_pass="Alt+1"
         type_user="Alt+2"
         autotype="Alt+3"

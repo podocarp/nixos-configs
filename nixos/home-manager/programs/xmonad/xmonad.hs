@@ -25,6 +25,7 @@ import XMonad
     appName,
     className,
     composeAll,
+    doF,
     doFloat,
     doIgnore,
     io,
@@ -42,6 +43,7 @@ import XMonad
     (=?),
     (|||),
   )
+import XMonad.Actions.CopyWindow (copyToAll)
 import XMonad.Actions.CycleWS (toggleWS, toggleWS')
 import XMonad.Actions.GridSelect
   ( GSConfig (gs_cellheight, gs_cellwidth),
@@ -58,7 +60,7 @@ import XMonad.Config.Kde (kdeConfig)
 import XMonad.Config.Prime (ScreenId)
 import XMonad.Hooks.EwmhDesktops (ewmh, ewmhFullscreen)
 import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook)
-import XMonad.Hooks.ManageHelpers (isInProperty)
+import XMonad.Hooks.ManageHelpers (isDialog, isInProperty)
 import XMonad.Hooks.RefocusLast
   ( refocusLastLayoutHook,
     refocusLastWhen,
@@ -210,7 +212,7 @@ myManageHook =
       | name <-
           [ "About",
             "Open Folder",
-            "Picture-in-picture",
+            "Picture-in-Picture", -- firefox
             "net-runelite-launcher-Launcher",
             "Volume Control",
             "dialog",
@@ -218,8 +220,16 @@ myManageHook =
             "zoom"
           ]
     ]
+      ++ [ appName =? name --> doFloat
+           | name <-
+               [ "Picture-in-Picture",
+                 "Picture-in-picture"
+               ]
+         ]
       ++ [stringProperty "WM_WINDOW_ROLE" =? "pop-up" --> doFloat]
-      ++ [className =? "plasmashell" <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_SKIP_TASKBAR" --> doIgnore]
+      -- chrome
+      ++ [stringProperty "WM_NAME" =? "Picture-in-picture" --> doFloat <+> doF copyToAll]
+      ++ [isDialog --> doFloat]
 
 myLogHook =
   xmobarPP

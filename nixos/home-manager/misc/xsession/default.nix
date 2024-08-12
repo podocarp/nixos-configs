@@ -74,6 +74,9 @@
       XTerm*ttyModes: erase ^?
       XTerm*allowWindowOps: true
       XTerm*selectToClipboard: true
+      XTerm*sixelScrolling: true
+      XTerm*maxStringParse: 100000000
+      XTerm*maxGraphicSize: 3000x3000
     '';
 
   gtk = {

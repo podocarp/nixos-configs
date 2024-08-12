@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ ... }:
 {
   imports = [
     ./common/boot.nix
@@ -40,8 +40,6 @@
   swapDevices =
     [{ device = "/dev/disk/by-uuid/d9fbd022-c7d0-4ee3-95a1-bbab0e3585f0"; }];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
-
   networking.hostName = "desktop"; # Define your hostname.
 
   virtualisation.virtualbox.host.enable = true;
@@ -54,7 +52,6 @@
 
   home-manager.users.pengu = import ../home-manager/desktop.nix;
 
-  sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   system.stateVersion = "22.11";

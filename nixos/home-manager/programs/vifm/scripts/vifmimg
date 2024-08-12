@@ -1,10 +1,16 @@
 [ -d "/tmp/vifm" ] || mkdir "/tmp/vifm"
 
 # $1 action, $2 panel width, $3 panel height, $4 image path
-width=$(($2*12))
-height=$(($3*14))
+
 hash=$(stat --terse -- "$(readlink -f "$4")" | md5sum | cut -d' ' -f1)
 PCACHE="/tmp/vifm/$hash.jpg"
+
+# Cell size in pixels
+cell_w=10
+cell_h=20
+# Desired image dimensions in pixels
+width=$(($2*cell_w))
+height=$(($3*cell_h))
 
 cleanup() {
     printf '\33[s\33[5A\33[2K\33[u'
@@ -15,9 +21,9 @@ cleanup() {
 image() {
     if [ -n "$TMUX" ];
     then
-        magick "$1" -geometry "${2}x${3}>" sixel:- | sed -e $'s:^:\u1bPtmux;:' -e 's:\x1b:\x1b\x1b:g' -e $'s/$/\u1b\\\\/'
+        magick "$1" -thumbnail "${width}x${height}" sixel:- | sed -e $'s:^:\u1bPtmux;:' -e 's:\x1b:\x1b\x1b:g' -e $'s/$/\u1b\\\\/'
     else
-        magick "$1" -geometry "${2}x${3}>" sixel:-
+        magick "$1" -thumbnail "${width}x${height}" sixel:-
     fi
 }
 
@@ -27,26 +33,25 @@ case "$1" in
     ;;
   "draw")
     [ ! -f "${PCACHE}" ] && \
-    magick "$4" -quality 80 -filter Lanczos -thumbnail "512x512" "${PCACHE}"
-    image "${PCACHE}" "$width" "$height"
+    image "${4}"
     ;;
   "video")
     [ ! -f "${PCACHE}" ] && \
     ffmpegthumbnailer -i "$4" -o "${PCACHE}" -s 0 -q 5
-    image "${PCACHE}" "$width" "$height"
+    image "${PCACHE}"
     ;;
   "pdf")
     [ ! -f "${PCACHE}" ] && pdftoppm -jpeg -f 1 -singlefile "$4" "$PCACHE"
-    image "${PCACHE}.jpg" "$width" "$height" # pdftoppm adds an extra extension...
+    image "${PCACHE}.jpg" # pdftoppm adds an extra extension...
     ;;
   "epub")
     [ ! -f "${PCACHE}" ] && epub-thumbnailer "$4" "$PCACHE" 1024
-    image "${PCACHE}" "$width" "$height"
+    image "${PCACHE}"
     ;;
   "djvu")
     [ ! -f "${PCACHE}" ] && \
     ddjvu -format=tiff -quality=80 -page=1 "$4" "${PCACHE}"
-    image "${PCACHE}" "$width" "$height"
+    image "${PCACHE}"
     ;;
   *)
 esac

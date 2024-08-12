@@ -26,7 +26,7 @@ in
       ./programs/direnv
       ./programs/fzf
       ./programs/git
-      ./programs/gpg
+      # ./programs/gpg
       ./programs/mpv
       ./programs/neovim
       # ./programs/ranger
@@ -38,7 +38,7 @@ in
       ./programs/vscode
       ./programs/zathura
 
-      ./services/gpg-agent
+      # ./services/gpg-agent
       ./services/syncthing
 
       ./scripts

@@ -16,6 +16,8 @@
     nvidiaPersistenced = true;
   };
 
+  hardware.nvidia-container-toolkit.enable = true;
+
   environment.variables = {
     "LIBVA_DRIVER_NAME" = "vdpau";
     "VDPAU_DRIVER" = "nvidia";
@@ -30,8 +32,6 @@
     linuxPackages.nvidia_x11
     stdenv.cc
   ];
-
-  virtualisation.docker.enableNvidia = true;
 
   nixpkgs.config.cudaSupport = true;
 }

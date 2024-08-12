@@ -210,8 +210,7 @@ myManageHook =
       | name <-
           [ "About",
             "Open Folder",
-            "Picture in picture",
-            "Picture-in-Picture",
+            "Picture-in-picture",
             "net-runelite-launcher-Launcher",
             "Volume Control",
             "dialog",

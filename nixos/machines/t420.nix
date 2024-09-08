@@ -18,6 +18,7 @@
     '';
     initrd.availableKernelModules = [ "ehci_pci" "ahci" "usb_storage" "sd_mod" "sdhci_pci" ];
     kernelModules = [ "kvm-intel" ];
+    kernelParams = [ "iomem=relaxed" ];
   };
 
 

@@ -13,9 +13,10 @@
     loader.grub = {
       useOSProber = true;
       efiSupport = true;
+      efiInstallAsRemovable = true;
       device = "nodev";
     };
-    loader.efi.canTouchEfiVariables = true;
+    loader.efi.canTouchEfiVariables = false;
     kernelModules = [ "kvm-amd" ];
   };
 
@@ -31,6 +32,11 @@
       fsType = "ext4";
     };
 
+    "/shared" = {
+      device = "/dev/disk/by-uuid/D84453A4445383E2";
+      fsType = "ntfs";
+    };
+
     "/boot" = {
       device = "/dev/disk/by-uuid/1618-9A73";
       fsType = "vfat";
@@ -39,6 +45,11 @@
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/d9fbd022-c7d0-4ee3-95a1-bbab0e3585f0"; }];
+
+  programs.steam = {
+    enable = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
 
   networking.hostName = "desktop"; # Define your hostname.
 

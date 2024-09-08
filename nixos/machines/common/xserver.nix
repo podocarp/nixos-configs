@@ -25,11 +25,14 @@
           manage = "window";
         }
       ];
-      defaultSession = "none+xsession";
-      autoLogin = {
-        enable = true;
-        user = "pengu";
-      };
+    };
+  };
+
+  services.displayManager = {
+    defaultSession = "none+xsession";
+    autoLogin = {
+      enable = true;
+      user = "pengu";
     };
   };
 }

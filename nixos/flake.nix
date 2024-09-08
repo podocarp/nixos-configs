@@ -23,51 +23,68 @@
     , nix-darwin
     , ...
     }: {
-      nixosConfigurations = {
-        server = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/server.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
+      nixosConfigurations =
+        let
+          registryPin = ({ ... }: {
+            nix.registry = {
+              nixpkgs.flake = nixpkgs;
+            };
+          });
+        in
+        {
+          server = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/server.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
 
-        server-min = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/server_min.nix
-            home-manager.nixosModules.home-manager
-          ];
-        };
+          server-min = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/server_min.nix
+              home-manager.nixosModules.home-manager
+            ];
+          };
 
-        desktop = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/desktop.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
+          desktop = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/desktop.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
 
-        t420 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/t420.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-            ({ ... }: {
-              nix.registry = {
-                nixpkgs.flake = nixpkgs;
-              };
-            })
-          ];
+          t420 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/t420.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
+
+          x1 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/x1-extreme.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
         };
-      };
 
       darwinConfigurations = {
         system = "aarch64-darwin";

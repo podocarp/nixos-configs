@@ -1,13 +1,12 @@
-{ config, pkgs, libs, ... }:
+{ lib, ... }:
 {
   imports =
     [
-      ''${builtins.fetchGit {
-          url = "https://github.com/NixOS/nixos-hardware.git";
-      }}/lenovo/thinkpad/x1-extreme''
-      <home-manager/nixos>
-      ./common.nix
-      ../misc/xserver.nix
+      ./common/boot.nix
+      ./common/common.nix
+      ./common/nvidia.nix
+      ./common/xserver.nix
+      ./common/wireless.nix
     ];
 
   boot.loader.grub.device = "nodev";
@@ -20,7 +19,13 @@
     options thinkpad_acpi fan_control
   '';
 
-  networking.hostName = "pebble"; # Define your hostname.
+  sops = {
+    defaultSopsFile = ../secrets/secrets.yaml;
+    age.keyFile = "/var/lib/sops/age/keys.txt";
+  };
+
+  networking.hostName = "x1"; # Define your hostname.
+  networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
@@ -32,25 +37,28 @@
     nvidiaBusId = "PCI:1:0:0";
     intelBusId = "PCI:0:2:0";
   };
-  # Some hardware acceleration things.
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
 
   home-manager.users.pengu = import ../home-manager/laptop.nix;
 
-  sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="TPPS/2 IBM TrackPoint", ATTR{device/press_to_select}="1"
   '';
+
+  fileSystems."/" =
+    {
+      device = "/dev/disk/by-uuid/06fa2c05-663a-4b3b-9f3f-7d1627190338";
+      fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    {
+      device = "/dev/disk/by-uuid/1618-9A73";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
 
   # WARNING: Machine specific settings. May crash your machine.
   services.undervolt = {
@@ -64,14 +72,14 @@
 
   services.thinkfan.enable = true;
   services.thinkfan.levels = [
-    [0     0      55]
-    [1     50     58]
-    [2     55     60]
-    [3     60     70]
-    [6     63     73]
-    [7     67     76]
-    [127   70     32767]
+    [ 0 0 55 ]
+    [ 1 50 58 ]
+    [ 2 55 60 ]
+    [ 3 60 70 ]
+    [ 6 63 73 ]
+    [ 7 67 76 ]
+    [ 127 70 32767 ]
   ];
 
-  system.stateVersion = "20.09";
+  system.stateVersion = "22.11";
 }

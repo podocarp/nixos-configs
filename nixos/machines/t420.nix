@@ -7,6 +7,7 @@
       ./common/common.nix
       ./common/network_drives.nix
       ./common/xserver.nix
+      ./common/wireless.nix
     ];
 
   boot = {
@@ -24,27 +25,6 @@
 
   networking.hostName = "t420"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
-  networking.wireless = {
-    userControlled.enable = true;
-    enable = true;
-    environmentFile = config.sops.secrets."network_env".path;
-    networks = {
-      "Wireless@SGx" = {
-        auth = ''
-          key_mgmt=WPA-EAP
-          eap=PEAP
-          identity="@WSG_IDENTITY@"
-          password="@WSG_PASSWORD@"
-        '';
-      };
-      "potato" = {
-        psk = "@POTATO_PSK@";
-      };
-      "mobile potato" = {
-        psk = "@POTATO_PSK@";
-      };
-    };
-  };
 
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;

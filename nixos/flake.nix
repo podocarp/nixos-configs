@@ -71,13 +71,14 @@
 
       darwinConfigurations = {
         system = "aarch64-darwin";
-        mac = nix-darwin.lib.darwinSystem {
+        work = nix-darwin.lib.darwinSystem {
           specialArgs = inputs;
           modules = [
-            ./machines/mac.nix
+            ./machines/work.nix
             home-manager.darwinModules.home-manager
           ];
         };
+
         jasmine = nix-darwin.lib.darwinSystem {
           specialArgs = inputs;
           modules = [

@@ -1,7 +1,7 @@
-args@{ ... }:
+{ pkgs, ... }:
 {
   imports = [
-    ((import ../services/yabai) args)
+    ../services/yabai
     ../services/skhd
   ];
 
@@ -9,7 +9,7 @@ args@{ ... }:
     home = "/Users/bytedance";
   };
 
-  home-manager.users.bytedance = import ../home-manager/mac.nix;
+  home-manager.users.bytedance = import ../home-manager/work.nix;
 
   environment.variables = {
     LC_ALL = "en_US.UTF-8";
@@ -34,6 +34,16 @@ args@{ ... }:
         }
       ];
     };
+  };
+
+  fonts = {
+    packages = with pkgs; [
+      liberation_ttf
+      corefonts
+      (nerdfonts.override {
+        fonts = [ "DroidSansMono" ];
+      })
+    ];
   };
 
   nixpkgs.hostPlatform = "aarch64-darwin";

@@ -91,12 +91,13 @@
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave" = true;
       "diagnostic.checkCurrentLine" = true;
-      "suggest.maxCompleteItemCount" = 10;
       "codeLens" = {
         "enable" = true;
         "separator" = "▸";
         "subseparator" = "▹";
       };
+
+      "inlayHint.enable" = false;
 
       # the pyright plugin doesn't like nested json for some reason...
       "python.pythonPath" = "nvim-python3";

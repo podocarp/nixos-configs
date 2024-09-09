@@ -16,7 +16,6 @@ in
       ./programs/direnv
       ./programs/atuin
       ./programs/git
-      ./programs/mpv
       ./programs/neovim
       ./programs/readline
       ./programs/tmux
@@ -111,7 +110,7 @@ in
         StrictHostKeyChecking no
 
       Host cloudide-robin
-        HostName wsa518ae3fae96a94c
+        HostName ws88adb68d478e9a82
         User byteide
         ProxyCommand /Users/bytedance/.local/bin/cloudide-cli --log-level info --apiserver-baseurl https://ide-us.tiktok-row.org --tenant-name bytedance workspace ssh proxy --id %h
         StrictHostKeyChecking no

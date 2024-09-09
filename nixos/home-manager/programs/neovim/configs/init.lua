@@ -26,14 +26,40 @@ vim.keymap.set('n', '<Leader>ds', function()
   widgets.centered_float(widgets.scopes)
 end)
 
-dap.adapters.go = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = 'dlv',
-    args = {'dap', '-l', '127.0.0.1:${port}'},
+local repl = require('dap.repl')
+repl.commands = vim.tbl_extend('force', repl.commands, {
+  custom_commands = {
+    ['.stop'] = dap.terminate,
+    ['.restart'] = dap.restart,
+  },
+})
+
+require('dap-go').setup({
+  dap_configurations = {
+    {
+      type = "go",
+      name = "Debug (Build Flags)",
+      request = "launch",
+      program = "${file}",
+      buildFlags = require("dap-go").get_build_flags,
+    },
+  },
+
+  delve = {
+    path = "dlv",
+    initialize_timeout_sec = 30,
+    port = "${port}",
+    args = {},
+    build_flags = {},
+  },
+  tests = {
+    verbose = true,
   }
-}
+})
+
+vim.keymap.set('n', '<Leader>td', function()
+  require('dap-go').debug_test()
+end)
 
 dap.adapters.python = function(cb, config)
   if config.request == 'attach' then
@@ -144,16 +170,6 @@ end
 dap.listeners.before.event_exited['dapui_config'] = function()
   close_tab()
 end
-
--- dap.listeners.after.event_initialized["dapui_config"] = function()
---   dapui.open()
--- end
--- dap.listeners.before.event_terminated["dapui_config"] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_exited["dapui_config"] = function()
---   dapui.close()
--- end
 
 require('gitsigns').setup()
 

@@ -32,6 +32,11 @@
       PS1="\[\033[1;32m\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\$\[\033[0m\] "
 
       bind 'TAB: menu-complete'
+      bind -m vi-command ".":insert-last-argument
+      bind -m vi-insert "\C-l.":clear-screen
+      bind -m vi-insert "\C-a.":beginning-of-line
+      bind -m vi-insert "\C-e.":end-of-line
+      bind -m vi-insert "\C-w.":backward-kill-word
     '';
   };
 }

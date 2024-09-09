@@ -53,9 +53,10 @@ let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/ultisnips"]
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set tagfunc=CocTagFunc
 inoremap <silent><expr> <c-c> coc#refresh()
-nmap <silent> gd :call CocActionAsync('jumpDefinition', 'tab drop')<CR>
+nmap <silent> gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
+nmap <silent> gD :call CocActionAsync('jumpDefinition', 'edit')<CR>
 nmap <silent> gy :call CocActionAsync('jumpTypeDefinition', 'vsplit')<CR>
-nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gi :call CocActionAsync('jumpImplementation')<CR>
 nmap <silent> gr :call CocActionAsync('jumpUsed')<CR>
 nmap <silent> gh :call CocActionAsync('doHover')<cr>
 autocmd CursorHold * silent call CocActionAsync('highlight')

@@ -1,15 +1,8 @@
-{ pkgs, ... }:
+{ ... }:
 {
   services.yabai = {
     enable = true;
     enableScriptingAddition = true;
-    package = pkgs.yabai.overrideAttrs rec {
-      version = "7.0.3";
-      src = pkgs.fetchzip {
-        url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-        sha256 = "sha256-EvtKYYjEmLkJTnc9q6f37hMD1T3DBO+I1LfBvPjCgfc=";
-      };
-    };
     config = {
       focus_follows_mouse = "autofocus";
       active_window_border_color = "0xffff0000";

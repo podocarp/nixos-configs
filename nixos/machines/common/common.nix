@@ -17,7 +17,6 @@
       git
       pciutils # for lspci
       sof-firmware # some audio devices need this
-      tmux
       vim
       wget
       hdparm
@@ -133,6 +132,13 @@
       allowed-users = [ "@wheel" ];
       experimental-features = [ "flakes" "nix-command" ];
     };
+  };
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
   hardware.enableRedistributableFirmware = true;

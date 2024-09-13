@@ -91,7 +91,7 @@ Config {
     , "--high"     , "red"
     , "--"
     , "-O"         , "<fc=#FFFFFF>󰕾</fc>"
-    , "-o"         , ""
+    , "-o"         , "<hspace=2/>"
     ]
   , Run XPropertyLog "_XMONAD_LOG"
   ]

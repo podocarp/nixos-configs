@@ -17,6 +17,7 @@
   home.packages = with pkgs; [
     arandr
     tdesktop
+    brightnessctl
   ];
 
   programs.man.enable = false;

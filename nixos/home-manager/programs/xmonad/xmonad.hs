@@ -179,15 +179,6 @@ myKeys =
        ]
     ++
     -- M-Shift-[1-9] moves windows to workspaces
-    -- M-Shift-[1-9] moves windows to workspaces
-    -- M-Shift-[1-9] moves windows to workspaces
-    -- M-Shift-[1-9] moves windows to workspaces
-    -- M-[1-9] views workspaces
-    -- M-[1-9] views workspaces
-    -- M-[1-9] views workspaces
-    -- M-[1-9] views workspaces
-
-    -- M-Shift-[1-9] moves windows to workspaces
     -- M-[1-9] views workspaces
     [ ("M-" ++ mask ++ show key, windows $ onCurrentScreen f i)
       | (key, i) <- zip [1 .. 9] myWorkspaces,
@@ -195,7 +186,9 @@ myKeys =
     ]
     ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
          ("<XF86AudioRaiseVolume>", myspawn "changevolume inc"),
-         ("<XF86AudioLowerVolume>", myspawn "changevolume dec")
+         ("<XF86AudioLowerVolume>", myspawn "changevolume dec"),
+         ("<XF86MonBrightnessUp>", myspawn "brightnessctl set 5%+"),
+         ("<XF86MonBrightnessDown>", myspawn "brightnessctl set 5%-")
        ]
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches

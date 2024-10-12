@@ -44,6 +44,11 @@
   };
   services.udisks2.enable = true;
 
+  programs.steam = {
+    enable = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
+
   networking.hostName = "desktop"; # Define your hostname.
 
   virtualisation.virtualbox.host.enable = true;

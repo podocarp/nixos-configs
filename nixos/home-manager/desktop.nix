@@ -10,6 +10,7 @@
       ./programs/zathura
 
       ./services/dunst
+      ./services/udiskie
       ./programs/xmonad
     ];
 

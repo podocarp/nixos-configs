@@ -5,6 +5,12 @@
     ../services/skhd
   ];
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    wireguard-go = pkgs.wireguard-go.override {
+      buildGoModule = pkgs.buildGo122Module;
+    };
+  };
+
   users.users.bytedance = {
     home = "/Users/bytedance";
   };
@@ -55,4 +61,5 @@
       experimental-features = [ "flakes" "nix-command" ];
     };
   };
+  system.stateVersion = 5;
 }

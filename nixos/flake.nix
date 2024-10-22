@@ -13,6 +13,9 @@
 
     nix-darwin.url = "github:LnL7/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -21,6 +24,7 @@
     , sops-nix
     , flake-utils
     , nix-darwin
+    , nixvim
     , ...
     }: {
       nixosConfigurations = {
@@ -75,7 +79,11 @@
           specialArgs = inputs;
           modules = [
             ./machines/work.nix
+            # sops does not have a darwin module yet
             home-manager.darwinModules.home-manager
+            {
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
           ];
         };
 

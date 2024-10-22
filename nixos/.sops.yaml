@@ -1,6 +1,7 @@
 keys:
   - &jxd_age age1jk6jh5wxv0au84ffhlkd7sd2v3ny8kyxjacvwxtxzgv932c5gf7s76ay8z
   - &t420_age age1tsv55k00fmkyvj2zaduzhvkgtnyqjneyycfxh8nj529xz2yyrehsgk5ld2
+  - &work_age age1fz0dx7y5juqply95rjs7czxmvrhl4ws75a4xqncgea6jcw6pfs2sga0umt
 creation_rules:
   - path_regex: secrets/secrets-network.yaml
     key_groups:
@@ -15,3 +16,8 @@ creation_rules:
     key_groups:
       - age:
           - *jxd_age
+  - path_regex: secrets/secrets-work.yaml
+    key_groups:
+      - age:
+          - *jxd_age
+          - *work_age

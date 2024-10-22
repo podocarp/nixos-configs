@@ -51,107 +51,6 @@ let g:UltiSnipsSnippetDirectories = ["~/.config/nvim/ultisnips"]
 "Plug 'rcarriga/nvim-dap-ui'
 
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
-set tagfunc=CocTagFunc
-inoremap <silent><expr> <c-c> coc#refresh()
-nmap <silent> gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
-nmap <silent> gD :call CocActionAsync('jumpDefinition', 'edit')<CR>
-nmap <silent> gy :call CocActionAsync('jumpTypeDefinition', 'vsplit')<CR>
-nmap <silent> gi :call CocActionAsync('jumpImplementation')<CR>
-nmap <silent> gr :call CocActionAsync('jumpUsed')<CR>
-nmap <silent> gh :call CocActionAsync('doHover')<cr>
-autocmd CursorHold * silent call CocActionAsync('highlight')
-" Symbol renaming.
-nmap <F2> <Plug>(coc-rename)
-
-" Formatting selected code.
-xmap <leader>=  <Plug>(coc-format-selected)
-nmap <leader>=  <Plug>(coc-format-selected)
-augroup cocgroup
-  autocmd!
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
-
-" Run the Code Lens action on the current line.
-nmap <leader>cl  <Plug>(coc-codelens-action)
-
-" Jump to next diagnostic (errors, etc)
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" line text object
-xnoremap il g_o^
-onoremap il :normal vil<CR>
-xnoremap al $o0
-onoremap al :normal val<CR>
-
-imap <C-j> <Plug>(coc-snippets-expand-jump)
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocActionAsync('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OI   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-autocmd BufWritePre *.go :OI
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Mappings for CoCList
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " keyword for scss
 autocmd FileType scss setl iskeyword+=@-@
@@ -197,13 +96,10 @@ nnoremap <leader>t :GFiles --cached --others --exclude-standard<CR>
 nnoremap <leader>s :Rg<CR>
 
 "Plug 'vim-airline/vim-airline'
-let g:airline_symbols_ascii=1
-let g:airline_section_x=''
-let g:airline_section_y=''
-let g:airline_section_z='%l:%c %p%%'
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#whitespace#enabled = 0
+"let g:airline#extensions#tabline#formatter = 'unique_tail'
+"let g:airline#extensions#whitespace#enabled = 0
+"let g:airline_extensions = ['vimtex', 'branch', 'tabline' ]
+"let g:airline_powerline_fonts = 1
 
 "Plug 'tpope/vim-surround'
 
@@ -334,6 +230,8 @@ vnoremap <A-j> :m '>+1<CR>gv
 vnoremap <A-k> :m '<-2<CR>gv
 
 vnoremap <C-c> "+y
+
 vnoremap <C-x> "+d
 
 """"""""""""""""""""""""""""MISC""""""""""""""""""""""""""
+

@@ -17,6 +17,10 @@
 
   home-manager.users.bytedance = import ../home-manager/work.nix;
 
+  security.sudo = {
+    extraConfig = "Defaults timestamp_timeout=60";
+  };
+
   environment.variables = {
     LC_ALL = "en_US.UTF-8";
     LANG = "en_US.UTF-8";
@@ -58,7 +62,10 @@
 
   nix = {
     settings = {
-      experimental-features = [ "flakes" "nix-command" ];
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
     };
   };
   system.stateVersion = 5;

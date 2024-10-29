@@ -5,13 +5,13 @@
   ];
   programs.nixvim = {
     enable = true;
-    # performance.byteCompileLua = {
-    #   enable = true;
-    #   configs = true;
-    #   initLua = true;
-    #   plugins = true;
-    #   nvimRuntime = true;
-    # };
+    performance.byteCompileLua = {
+      enable = true;
+      configs = true;
+      initLua = true;
+      plugins = true;
+      nvimRuntime = true;
+    };
 
     colorschemes.one.enable = true;
     viAlias = true;
@@ -22,6 +22,7 @@
       autoindent = true;
       autowriteall = true;
       background = "light";
+      backupdir = "/tmp/nvim/backups";
       colorcolumn = [ 80 ];
       complete = "";
       cursorline = true;
@@ -48,33 +49,40 @@
         "list"
         "full"
       ];
+      wrapscan = false;
     };
 
-    autoCmd = [
-      {
-        callback.__raw = "function() vim.lsp.buf.format({ async = false }) end";
-        event = [ "BufWritePre" ];
-        pattern = [ "*" ];
-      }
-    ];
+    autoCmd = [ ];
 
     keymaps =
       [
         {
-          key = "<leader>c";
+          key = "<leader>gd";
           mode = [ "n" ];
-          action = ":VimtexTocToggle<CR>";
+          action = ":Gdiff<CR>";
+          options = {
+            desc = "Git diff";
+          };
         }
 
         {
           key = "<C-n>";
           mode = [ "n" ];
           action = ":NvimTreeToggle<CR>";
+          options.silent = true;
         }
         {
-          key = "<C-m>";
+          key = "<leader>n";
           mode = [ "n" ];
           action = ":NvimTreeFindFile<CR>";
+          options.silent = true;
+        }
+
+        {
+          key = "<C-g>n";
+          mode = [ "n" ];
+          action = ":NvimTreeFindFile<CR>";
+          options.silent = true;
         }
 
         {
@@ -155,6 +163,7 @@
               })
             end
           '';
+          options.desc = "Go to definition";
         }
         {
           key = "gD";
@@ -167,6 +176,7 @@
               })
             end
           '';
+          options.desc = "View definition in a split";
         }
         {
           key = "gy";
@@ -179,78 +189,93 @@
               })
             end
           '';
+          options.desc = "View type definition in a split";
         }
         {
           key = "gca";
           mode = [ "n" ];
           action.__raw = "function() require'fzf-lua'.lsp_code_actions() end";
+          options.desc = "View lsp code actions";
         }
         {
           key = "gi";
           mode = [ "n" ];
           action.__raw = "function() require'fzf-lua'.lsp_implementations({jump_to_single_result = true}) end";
+          options.desc = "View lsp implementations";
         }
         {
           key = "gr";
           mode = [ "n" ];
           action.__raw = "function() require'fzf-lua'.lsp_references({jump_to_single_result = true}) end";
+          options.desc = "View lsp references";
         }
         {
           key = "<leader>a";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.diagnostics_workspace";
+          options.desc = "Workspace diagnostics";
         }
         {
-          key = "<leader>g";
+          key = "<leader>t";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.git_files";
+          options.desc = "Search through files tracked by git";
         }
         {
           key = "<leader>s";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.lsp_live_workspace_symbols";
+          options.desc = "Search through workspace symbols";
         }
         {
           key = "<leader>f";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.grep_project";
+          options.desc = "Grep through project";
         }
         {
           key = "<leader>c";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.builtin";
+          options.desc = "Other fzf-lua commands";
         }
 
         {
           key = "<C-c>";
           mode = [ "v" ];
           action = "\"+y";
+          options.desc = "Copy to system clipboard";
         }
         {
           key = "<C-x>";
           mode = [ "v" ];
           action = "\"+d";
+          options.desc = "Cut to system clipboard";
         }
         {
           key = "<C-v>";
           mode = [ "i" ];
           action = "<C-o>\"+p";
+          options.desc = "Paste from system clipboard";
         }
         {
           key = "<leader>d";
           mode = [ "n" ];
           action = "\"_d";
+          options.desc = "Delete into black hole register";
         }
 
         {
           key = "<C-j>";
           mode = [ "v" ];
           action = ":m '>+1<CR>gv";
+          options.desc = "Shift selected line down";
         }
         {
           key = "<C-k>";
           mode = [ "v" ];
           action = ":m '<-2<CR>gv";
+          options.desc = "Shift selected line up";
         }
 
         {
@@ -313,21 +338,20 @@
       })
     ];
 
-    highlight = {
-      PmenuSel = {
-        fg = "white";
-        bold = true;
-      };
-      IncSearch = {
-        link = "Search";
-        force = true;
-      };
-    };
-
     extraConfigLuaPre = # lua
       ''
         local luasnip = require "luasnip"
         require("tailwind-tools").setup({ })
+        local list_snips = function()
+          local ft_list = luasnip.available()[vim.o.filetype]
+          local ft_snips = {}
+          for _, item in pairs(ft_list) do
+            ft_snips[item.trigger] = item.name
+          end
+          print(vim.inspect(ft_snips))
+        end
+
+        vim.api.nvim_create_user_command("SnipList", list_snips, {})
       '';
 
     extraConfigLuaPost = # lua
@@ -339,6 +363,7 @@
         vim.api.nvim_set_hl(0, "PmenuSel", {
               bold = true,
               fg = "white",
+              bg = "black",
         })
       '';
 
@@ -357,8 +382,6 @@
               keyword_length = 3;
             }
             { name = "luasnip"; }
-            { name = "nvim_lsp_signature_help"; }
-            { name = "cmdline"; }
           ];
           snippet = {
             expand = "function(args) luasnip.lsp_expand(args.body) end";
@@ -477,12 +500,16 @@
         };
       };
 
-      friendly-snippets.enable = true;
-
       gitsigns.enable = true;
 
       luasnip = {
         enable = true;
+        fromLua = [
+          {
+            paths = ./snippets;
+            lazyLoad = false;
+          }
+        ];
       };
 
       lsp = {
@@ -491,7 +518,7 @@
           diagnostic = {
             "]g" = "goto_next";
             "[g" = "goto_prev";
-            "<C-w>d" = "open_float";
+            "gh" = "open_float";
           };
           lspBuf = {
             "<F2>" = "rename";
@@ -504,6 +531,21 @@
             }
           ];
         };
+        onAttach = # lua
+          ''
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = bufnr,
+              callback = function() vim.lsp.buf.format({ async = false }) end
+            })
+            vim.api.nvim_create_autocmd("CursorHold", {
+              buffer = bufnr,
+              callback = vim.lsp.buf.document_highlight,
+            })
+            vim.api.nvim_create_autocmd("CursorMoved", {
+              buffer = bufnr,
+              callback = vim.lsp.buf.clear_references,
+            })
+          '';
         servers = {
           gopls = {
             enable = true;
@@ -517,15 +559,23 @@
                 staticcheck = true;
               };
             };
-            onAttach.function = ''
-              vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = bufnr,
-                callback = function()
-                  vim.lsp.buf.code_action { context = { only = { 'source.organizeImports' } }, apply = true }
-                  vim.lsp.buf.code_action { context = { only = { 'source.fixAll' } }, apply = true }
-                end
-              })
-            '';
+            onAttach.function = # lua
+              ''
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                  buffer = bufnr,
+                  callback = function()
+                    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", {only = {"source.organizeImports"}})
+                    for cid, res in pairs(result or {}) do
+                      for _, r in pairs(res.result or {}) do
+                        if r.edit then
+                          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+                          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+                        end
+                      end
+                    end
+                  end
+                })
+              '';
           };
           nixd = {
             enable = true;
@@ -545,7 +595,13 @@
               end
             '';
             settings = {
-              workspace.library = [ { __raw = "vim.env.VIMRUNTIME"; } ];
+              workspace = {
+                library = [
+                  { __raw = "vim.env.VIMRUNTIME"; }
+                  { __raw = "vim.api.nvim_get_runtime_file('*lua/luasnip', false)[1]"; }
+                ];
+                checkThirdParty = false;
+              };
               workspace.ignoreDir = [
                 ".direnv"
                 "node_modules"
@@ -566,16 +622,6 @@
             '';
           };
           ts_ls.enable = true;
-        };
-      };
-
-      lsp-signature = {
-        enable = false;
-        settings = {
-          handler_opts = {
-            border = "none";
-          };
-          hint_prefix = "";
         };
       };
 
@@ -613,6 +659,21 @@
         };
       };
 
+      neogen = {
+        enable = true;
+        snippetEngine = "luasnip";
+        keymaps.generate = "<leader>gc";
+        inputAfterComment = true;
+        languages = rec {
+          typescript = {
+            template = {
+              annotation_convention = "tsdoc";
+            };
+          };
+          typescriptreact = typescript;
+        };
+      };
+
       noice = {
         enable = true;
         lsp.override = {
@@ -620,18 +681,9 @@
           "vim.lsp.util.convert_input_to_markdown_lines" = true;
           "vim.lsp.util.stylize_markdown" = true;
         };
-        routes = [
-          {
-            filter = {
-              event = "msg_show";
-              kind = "";
-              rind = "written";
-            };
-            opts = {
-              skip = true;
-            };
-          }
-        ];
+        presets = {
+          long_message_to_split = true;
+        };
         views = {
           mini = {
             timeout = 5000;
@@ -746,6 +798,10 @@
         profile = "default";
       };
 
+      refactoring = {
+        enable = true;
+      };
+
       sleuth.enable = true;
 
       treesitter = {
@@ -756,15 +812,13 @@
           incremental_selection = {
             enable = true;
             keymaps = {
-              init_selection = false;
-              node_decremental = "ghm";
-              node_incremental = "ghn";
-              scope_incremental = "ghc";
+              init_selection = "<CR>";
+              node_incremental = "<CR>";
+              scope_incremental = "<S-CR>";
+              node_decremental = "<BS>";
             };
           };
-          indent = {
-            enable = true;
-          };
+          indent.enable = true;
         };
       };
 
@@ -783,6 +837,10 @@
       ts-autotag.enable = true;
 
       web-devicons.enable = true;
+
+      which-key = {
+        enable = true;
+      };
     };
   };
 }

@@ -16,7 +16,7 @@
       "vm.dirty_writeback_centisecs" = 1500;
     };
 
-    initrd.kernelModules = [
+    initrd.availableKernelModules = [
       "ahci"
       "nvme"
       "sd_mod"

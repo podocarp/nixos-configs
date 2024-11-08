@@ -1,5 +1,5 @@
 # A common set of user environment things
-{ pkgs, ... }:
+{ pkgs, useX ? true, ... }:
 {
   imports = [
     ../scripts
@@ -13,8 +13,9 @@
     ../programs/vscode
     ../services/syncthing
     ../misc/keyboard
+  ] ++ (if useX then [
     ../misc/xsession
-  ];
+  ] else [ ]);
 
   nixpkgs.config.allowUnfree = true;
 

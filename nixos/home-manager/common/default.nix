@@ -1,8 +1,8 @@
-{ ... }:
+args@{ ... }:
 {
   imports = [
     ./dev.nix
-    ./env.nix
+    ((import ./env.nix) args)
   ];
 
   programs.home-manager.enable = true;

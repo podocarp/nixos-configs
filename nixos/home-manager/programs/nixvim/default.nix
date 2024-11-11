@@ -340,8 +340,11 @@
 
     extraConfigLuaPre = # lua
       ''
-        local luasnip = require "luasnip"
         require("tailwind-tools").setup({ })
+        local noice = require "noice"
+
+        local luasnip = require "luasnip"
+
         local list_snips = function()
           local ft_list = luasnip.available()[vim.o.filetype]
           local ft_snips = {}
@@ -375,13 +378,13 @@
         autoEnableSources = true;
         settings = {
           sources = [
-            { name = "path"; }
             { name = "nvim_lsp"; }
+            { name = "luasnip"; }
+            { name = "path"; }
             {
               name = "buffer";
               keyword_length = 3;
             }
-            { name = "luasnip"; }
           ];
           snippet = {
             expand = "function(args) luasnip.lsp_expand(args.body) end";
@@ -507,9 +510,12 @@
         fromLua = [
           {
             paths = ./snippets;
-            lazyLoad = false;
+            lazyLoad = true;
           }
         ];
+        filetypeExtend = {
+          typescriptreact = [ "typescript" ];
+        };
       };
 
       lsp = {
@@ -640,12 +646,18 @@
               "diff"
             ];
             lualine_c = [
-              "diagnostics"
-            ];
-            lualine_x = [
               {
                 __unkeyed-1 = "filename";
                 path = 1;
+              }
+            ];
+            lualine_x = [
+              {
+                __unkeyed-1.__raw = "noice.api.statusline.mode.get";
+                cond.__raw = "noice.api.statusline.mode.has";
+                color = {
+                  fg = "#ff9e64";
+                };
               }
             ];
             lualine_y = [
@@ -653,7 +665,19 @@
               "location"
             ];
             lualine_z = [
-              ""
+              {
+                __unkeyed-1 = "diagnostics";
+                sources = [
+                  "nvim_lsp"
+                  "nvim_diagnostic"
+                ];
+                sections = [
+                  "error"
+                  "warn"
+                  "info"
+                  "hint"
+                ];
+              }
             ];
           };
         };
@@ -676,6 +700,7 @@
 
       noice = {
         enable = true;
+        notify.view = "mini";
         lsp.override = {
           "cmp.entry.get_documentation" = true;
           "vim.lsp.util.convert_input_to_markdown_lines" = true;

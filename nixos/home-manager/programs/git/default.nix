@@ -31,6 +31,7 @@
         tool = "vimdiff";
         prompt = false;
         conflictstyle = "diff3";
+        keepBackup = false;
       };
       color = {
         ui = true;

@@ -4,7 +4,7 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "J XD";
+    userName = "podocarp";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {
       a = "add";
@@ -31,6 +31,7 @@
         tool = "vimdiff";
         prompt = false;
         conflictstyle = "diff3";
+        keepBackup = false;
       };
       color = {
         ui = true;

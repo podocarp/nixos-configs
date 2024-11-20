@@ -15,24 +15,33 @@
 
     nix-darwin.url = "github:LnL7/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
-    inputs@{ nixpkgs
-    , home-manager
-    , sops-nix
-    , flake-utils
-    , nix-darwin
-    , nixos-hardware
-    , ...
-    }: {
+    inputs@{
+      nixpkgs,
+      home-manager,
+      sops-nix,
+      flake-utils,
+      nix-darwin,
+      nixvim,
+      nixos-hardware,
+      ...
+    }:
+    {
       nixosConfigurations =
         let
-          registryPin = ({ ... }: {
-            nix.registry = {
-              nixpkgs.flake = nixpkgs;
-            };
-          });
+          registryPin = (
+            { ... }:
+            {
+              nix.registry = {
+                nixpkgs.flake = nixpkgs;
+              };
+            }
+          );
         in
         {
           server = nixpkgs.lib.nixosSystem {
@@ -92,13 +101,20 @@
 
       darwinConfigurations = {
         system = "aarch64-darwin";
-        mac = nix-darwin.lib.darwinSystem {
+        work = nix-darwin.lib.darwinSystem {
           specialArgs = inputs;
           modules = [
-            ./machines/mac.nix
+            ./machines/work.nix
+            # sops does not have a darwin module yet
             home-manager.darwinModules.home-manager
+            {
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
+            }
           ];
         };
+
         jasmine = nix-darwin.lib.darwinSystem {
           specialArgs = inputs;
           modules = [
@@ -112,19 +128,21 @@
 
       devShell =
         let
-          shell = { pkgs }: pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [
-              (haskellPackages.ghcWithPackages (hp: [
-                hp.xmonad
-                hp.xmonad-contrib
-                hp.regex-posix
-              ]))
-              sops
-              age
-              wireguard-tools
-            ];
-            shellHook = '' '';
-          };
+          shell =
+            { pkgs }:
+            pkgs.mkShell {
+              nativeBuildInputs = with pkgs; [
+                (haskellPackages.ghcWithPackages (hp: [
+                  hp.xmonad
+                  hp.xmonad-contrib
+                  hp.regex-posix
+                ]))
+                sops
+                age
+                wireguard-tools
+              ];
+              shellHook = '''';
+            };
         in
         {
           x86_64-linux = shell {

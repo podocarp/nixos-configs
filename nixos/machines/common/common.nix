@@ -12,16 +12,15 @@
   };
 
   # Packages we want system-wide.
-  environment.systemPackages = with pkgs;
-    [
-      git
-      pciutils # for lspci
-      sof-firmware # some audio devices need this
-      vim
-      wget
-      hdparm
-      lm_sensors
-    ];
+  environment.systemPackages = with pkgs; [
+    git
+    pciutils # for lspci
+    sof-firmware # some audio devices need this
+    vim
+    wget
+    hdparm
+    lm_sensors
+  ];
 
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
@@ -66,9 +65,18 @@
       };
 
       defaultFonts = {
-        serif = [ "Liberation Serif" "DejaVu Serif" ];
-        sansSerif = [ "Liberation Sans" "DejaVu Sans" ];
-        monospace = [ "DroidSansM Nerd Font Mono" "Liberation Mono" ];
+        serif = [
+          "Liberation Serif"
+          "DejaVu Serif"
+        ];
+        sansSerif = [
+          "Liberation Sans"
+          "DejaVu Sans"
+        ];
+        monospace = [
+          "DroidSansM Nerd Font Mono"
+          "Liberation Mono"
+        ];
       };
     };
   };
@@ -91,6 +99,7 @@
   security.sudo = {
     enable = true;
     wheelNeedsPassword = false;
+    extraConfig = "Defaults timestamp_timeout=60";
   };
 
   security.wrappers = {
@@ -130,7 +139,10 @@
 
     settings = {
       allowed-users = [ "@wheel" ];
-      experimental-features = [ "flakes" "nix-command" ];
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
     };
   };
 

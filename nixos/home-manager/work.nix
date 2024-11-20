@@ -10,29 +10,31 @@ in
   home.homeDirectory = homeDir;
   home.stateVersion = "23.11";
 
-  imports =
-    [
-      ./programs/bash
-      ./programs/direnv
-      ./programs/atuin
-      ./programs/git
-      ./programs/mpv
-      ./programs/neovim
-      ./programs/readline
-      ./programs/tmux
-      ./programs/vscode
-      ((import ./programs/vifm) { pkgs = pkgs; myTerm = myTerm; })
+  imports = [
+    ./programs/bash
+    ./programs/direnv
+    ./programs/atuin
+    ./programs/git
+    ./programs/neovim
+    ./programs/nixvim
+    ./programs/readline
+    ./programs/tmux
+    ./programs/vscode
+    ((import ./programs/vifm) {
+      pkgs = pkgs;
+      myTerm = myTerm;
+    })
 
-      ./services/syncthing
+    ./services/syncthing
 
-      ./scripts
+    ./scripts
 
-      ./misc/keyboard
-    ];
+    ./misc/keyboard
+  ];
 
   home.packages = with pkgs; [
     bind # for nslookup
-    entr
+    entr # run arbitrary commands when files change
     ffmpeg
     file-rename
     gnumake
@@ -44,13 +46,13 @@ in
     lsof
     nix-index
     nmap
-    nomacs
     p7zip
-    (python3.withPackages (p: with p; [
-      requests
-    ]))
+    (python3.withPackages (
+      p: with p; [
+        requests
+      ]
+    ))
     ripgrep
-    syncthing
     tldr
     unzip
     unrar
@@ -111,7 +113,7 @@ in
         StrictHostKeyChecking no
 
       Host cloudide-robin
-        HostName wsa518ae3fae96a94c
+        HostName ws88adb68d478e9a82
         User byteide
         ProxyCommand /Users/bytedance/.local/bin/cloudide-cli --log-level info --apiserver-baseurl https://ide-us.tiktok-row.org --tenant-name bytedance workspace ssh proxy --id %h
         StrictHostKeyChecking no

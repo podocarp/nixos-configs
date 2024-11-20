@@ -2,7 +2,7 @@
 
 {
   programs.neovim = {
-    enable = true;
+    enable = false;
     plugins = with pkgs.vimPlugins;
       [
         coc-css
@@ -12,26 +12,40 @@
         coc-nvim
         coc-prettier
         coc-pyright
-        coc-ultisnips
+        coc-snippets
         coc-tsserver
+        coc-ultisnips
         coc-vimtex
+
         fzf-vim
+
         gitsigns-nvim
+
+        lualine-nvim
+
         nvim-dap
-        nvim-dap-ui
-        nvim-dap-python
         nvim-dap-go
+        nvim-dap-python
+        nvim-dap-ui
+
         nvim-tree-lua
+
         nvim-web-devicons
+
         papercolor-theme
+
         ultisnips
+
         undotree
-        vim-airline
-        vim-airline-themes
+
         vim-fugitive
+
         vim-obsession
+
         vim-sleuth
+
         vim-surround
+
         vimtex
 
         (nvim-treesitter.withPlugins (plugins: [
@@ -48,11 +62,11 @@
     extraPython3Packages = p: with p; [
       # note: python lsps will use the current interpreter, and so will not see
       # vim extra python packages
-      inotify-simple # ultisnips needs this
-      unidecode # ultisnips needs this
       black
-      mypy
       flake8
+      inotify-simple # ultisnips needs this
+      mypy
+      unidecode # ultisnips needs this
     ];
 
     extraLuaPackages = p: with p; [
@@ -60,17 +74,19 @@
     ];
 
     extraPackages = with pkgs; [
-      nil # nix lsp
-      nixpkgs-fmt
       delve # go debugger
-      gopls # go language server
       gofumpt # go fmt replacement
+      gopls # go language server
       haskell-language-server
       haskellPackages.hlint
+      lua-language-server
+      nil # nix lsp
+      nixpkgs-fmt
       ripgrep # for cocsearch
       tailwindcss-language-server
       tree-sitter
       watchman # for coc
+      nodejs
     ];
 
     # The following symlinks vi, vim, vimdiff to the nvim equivalents.
@@ -78,31 +94,29 @@
     vimAlias = true;
     vimdiffAlias = true;
 
-    withNodeJs = true;
-    withPython3 = true;
-    withRuby = true;
-
     coc.enable = true;
     # can override in local dir's .vim/coc-settings.json
     coc.settings = {
       "coc.source.around.enable" = false;
-      "coc.preferences.jumpCommand" = "tab drop";
+      "coc.preferences.jumpCommand" = "vsplit";
       "coc.preferences.formatOnSaveFiletypes" = [ "*" ];
       "diagnostic.displayByAle" = false;
       "diagnostic.refreshAfterSave" = true;
       "diagnostic.checkCurrentLine" = true;
-      "suggest.maxCompleteItemCount" = 10;
       "codeLens" = {
         "enable" = true;
         "separator" = "▸";
         "subseparator" = "▹";
       };
 
-      # the pyright plugin doesn't like nested json for some reason...
+      "inlayHint.enable" = false;
+
       "python.pythonPath" = "nvim-python3";
       "python.formatting.provider" = "black";
       "python.linting.flake8Enabled" = true;
       "python.linting.mypyEnabled" = true;
+
+      "prettier.statusItemText" = "";
 
       "typescript" = {
         "format" = {
@@ -113,6 +127,7 @@
           "importModuleSpecifier" = "project-relative";
           "quoteStyle" = "single";
         };
+        "preferGoToSourceDefinition" = true;
       };
       "go" = {
         goplsEnv = {
@@ -124,7 +139,6 @@
         };
         "goplsPath" = "${pkgs.gopls}/bin/gopls";
       };
-
       "tsserver.useLocalTsdk" = true;
       "languageserver" = {
         "haskell" = {
@@ -138,6 +152,24 @@
             "package.yaml"
             "hie.yaml"
           ];
+        };
+        "lua" = {
+          "command" = "${pkgs.lua-language-server}/bin/lua-language-server";
+          "filetypes" = [ "lua" ];
+          "settings" = {
+            "Lua" = {
+              "workspace" = {
+                "library" = [
+                  "${pkgs.neovim}/share/nvim/runtime/lua"
+                  "${pkgs.vimPlugins.plenary-nvim}/lua"
+                ];
+              };
+              "diagnostics" = {
+                "enable" = true;
+                "globals" = [ "vim" ];
+              };
+            };
+          };
         };
         "nix" = {
           "command" = "nil";
@@ -164,10 +196,10 @@
 
   home.packages = [ pkgs.neovim-remote ];
 
-  xdg.configFile.nvim = {
-    source = ./configs;
-    recursive = true;
-  };
+  # xdg.configFile.nvim = {
+  #   source = ./configs;
+  #   recursive = true;
+  # };
 
   # Used for a snippet.
   xdg.configFile.inkscapeTemplate = {

@@ -1,15 +1,25 @@
-args@{ ... }:
+{ pkgs, ... }:
 {
   imports = [
-    ((import ../services/yabai) args)
+    ../services/yabai
     ../services/skhd
   ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    wireguard-go = pkgs.wireguard-go.override {
+      buildGoModule = pkgs.buildGo122Module;
+    };
+  };
 
   users.users.bytedance = {
     home = "/Users/bytedance";
   };
 
-  home-manager.users.bytedance = import ../home-manager/mac.nix;
+  home-manager.users.bytedance = import ../home-manager/work.nix;
+
+  security.sudo = {
+    extraConfig = "Defaults timestamp_timeout=60";
+  };
 
   environment.variables = {
     LC_ALL = "en_US.UTF-8";
@@ -36,13 +46,27 @@ args@{ ... }:
     };
   };
 
+  fonts = {
+    packages = with pkgs; [
+      liberation_ttf
+      corefonts
+      (nerdfonts.override {
+        fonts = [ "DroidSansMono" ];
+      })
+    ];
+  };
+
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
   nix.useDaemon = true;
 
   nix = {
     settings = {
-      experimental-features = [ "flakes" "nix-command" ];
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
     };
   };
+  system.stateVersion = 5;
 }

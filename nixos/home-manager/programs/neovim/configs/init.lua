@@ -11,10 +11,10 @@ vim.keymap.set('n', '<Leader>dt', function() dap.toggle_breakpoint() end)
 vim.keymap.set('n', '<Leader>dT', function() dap.set_breakpoint() end)
 vim.keymap.set('n', '<Leader>dl', function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
 vim.keymap.set('n', '<Leader>dr', function() dap.repl.open() end)
-vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
   require('dap.ui.widgets').hover()
 end)
-vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
   require('dap.ui.widgets').preview()
 end)
 vim.keymap.set('n', '<Leader>df', function()
@@ -26,14 +26,40 @@ vim.keymap.set('n', '<Leader>ds', function()
   widgets.centered_float(widgets.scopes)
 end)
 
-dap.adapters.go = {
-  type = 'server',
-  port = '${port}',
-  executable = {
-    command = 'dlv',
-    args = {'dap', '-l', '127.0.0.1:${port}'},
+local repl = require('dap.repl')
+repl.commands = vim.tbl_extend('force', repl.commands, {
+  custom_commands = {
+    ['.stop'] = dap.terminate,
+    ['.restart'] = dap.restart,
+  },
+})
+
+require('dap-go').setup({
+  dap_configurations = {
+    {
+      type = "go",
+      name = "Debug (Build Flags)",
+      request = "launch",
+      program = "${file}",
+      buildFlags = require("dap-go").get_build_flags,
+    },
+  },
+
+  delve = {
+    path = "dlv",
+    initialize_timeout_sec = 30,
+    port = "${port}",
+    args = {},
+    build_flags = {},
+  },
+  tests = {
+    verbose = true,
   }
-}
+})
+
+vim.keymap.set('n', '<Leader>td', function()
+  require('dap-go').debug_test()
+end)
 
 dap.adapters.python = function(cb, config)
   if config.request == 'attach' then
@@ -64,23 +90,23 @@ end
 dap.configurations.python = {
   {
     -- The first three options are required by nvim-dap
-    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
-    request = 'launch';
-    name = "Launch file";
+    type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
+    request = 'launch',
+    name = "Launch file",
     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
-    program = "${file}"; -- This configuration will launch the current file if used.
+    program = "${file}", -- This configuration will launch the current file if used.
   },
 }
 
-vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointCondition', {	text='', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapLogPoint', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpoint', { text = '', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapLogPoint', { text = '', texthl = '', linehl = '', numhl = '' })
 
 require("dapui").setup({
   mappings = {
-    expand = {"<CR>", "<2-LeftMouse>"},
-    open = {"o"},
+    expand = { "<CR>", "<2-LeftMouse>" },
+    open = { "o" },
     remove = "d",
     edit = "e",
     repl = "r",
@@ -90,9 +116,9 @@ require("dapui").setup({
     {
       elements = {
         { id = "breakpoints", size = 0.1 },
-        { id = "scopes", size = 0.6 },
-        { id = "stacks", size = 0.15 },
-        { id = "watches", size = 0.15 },
+        { id = "scopes",      size = 0.6 },
+        { id = "stacks",      size = 0.15 },
+        { id = "watches",     size = 0.15 },
       },
       size = 40,
       position = "left",
@@ -145,19 +171,200 @@ dap.listeners.before.event_exited['dapui_config'] = function()
   close_tab()
 end
 
--- dap.listeners.after.event_initialized["dapui_config"] = function()
---   dapui.open()
--- end
--- dap.listeners.before.event_terminated["dapui_config"] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_exited["dapui_config"] = function()
---   dapui.close()
--- end
+-- Use <c-j> to trigger snippets
+vim.keymap.set("i", "<c-j>", "<Plug>(coc-snippets-expand-jump)")
+-- Use <c-space> to trigger completion
+vim.keymap.set("i", "<c-space>", "coc#refresh()", { silent = true, expr = true })
+
+-- Use `[g` and `]g` to navigate diagnostics
+-- Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+vim.keymap.set("n", "[g", "<Plug>(coc-diagnostic-prev)", { silent = true })
+vim.keymap.set("n", "]g", "<Plug>(coc-diagnostic-next)", { silent = true })
+
+-- GoTo code navigation
+vim.keymap.set("n", "gd", "<Plug>(coc-definition)", { silent = true })
+vim.keymap.set("n", "gy", "<Plug>(coc-type-definition)", { silent = true })
+vim.keymap.set("n", "gi", "<Plug>(coc-implementation)", { silent = true })
+vim.keymap.set("n", "gr", "<Plug>(coc-references)", { silent = true })
+-- Show documentation in preview window
+vim.keymap.set("n", "gh", function()
+  local cw = vim.fn.expand('<cword>')
+  if vim.fn.index({ 'vim', 'help' }, vim.bo.filetype) >= 0 then
+    vim.api.nvim_command('h ' .. cw)
+  elseif vim.api.nvim_eval('coc#rpc#ready()') then
+    vim.fn.CocActionAsync('doHover')
+  else
+    vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
+  end
+end, { silent = true })
+
+-- Highlight the symbol and its references on a CursorHold event(cursor is idle)
+vim.api.nvim_create_augroup("CocGroup", {})
+vim.api.nvim_create_autocmd("CursorHold", {
+  group = "CocGroup",
+  command = "silent call CocActionAsync('highlight')",
+  desc = "Highlight symbol under cursor on CursorHold"
+})
+
+-- Symbol renaming
+vim.keymap.set("n", "<F2>", "<Plug>(coc-rename)", { silent = true })
+
+-- Formatting selected code
+vim.keymap.set("x", "<leader>=", "<Plug>(coc-format-selected)", { silent = true })
+vim.keymap.set("n", "<leader>=", "<Plug>(coc-format-selected)", { silent = true })
+
+-- Setup formatexpr specified filetype(s)
+vim.api.nvim_create_autocmd("FileType", {
+  group = "CocGroup",
+  pattern = "typescript,json",
+  command = "setl formatexpr=CocAction('formatSelected')",
+  desc = "Setup formatexpr specified filetype(s)."
+})
+
+-- Update signature help on jump placeholder
+vim.api.nvim_create_autocmd("User", {
+  group = "CocGroup",
+  pattern = "CocJumpPlaceholder",
+  command = "call CocActionAsync('showSignatureHelp')",
+  desc = "Update signature help on jump placeholder"
+})
+
+-- Apply codeAction to the selected region
+-- Example: `<leader>aap` for current paragraph
+local opts = { silent = true, nowait = true }
+vim.keymap.set("x", "<leader>a", "<Plug>(coc-codeaction-selected)", opts)
+vim.keymap.set("n", "<leader>a", "<Plug>(coc-codeaction-selected)", opts)
+
+-- Remap keys for apply code actions at the cursor position.
+vim.keymap.set("n", "<leader>ac", "<Plug>(coc-codeaction-cursor)", opts)
+-- Apply the most preferred quickfix action on the current line.
+vim.keymap.set("n", "<leader>qf", "<Plug>(coc-fix-current)", opts)
+
+-- Remap keys for apply refactor code actions.
+vim.keymap.set("n", "<leader>re", "<Plug>(coc-codeaction-refactor)", { silent = true })
+vim.keymap.set("x", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
+vim.keymap.set("n", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
+
+-- Run the Code Lens actions on the current line
+vim.keymap.set("n", "<leader>cl", "<Plug>(coc-codelens-action)", opts)
+
+-- Map function and class text objects
+-- NOTE: Requires 'textDocument.documentSymbol' support from the language server
+vim.keymap.set("x", "if", "<Plug>(coc-funcobj-i)", opts)
+vim.keymap.set("o", "if", "<Plug>(coc-funcobj-i)", opts)
+vim.keymap.set("x", "af", "<Plug>(coc-funcobj-a)", opts)
+vim.keymap.set("o", "af", "<Plug>(coc-funcobj-a)", opts)
+vim.keymap.set("x", "ic", "<Plug>(coc-classobj-i)", opts)
+vim.keymap.set("o", "ic", "<Plug>(coc-classobj-i)", opts)
+vim.keymap.set("x", "ac", "<Plug>(coc-classobj-a)", opts)
+vim.keymap.set("o", "ac", "<Plug>(coc-classobj-a)", opts)
+
+-- Remap <C-f> and <C-b> to scroll float windows/popups
+---@diagnostic disable-next-line: redefined-local
+local opts = { silent = true, nowait = true, expr = true }
+vim.keymap.set("n", "<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', opts)
+vim.keymap.set("n", "<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', opts)
+vim.keymap.set("i", "<C-f>",
+  'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(1)<cr>" : "<Right>"', opts)
+vim.keymap.set("i", "<C-b>",
+  'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', opts)
+vim.keymap.set("v", "<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', opts)
+vim.keymap.set("v", "<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', opts)
+
+-- Use CTRL-S for selections ranges
+-- Requires 'textDocument/selectionRange' support of language server
+vim.keymap.set("n", "<C-s>", "<Plug>(coc-range-select)", { silent = true })
+vim.keymap.set("x", "<C-s>", "<Plug>(coc-range-select)", { silent = true })
+
+-- Add `:Format` command to format current buffer
+vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
+
+-- " Add `:Fold` command to fold current buffer
+vim.api.nvim_create_user_command("Fold", "call CocAction('fold', <f-args>)", { nargs = '?' })
+
+-- Add `:OI` command for organize imports of the current buffer
+vim.api.nvim_create_user_command("OI", "call CocActionAsync('runCommand', 'editor.action.organizeImport')", {})
+
+vim.opt.statusline:prepend("%{coc#status()}%{get(b:,'coc_current_function','')}")
+
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  pattern = { "*.go" },
+  callback = function()
+    vim.cmd("OI")
+  end,
+})
+
+-- Mappings for CoCList
+-- code actions and coc stuff
+---@diagnostic disable-next-line: redefined-local
+local opts = { silent = true, nowait = true }
+-- Show all diagnostics
+vim.keymap.set("n", "<space>a", ":<C-u>CocList diagnostics<cr>", opts)
+-- Manage extensions
+vim.keymap.set("n", "<space>e", ":<C-u>CocList extensions<cr>", opts)
+-- Show commands
+vim.keymap.set("n", "<space>c", ":<C-u>CocList commands<cr>", opts)
+-- Find symbol of current document
+vim.keymap.set("n", "<space>o", ":<C-u>CocList outline<cr>", opts)
+-- Search workspace symbols
+vim.keymap.set("n", "<space>s", ":<C-u>CocList -I symbols<cr>", opts)
+-- Do default action for next item
+vim.keymap.set("n", "<space>j", ":<C-u>CocNext<cr>", opts)
+-- Do default action for previous item
+vim.keymap.set("n", "<space>k", ":<C-u>CocPrev<cr>", opts)
+-- Resume latest coc list
+vim.keymap.set("n", "<space>p", ":<C-u>CocListResume<cr>", opts)
+
+local function search_result()
+  if vim.v.hlsearch == 0 then
+    return ''
+  end
+  local last_search = vim.fn.getreg('/')
+  if not last_search or last_search == '' then
+    return ''
+  end
+  local searchcount = vim.fn.searchcount { maxcount = 9999 }
+  return last_search .. '(' .. searchcount.current .. '/' .. searchcount.total .. ')'
+end
+
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'onelight',
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = { 'mode' },
+    lualine_b = { 'branch', 'diagnostics', 'diff' },
+    lualine_c = { 'filename' },
+    lualine_x = { search_result },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { 'filename' },
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = { 'location' }
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 
 require('gitsigns').setup()
 
-require'nvim-treesitter.configs'.setup{highlight={enable=true}}
+require 'nvim-treesitter.configs'.setup { highlight = { enable = true } }
 
 local function on_attach(bufnr)
   local api = require('nvim-tree.api')
@@ -199,18 +406,17 @@ local function on_attach(bufnr)
   api.config.mappings.default_on_attach(bufnr)
 
   vim.keymap.set('n', 'u', api.tree.change_root_to_parent, opts('Up'))
-  vim.keymap.set("n", "l", edit_or_open,          opts("Edit Or Open"))
-  vim.keymap.set("n", "L", vsplit_preview,        opts("Vsplit Preview"))
-  vim.keymap.set("n", "h", api.node.navigate.parent_close,        opts("Close"))
+  vim.keymap.set("n", "l", edit_or_open, opts("Edit Or Open"))
+  vim.keymap.set("n", "L", vsplit_preview, opts("Vsplit Preview"))
+  vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Close"))
   vim.keymap.set("n", "H", api.tree.collapse_all, opts("Collapse All"))
-
 end
 
-local HEIGHT_RATIO = 0.8  -- You can change this
-local WIDTH_RATIO = 0.5   -- You can change this too
+local HEIGHT_RATIO = 0.8 -- You can change this
+local WIDTH_RATIO = 0.5  -- You can change this too
 
 require("nvim-tree").setup({
-  on_attach=on_attach,
+  on_attach = on_attach,
   view = {
     float = {
       enable = true,
@@ -223,7 +429,7 @@ require("nvim-tree").setup({
         local window_h_int = math.floor(window_h)
         local center_x = (screen_w - window_w) / 2
         local center_y = ((vim.opt.lines:get() - window_h) / 2)
-                         - vim.opt.cmdheight:get()
+            - vim.opt.cmdheight:get()
         return {
           border = 'rounded',
           relative = 'editor',
@@ -232,7 +438,7 @@ require("nvim-tree").setup({
           width = window_w_int,
           height = window_h_int,
         }
-        end,
+      end,
     },
     width = function()
       return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
@@ -240,7 +446,7 @@ require("nvim-tree").setup({
   },
 })
 
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
   auto_install = false,
   highlight = {
     enable = true,
@@ -272,7 +478,7 @@ require'nvim-treesitter.configs'.setup {
       -- mapping query_strings to modes.
       selection_modes = {
         ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V', -- linewise
+        ['@function.outer'] = 'V',  -- linewise
         ['@class.outer'] = '<c-v>', -- blockwise
       },
       -- If you set this to `true` (default is `false`) then any textobject is
@@ -325,4 +531,3 @@ require'nvim-treesitter.configs'.setup {
     },
   },
 }
-

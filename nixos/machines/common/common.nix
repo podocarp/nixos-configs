@@ -158,6 +158,4 @@
   services.timesyncd.enable = false;
   services.ntp.enable = false;
   services.chrony.enable = true;
-
-  hardware.enableRedistributableFirmware = true;
 }

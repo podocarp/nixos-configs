@@ -21,14 +21,12 @@
   };
 
   outputs =
-    inputs@{ nixpkgs
-    , home-manager
-    , sops-nix
-    , flake-utils
-    , nix-darwin
-    , nixvim
-    , nixos-hardware
-    , ...
+    inputs@{
+      nixpkgs,
+      home-manager,
+      sops-nix,
+      nix-darwin,
+      ...
     }:
     {
       nixosConfigurations =

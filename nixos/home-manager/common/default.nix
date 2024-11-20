@@ -1,4 +1,4 @@
-args@{ ... }:
+args@{ pkgs, ... }:
 {
   imports = [
     ./dev.nix

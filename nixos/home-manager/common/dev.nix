@@ -6,7 +6,7 @@
     ../programs/direnv
     ../programs/fzf
     ../programs/git
-    ../programs/neovim
+    ../programs/nixvim
     ../programs/readline
     ../programs/tmux
   ];

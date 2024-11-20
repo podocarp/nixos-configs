@@ -60,7 +60,7 @@
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  home-manager.users.pengu = import ../home-manager/laptop.nix;
+  home-manager.users.pengu = import ../home-manager/x1-extreme.nix;
 
   fileSystems."/" =
     {

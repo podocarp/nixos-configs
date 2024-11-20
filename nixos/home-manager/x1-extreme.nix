@@ -18,10 +18,7 @@
     arandr
     tdesktop
     brightnessctl
-    dolphin
   ];
-
-  programs.man.enable = false;
 
   xresources.extraConfig = "XTerm*faceSize: 11";
 }

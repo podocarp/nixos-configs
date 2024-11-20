@@ -15,7 +15,6 @@ in
     ./programs/direnv
     ./programs/atuin
     ./programs/git
-    ./programs/neovim
     ./programs/nixvim
     ./programs/readline
     ./programs/tmux

@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -19,59 +21,83 @@
   };
 
   outputs =
-    inputs@{ nixpkgs
-    , home-manager
-    , sops-nix
-    , flake-utils
-    , nix-darwin
-    , nixvim
-    , ...
-    }: {
-      nixosConfigurations = {
-        server = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/server.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
-
-        server-min = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/server_min.nix
-            home-manager.nixosModules.home-manager
-          ];
-        };
-
-        desktop = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/desktop.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-          ];
-        };
-
-        t420 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./machines/t420.nix
-            home-manager.nixosModules.home-manager
-            sops-nix.nixosModules.sops
-            ({ ... }: {
+    inputs@{
+      nixpkgs,
+      home-manager,
+      sops-nix,
+      flake-utils,
+      nix-darwin,
+      nixvim,
+      nixos-hardware,
+      ...
+    }:
+    {
+      nixosConfigurations =
+        let
+          registryPin = (
+            { ... }:
+            {
               nix.registry = {
                 nixpkgs.flake = nixpkgs;
               };
-            })
-          ];
+            }
+          );
+        in
+        {
+          server = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/server.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
+
+          server-min = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/server_min.nix
+              home-manager.nixosModules.home-manager
+            ];
+          };
+
+          desktop = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/desktop.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
+
+          t420 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/t420.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+            ];
+          };
+
+          x1 = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = inputs;
+            modules = [
+              ./machines/x1-extreme.nix
+              home-manager.nixosModules.home-manager
+              sops-nix.nixosModules.sops
+              registryPin
+              nixos-hardware.nixosModules.lenovo-thinkpad-x1-extreme
+            ];
+          };
         };
-      };
 
       darwinConfigurations = {
         system = "aarch64-darwin";
@@ -82,7 +108,9 @@
             # sops does not have a darwin module yet
             home-manager.darwinModules.home-manager
             {
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
             }
           ];
         };
@@ -100,19 +128,21 @@
 
       devShell =
         let
-          shell = { pkgs }: pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [
-              (haskellPackages.ghcWithPackages (hp: [
-                hp.xmonad
-                hp.xmonad-contrib
-                hp.regex-posix
-              ]))
-              sops
-              age
-              wireguard-tools
-            ];
-            shellHook = '' '';
-          };
+          shell =
+            { pkgs }:
+            pkgs.mkShell {
+              nativeBuildInputs = with pkgs; [
+                (haskellPackages.ghcWithPackages (hp: [
+                  hp.xmonad
+                  hp.xmonad-contrib
+                  hp.regex-posix
+                ]))
+                sops
+                age
+                wireguard-tools
+              ];
+              shellHook = '''';
+            };
         in
         {
           x86_64-linux = shell {

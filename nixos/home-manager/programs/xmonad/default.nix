@@ -11,6 +11,7 @@ in
 
   xdg.configFile."xmobar/xmobarrc".source = {
     "t420" = ./xmobarrc;
+    "x1" = ./xmobarrc;
     "desktop" = ./xmobarrc_desktop;
   }."${hostname}";
 

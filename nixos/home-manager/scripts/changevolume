@@ -1,13 +1,23 @@
 #!/usr/bin/env bash 
-
-msgTag="changevolume"
+msgTag=
+wpID=
+case "$2" in
+    "mic")
+        msgTag="Microphone"
+        wpID="@DEFAULT_AUDIO_SOURCE@"
+        ;;
+    "speaker")
+        msgTag="Speaker"
+        wpID="@DEFAULT_AUDIO_SINK@"
+        ;;
+esac
 
 volume () {
-    wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2*100}'
+    wpctl get-volume $wpID | awk '{print $2*100}'
 }
 
 muted () {
-    res=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d' ' -f3)
+    res=$(wpctl get-volume $wpID | cut -d' ' -f3)
     if [[ "$res" == "[MUTED]" ]]; then
         return 0
     else
@@ -18,14 +28,14 @@ muted () {
 
 case "$1" in
   "toggle")
-      wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      wpctl set-mute $wpID toggle
     ;;
   "inc")
-      wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+      wpctl set-volume -l 1.5 $wpID 5%+
     ;;
   "dec")
-      wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
-      wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+      # wpctl set-mute $wpID 0
+      wpctl set-volume $wpID 5%-
     ;;
   *)
 esac

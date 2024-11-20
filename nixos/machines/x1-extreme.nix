@@ -2,11 +2,13 @@
 {
   imports =
     [
+      ./common/bluetooth.nix
       ./common/boot.nix
       ./common/common.nix
+      ./common/network_drives.nix
       ./common/nvidia.nix
-      ./common/xserver.nix
       ./common/wireless.nix
+      ./common/xserver.nix
     ];
 
   boot = {
@@ -34,12 +36,15 @@
   networking.hostName = "x1"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
 
+  programs.steam.enable = true;
+
   services.xserver = {
     videoDrivers = [ "nvidia" ];
     monitorSection = ''
       DisplaySize 344 193
     '';
   };
+  services.libinput.touchpad.accelSpeed = "0.3";
 
   hardware.nvidia.prime = {
     sync.enable = true;

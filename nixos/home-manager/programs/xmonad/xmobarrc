@@ -18,7 +18,7 @@ Config {
 , commands =
   [
   Run Battery [
-      "--template", "<acstatus><hspace=5/><box mt=1><leftvbar></box>"
+      "--template", "<acstatus><hspace=5/><box mt=1><leftvbar></box><hspace=5/><timeleft>"
     , "--Low", "30"
     , "--High", "70"
     , "--low", "red"
@@ -27,8 +27,8 @@ Config {
     , "--"
     , "-p", "blue"
     , "-P", "%"
-    , "-O", "<fc=#FFFFFF>󱐋</fc> <timeleft>"
-    , "-o", "<fc=#FFFFFF>󰁼</fc> <timeleft>"
+    , "-O", "<fc=#FFFFFF>󱐋</fc>"
+    , "-o", "<fc=#FFFFFF>󰁼</fc>"
     , "-i", "<fc=#FFFFFF>󰁹</fc>"
     , "-a", "notify-send -u critical 'Battery level low!'"
     , "-A", "15"
@@ -42,8 +42,8 @@ Config {
     , "--normal"   , "yellow"
     , "--high"     , "red"
     , "--"
-    , "--mintemp"  , "0"
-    , "--maxtemp"  , "100"
+    , "--mintemp"  , "30"
+    , "--maxtemp"  , "80"
     ] 100
   , Run Memory [
       "--template" , "<hspace=10/><box mt=1><usedvbar></box>"

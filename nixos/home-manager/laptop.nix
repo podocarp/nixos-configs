@@ -18,6 +18,7 @@
     arandr
     tdesktop
     brightnessctl
+    dolphin
   ];
 
   programs.man.enable = false;

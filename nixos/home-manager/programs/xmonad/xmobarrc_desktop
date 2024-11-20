@@ -26,8 +26,8 @@ Config {
     , "--normal"   , "yellow"
     , "--high"     , "red"
     , "--"
-    , "--mintemp"  , "0"
-    , "--maxtemp"  , "100"
+    , "--mintemp"  , "30"
+    , "--maxtemp"  , "80"
     ] 10
   , Run Memory [
       "--template" , "<hspace=18/><box mt=1 mb=4><usedvbar></box>"

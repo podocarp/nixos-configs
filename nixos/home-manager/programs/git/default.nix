@@ -4,7 +4,7 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "J XD";
+    userName = "podocarp";
     userEmail = "xdjiaxd@gmail.com";
     aliases = {
       a = "add";

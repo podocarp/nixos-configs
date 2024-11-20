@@ -12,7 +12,13 @@
       PATH = "$PATH:~/.scripts:~/.npm-global/bin:~/go/bin";
     };
     historyControl = [ "ignoredups" ];
-    historyIgnore = [ "exit" "ls" "cd" "lla" "la" ];
+    historyIgnore = [
+      "exit"
+      "ls"
+      "cd"
+      "lla"
+      "la"
+    ];
     shellAliases = {
       escapeWhitespace = "sed -e 's/\\\\n/\\n/g' -e 's/\\\\t/\\t/g'";
       f = "grep -RHn";
@@ -20,8 +26,7 @@
       la = "ls -a";
       lla = "ls -la";
       t = "tmux -u";
-      vim = "nvim";
-      v = "nvim -S";
+      v = "nvim";
       # The trailing space makes the shell try alias expansion on the next word
       sudo = "sudo ";
     };

@@ -239,6 +239,49 @@
           action.__raw = "require'fzf-lua'.builtin";
           options.desc = "Other fzf-lua commands";
         }
+        {
+          key = "<leader>b";
+          mode = [ "n" ];
+          action.__raw = "require'fzf-lua'.buffers";
+          options.desc = "Search through buffers";
+        }
+
+        {
+          key = "<leader>dt";
+          mode = [ "n" ];
+          action.__raw = "require'dap'.toggle_breakpoint";
+          options.desc = "Toggle breakpoint";
+        }
+        {
+          key = "<leader>dl";
+          mode = [ "n" ];
+          action.__raw = "function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end";
+          options.desc = "Set logging breakpoint";
+        }
+        {
+          key = "<F5>";
+          mode = [ "n" ];
+          action.__raw = "require'dap'.continue";
+          options.desc = "DAP continue";
+        }
+        {
+          key = "<leader>dn";
+          mode = [ "n" ];
+          action.__raw = "require'dap'.step_over";
+          options.desc = "DAP step over (next)";
+        }
+        {
+          key = "<leader>di";
+          mode = [ "n" ];
+          action.__raw = "require'dap'.step_into";
+          options.desc = "DAP step into";
+        }
+        {
+          key = "<leader>do";
+          mode = [ "n" ];
+          action.__raw = "require'dap'.step_out";
+          options.desc = "DAP step out";
+        }
 
         {
           key = "<C-c>";
@@ -288,6 +331,70 @@
           mode = [ "n" ];
           action = ":update!<CR>";
           options.silent = true;
+        }
+
+        {
+          key = "mt";
+          mode = [ "n" ];
+          action.__raw = ''
+            function()
+              -- taken from the vim wiki and translated into lua
+
+              local last_tab_nr = vim.fn.tabpagenr('$')
+              local last_win_nr = vim.fn.winnr('$')
+              -- There is only one window
+              if last_tab_nr == 1 and last_win_nr == 1 then
+                return
+              end
+
+              -- Preparing new window
+              local cur_buf = vim.fn.bufnr('%')
+              if vim.fn.tabpagenr() < last_tab_nr then
+              -- current tab page not the last tab
+                vim.cmd('close!')
+                if last_tab_nr == vim.fn.tabpagenr('$') then
+                -- ended up on the last tab, 
+                  vim.cmd('tabnext')
+                end
+                vim.cmd('vsp')
+              else
+                vim.cmd('close!')
+                vim.cmd('tabnew')
+              end
+
+              -- Opening current buffer in new window
+              vim.cmd('b' .. cur_buf)
+            end
+          '';
+          options.desc = "Move window to next tab";
+        }
+        {
+          key = "mT";
+          mode = [ "n" ];
+          action.__raw = ''
+            function()
+              local last_tab_nr = vim.fn.tabpagenr('$')
+              local last_win_nr = vim.fn.winnr('$')
+              if last_tab_nr == 1 and last_win_nr == 1 then
+                return
+              end
+
+              local cur_buf = vim.fn.bufnr('%')
+              if vim.fn.tabpagenr() ~= 1 then
+                vim.cmd('close!')
+                if last_tab_nr == vim.fn.tabpagenr('$') then
+                  vim.cmd('tabprev')
+                end
+                vim.cmd('vsp')
+              else
+                vim.cmd('close!')
+                vim.cmd('0tabnew')
+              end
+
+              vim.cmd('b' .. cur_buf)
+            end
+          '';
+          options.desc = "Move window to previous tab";
         }
       ]
       ++ (builtins.map
@@ -563,6 +670,7 @@
                   shadow = true;
                 };
                 staticcheck = true;
+                gofumpt = true;
               };
             };
             onAttach.function = # lua
@@ -570,7 +678,9 @@
                 vim.api.nvim_create_autocmd("BufWritePre", {
                   buffer = bufnr,
                   callback = function()
-                    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", {only = {"source.organizeImports"}})
+                    local params = vim.lsp.util.make_range_params()
+                    params.context = {only = {"source.organizeImports"}}
+                    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
                     for cid, res in pairs(result or {}) do
                       for _, r in pairs(res.result or {}) do
                         if r.edit then
@@ -579,10 +689,12 @@
                         end
                       end
                     end
+                    vim.lsp.buf.format({async = false})
                   end
                 })
               '';
           };
+
           nixd = {
             enable = true;
             onAttach.function = "client.server_capabilities.semanticTokensProvider = nil";
@@ -590,6 +702,7 @@
               formatting.command = [ "nixfmt" ];
             };
           };
+
           lua_ls = {
             enable = true;
             onAttach.function = ''
@@ -680,6 +793,19 @@
               }
             ];
           };
+          tabline = {
+            lualine_a = [
+              {
+                __unkeyed-1 = "tabs";
+                max_length.__raw = "vim.o.columns";
+                mode = 2;
+                use_mode_colors = true;
+                tabs_color = {
+                  inactive = "lualine_b_normal";
+                };
+              }
+            ];
+          };
         };
       };
 
@@ -700,25 +826,27 @@
 
       noice = {
         enable = true;
-        notify.view = "mini";
-        lsp.override = {
-          "cmp.entry.get_documentation" = true;
-          "vim.lsp.util.convert_input_to_markdown_lines" = true;
-          "vim.lsp.util.stylize_markdown" = true;
-        };
-        presets = {
-          long_message_to_split = true;
-        };
-        views = {
-          mini = {
-            timeout = 5000;
-            focusable = true;
-            border = {
-              style = "rounded";
-            };
-            win_options = {
-              winhighlight = {
-                Normal = "NormalFloat";
+        settings = {
+          notify.view = "mini";
+          lsp.override = {
+            "cmp.entry.get_documentation" = true;
+            "vim.lsp.util.convert_input_to_markdown_lines" = true;
+            "vim.lsp.util.stylize_markdown" = true;
+          };
+          presets = {
+            long_message_to_split = true;
+          };
+          views = {
+            mini = {
+              timeout = 5000;
+              focusable = true;
+              border = {
+                style = "rounded";
+              };
+              win_options = {
+                winhighlight = {
+                  Normal = "NormalFloat";
+                };
               };
             };
           };

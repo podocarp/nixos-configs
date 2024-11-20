@@ -10,29 +10,31 @@ in
   home.homeDirectory = homeDir;
   home.stateVersion = "23.11";
 
-  imports =
-    [
-      ./programs/bash
-      ./programs/direnv
-      ./programs/atuin
-      ./programs/git
-      ./programs/neovim
-      ./programs/nixvim
-      ./programs/readline
-      ./programs/tmux
-      ./programs/vscode
-      ((import ./programs/vifm) { pkgs = pkgs; myTerm = myTerm; })
+  imports = [
+    ./programs/bash
+    ./programs/direnv
+    ./programs/atuin
+    ./programs/git
+    ./programs/neovim
+    ./programs/nixvim
+    ./programs/readline
+    ./programs/tmux
+    ./programs/vscode
+    ((import ./programs/vifm) {
+      pkgs = pkgs;
+      myTerm = myTerm;
+    })
 
-      ./services/syncthing
+    ./services/syncthing
 
-      ./scripts
+    ./scripts
 
-      ./misc/keyboard
-    ];
+    ./misc/keyboard
+  ];
 
   home.packages = with pkgs; [
     bind # for nslookup
-    entr
+    entr # run arbitrary commands when files change
     ffmpeg
     file-rename
     gnumake
@@ -44,13 +46,13 @@ in
     lsof
     nix-index
     nmap
-    nomacs
     p7zip
-    (python3.withPackages (p: with p; [
-      requests
-    ]))
+    (python3.withPackages (
+      p: with p; [
+        requests
+      ]
+    ))
     ripgrep
-    syncthing
     tldr
     unzip
     unrar

@@ -424,8 +424,9 @@
     extraConfigLuaPre = # lua
       ''
         require("tailwind-tools").setup({ })
-        local noice = require "noice"
 
+        local cmp = require "cmp"
+        local noice = require "noice"
         local luasnip = require "luasnip"
 
         local list_snips = function()
@@ -502,16 +503,16 @@
             "<C-d>" = "cmp.mapping.scroll_docs(4)";
             # C-b (back) C-f (forward) for snippet placeholder navigation.
             "<C-y>" = "cmp.mapping.confirm {select = true}";
-            "<C-Y>" = "cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true }";
             "<C-n>" = # lua
               ''
                 cmp.mapping(function(fallback)
                   if cmp.visible() then
                     cmp.select_next_item()
                   else
-                    fallback()
+                    print("asd")
+                    cmp.mapping.complete()()
                   end
-                end, { 'i', 's' })
+                end, { 'i', 's', 'c' })
               '';
             "<C-p>" = # lua
               ''
@@ -519,9 +520,9 @@
                   if cmp.visible() then
                     cmp.select_prev_item()
                   else
-                    fallback()
+                    cmp.mapping.complete()()
                   end
-                end, { 'i', 's' })
+                end, { 'i', 's', 'c' })
               '';
           };
         };

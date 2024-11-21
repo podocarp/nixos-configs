@@ -153,32 +153,6 @@
           action.__raw = "function() require'fzf-lua'.lsp_finder() end";
         }
         {
-          key = "gd";
-          mode = [ "n" ];
-          action.__raw = ''
-            function()
-              require'fzf-lua'.lsp_definitions({
-                jump_to_single_result = true,
-                jump_to_single_result_action = require('fzf-lua.actions').file_switch_or_edit,
-              })
-            end
-          '';
-          options.desc = "Go to definition";
-        }
-        {
-          key = "gD";
-          mode = [ "n" ];
-          action.__raw = ''
-            function()
-              require'fzf-lua'.lsp_definitions({
-                jump_to_single_result = true,
-                jump_to_single_result_action = require('fzf-lua.actions').file_vsplit,
-              })
-            end
-          '';
-          options.desc = "View definition in a split";
-        }
-        {
           key = "gy";
           mode = [ "n" ];
           action.__raw = ''
@@ -192,7 +166,7 @@
           options.desc = "View type definition in a split";
         }
         {
-          key = "gca";
+          key = "ga";
           mode = [ "n" ];
           action.__raw = "function() require'fzf-lua'.lsp_code_actions() end";
           options.desc = "View lsp code actions";
@@ -215,6 +189,7 @@
           action.__raw = "require'fzf-lua'.diagnostics_workspace";
           options.desc = "Workspace diagnostics";
         }
+
         {
           key = "<leader>t";
           mode = [ "n" ];
@@ -252,8 +227,9 @@
           action.__raw = "require'dap'.toggle_breakpoint";
           options.desc = "Toggle breakpoint";
         }
+
         {
-          key = "<leader>dl";
+          key = "gdd";
           mode = [ "n" ];
           action.__raw = "function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end";
           options.desc = "Set logging breakpoint";
@@ -474,6 +450,14 @@
               bold = true,
               fg = "white",
               bg = "black",
+        })
+
+        vim.diagnostic.config({
+          float = {
+            format = function(diagnostic)
+              return string.format("%s: %s", diagnostic.source, diagnostic.message)
+            end
+          },
         })
       '';
 

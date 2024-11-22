@@ -16,7 +16,6 @@
     git
     pciutils # for lspci
     sof-firmware # some audio devices need this
-    vim
     wget
     hdparm
     lm_sensors

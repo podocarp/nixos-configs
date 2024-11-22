@@ -15,5 +15,11 @@
       NVIDIA_VISIBLE_DEVICES = "all";
       NVIDIA_DRIVER_CAPABILITIES = "all";
     };
+    extraOptions = [
+      "--device=/dev/dri/renderD128"
+      # render group gid for vaapi hardware acceleration
+      # getent group render | cut -d: -f3
+      "--group-add=303"
+    ];
   };
 }

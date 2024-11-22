@@ -1,10 +1,11 @@
-{ pkgs, ... }:
+args@{ pkgs, ... }:
 {
   home.stateVersion = "22.11";
 
   imports = [
-    ./common/dev.nix
-    ./common/env.nix
+    (import ./common (args // {
+      useX = false;
+    }))
 
     ./programs/htop
   ];

@@ -266,5 +266,10 @@ in
     algorithm = "zstd";
   };
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
   system.stateVersion = "22.11";
 }

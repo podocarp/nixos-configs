@@ -25,10 +25,7 @@
       nixpkgs,
       home-manager,
       sops-nix,
-      flake-utils,
       nix-darwin,
-      nixvim,
-      nixos-hardware,
       ...
     }:
     {
@@ -92,9 +89,13 @@
             modules = [
               ./machines/x1-extreme.nix
               home-manager.nixosModules.home-manager
+              {
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                };
+              }
               sops-nix.nixosModules.sops
               registryPin
-              nixos-hardware.nixosModules.lenovo-thinkpad-x1-extreme
             ];
           };
         };

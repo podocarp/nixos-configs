@@ -184,11 +184,12 @@ myKeys =
       | (key, i) <- zip [1 .. 9] myWorkspaces,
         (f, mask) <- [(W.view, ""), (W.shift, "S-")]
     ]
-    ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle"),
-         ("<XF86AudioRaiseVolume>", myspawn "changevolume inc"),
-         ("<XF86AudioLowerVolume>", myspawn "changevolume dec"),
+    ++ [ ("<XF86AudioMute>", myspawn "changevolume toggle speaker"),
+         ("<XF86AudioRaiseVolume>", myspawn "changevolume inc speaker"),
+         ("<XF86AudioLowerVolume>", myspawn "changevolume dec speaker"),
          ("<XF86MonBrightnessUp>", myspawn "brightnessctl set 5%+"),
-         ("<XF86MonBrightnessDown>", myspawn "brightnessctl set 5%-")
+         ("<XF86MonBrightnessDown>", myspawn "brightnessctl set 5%-"),
+         ("<XF86AudioMicMute>", myspawn "changevolume toggle mic")
        ]
 
 -- @q =?~ x@. matches @q@ using the regex @x@, return 'True' if it matches

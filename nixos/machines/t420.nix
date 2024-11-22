@@ -66,7 +66,6 @@
   home-manager.users.pengu = import ../home-manager/laptop.nix;
 
   hardware.pulseaudio.enable = true;
-  hardware.enableRedistributableFirmware = true;
 
   services.xserver.dpi = 90;
 

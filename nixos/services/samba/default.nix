@@ -32,13 +32,6 @@
       "server min protocol" = "SMB3_00";
       "socket options" = "TPC_NODELAY IPTOS_LOWDELAY";
     };
-
-    extraConfig = ''
-      load printers = no
-      printing = bsd
-      printcap name = /dev/null
-      disable spoolss = yes
-    '';
   };
 
 

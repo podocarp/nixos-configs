@@ -52,7 +52,26 @@
       wrapscan = false;
     };
 
-    autoCmd = [ ];
+    autoCmd = [
+      {
+        command = ''
+          setlocal tw=80
+          setlocal fo+=a
+          setlocal filetype=markdown
+          setlocal spell spelllang=en_gb
+        '';
+        desc = "Set additional options for markdown files.";
+        event = [
+          "BufRead"
+          "BufNewFile"
+        ];
+        nested = true;
+        pattern = [
+          "*.md"
+          "*.mdx"
+        ];
+      }
+    ];
 
     keymaps =
       [
@@ -148,9 +167,14 @@
         }
 
         {
+          key = "z=";
+          mode = [ "n" ];
+          action.__raw = "require'fzf-lua'.spell_suggest";
+        }
+        {
           key = "gf";
           mode = [ "n" ];
-          action.__raw = "function() require'fzf-lua'.lsp_finder() end";
+          action.__raw = "require'fzf-lua'.lsp_finder";
         }
         {
           key = "gy";
@@ -168,7 +192,7 @@
         {
           key = "ga";
           mode = [ "n" ];
-          action.__raw = "function() require'fzf-lua'.lsp_code_actions() end";
+          action.__raw = "require'fzf-lua'.lsp_code_actions";
           options.desc = "View lsp code actions";
         }
         {
@@ -193,8 +217,8 @@
         {
           key = "<leader>t";
           mode = [ "n" ];
-          action.__raw = "require'fzf-lua'.git_files";
-          options.desc = "Search through files tracked by git";
+          action.__raw = "require'fzf-lua'.files";
+          options.desc = "Search through files";
         }
         {
           key = "<leader>s";
@@ -456,7 +480,7 @@
         vim.diagnostic.config({
           float = {
             format = function(diagnostic)
-              return string.format("%s: %s", diagnostic.source, diagnostic.message)
+              return string.format("%s: (%s) %s", diagnostic.source, diagnostic.code, diagnostic.message)
             end
           },
         })

@@ -27,6 +27,7 @@
       complete = "";
       cursorline = true;
       expandtab = true;
+      formatoptions = "cro/qj";
       incsearch = true;
       ignorecase = true;
       number = true;
@@ -39,6 +40,7 @@
       smartindent = true;
       smarttab = true;
       splitbelow = true;
+      splitright = true;
       title = true;
       undofile = true;
       updatetime = 300;
@@ -52,11 +54,19 @@
       wrapscan = false;
     };
 
+    userCommands = {
+      FormatMdTable = {
+        command = ''<line1>,<line2>!awk '{$1=$1};1' | column -t -s "|" -o "|"'';
+        range = true;
+        desc = "Formats markdown tables (select table in visual mode first)";
+      };
+    };
+
     autoCmd = [
       {
         command = ''
           setlocal tw=80
-          setlocal fo+=a
+          setlocal formatoptions+=t
           setlocal filetype=markdown
           setlocal spell spelllang=en_gb
         '';
@@ -71,6 +81,7 @@
           "*.mdx"
         ];
       }
+
     ];
 
     keymaps =
@@ -170,11 +181,6 @@
           key = "z=";
           mode = [ "n" ];
           action.__raw = "require'fzf-lua'.spell_suggest";
-        }
-        {
-          key = "gf";
-          mode = [ "n" ];
-          action.__raw = "require'fzf-lua'.lsp_finder";
         }
         {
           key = "gy";
@@ -499,7 +505,7 @@
             { name = "path"; }
             {
               name = "buffer";
-              keyword_length = 3;
+              keyword_length = 2;
             }
           ];
           snippet = {
@@ -533,7 +539,6 @@
                   if cmp.visible() then
                     cmp.select_next_item()
                   else
-                    print("asd")
                     cmp.mapping.complete()()
                   end
                 end, { 'i', 's', 'c' })
@@ -762,7 +767,9 @@
             theme = "onelight";
           };
           sections = {
-            lualine_a = [ "mode" ];
+            lualine_a = [
+              "mode"
+            ];
             lualine_b = [
               "branch"
               "diff"
@@ -970,7 +977,10 @@
         enable = true;
         settings = {
           auto_install = false;
-          highlight.enable = true;
+          highlight = {
+            enable = true;
+            additional_vim_regex_highlighting = true;
+          };
           incremental_selection = {
             enable = true;
             keymaps = {
@@ -980,7 +990,7 @@
               node_decremental = "<BS>";
             };
           };
-          indent.enable = true;
+          indent.enable = false;
         };
       };
 

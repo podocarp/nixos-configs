@@ -1,4 +1,4 @@
-args@{ pkgs, ... }:
+args@{ ... }:
 {
   imports = [
     ./dev.nix
@@ -8,4 +8,10 @@ args@{ pkgs, ... }:
   programs.home-manager.enable = true;
   home.username = "pengu";
   home.homeDirectory = "/home/pengu";
+
+  home.sessionVariables = {
+    NIXPKGS_ALLOW_INSECURE = "1";
+    NIXPKGS_ALLOW_UNFREE = "1";
+    EDITOR = "nvim";
+  };
 }

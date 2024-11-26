@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 let
   myTerm = "iterm";
   homeDir = "/Users/bytedance";
@@ -32,6 +36,9 @@ in
   ];
 
   home.packages = with pkgs; [
+    coreutils
+    util-linux
+
     bind # for nslookup
     entr # run arbitrary commands when files change
     ffmpeg

@@ -41,6 +41,7 @@
       smarttab = true;
       splitbelow = true;
       splitright = true;
+      textwidth = 80;
       title = true;
       undofile = true;
       updatetime = 300;
@@ -152,6 +153,16 @@
           options = {
             expr = true;
           };
+        }
+        {
+          key = "<C-u>";
+          mode = [ "i" ];
+          action = "<c-g>u<c-u>";
+        }
+        {
+          key = "<C-w>";
+          mode = [ "i" ];
+          action = "<c-g>u<c-w>";
         }
 
         {
@@ -337,6 +348,18 @@
           mode = [ "n" ];
           action = ":update!<CR>";
           options.silent = true;
+        }
+        {
+          key = "<C-w><C-]>";
+          mode = [ "n" ];
+          action = "<C-w>v<C-]>";
+          options.desc = "Jumpt to current tag in a vertical split";
+        }
+        {
+          key = "<leader><q>";
+          mode = [ "n" ];
+          action = ":pclose<CR>";
+          options.desc = "Closes the preview window";
         }
 
         {
@@ -526,7 +549,6 @@
           '';
           view.entries = {
             name = "custom";
-            selection_order = "near_cursor";
           };
           mapping = {
             "<C-u>" = "cmp.mapping.scroll_docs(-4)";
@@ -755,13 +777,14 @@
             '';
           };
           ts_ls.enable = true;
+
+          pylsp.enable = true;
         };
       };
 
       lualine = {
         enable = true;
         settings = {
-          extensions = [ "nvim-tree" ];
           options = {
             icons_enabled = true;
             theme = "onelight";
@@ -878,6 +901,9 @@
         git = {
           enable = true;
           ignore = true;
+        };
+        actions = {
+          windowPicker.enable = false;
         };
         view = {
           signcolumn = "no";

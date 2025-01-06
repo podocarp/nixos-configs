@@ -50,9 +50,7 @@
     packages = with pkgs; [
       liberation_ttf
       corefonts
-      (nerdfonts.override {
-        fonts = [ "DroidSansMono" ];
-      })
+      nerd-fonts.droid-sans-mono
     ];
   };
 

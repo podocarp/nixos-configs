@@ -696,6 +696,10 @@
             })
           '';
         servers = {
+          clangd = {
+            enable = true;
+          };
+
           gopls = {
             enable = true;
             settings = {

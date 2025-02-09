@@ -353,7 +353,7 @@
           key = "<C-w><C-]>";
           mode = [ "n" ];
           action = "<C-w>v<C-]>";
-          options.desc = "Jumpt to current tag in a vertical split";
+          options.desc = "Jump to current tag in a vertical split";
         }
         {
           key = "<leader><q>";
@@ -598,52 +598,52 @@
           dapLogPoint.text = "";
           dapStopped.text = "→";
         };
-        extensions = {
-          dap-go = {
-            enable = true;
-          };
-          dap-ui = {
-            enable = true;
-            layouts = [
+      };
+
+      dap-go = {
+        enable = true;
+      };
+
+      dap-ui = {
+        enable = true;
+        settings.layouts = [
+          {
+            elements = [
               {
-                elements = [
-                  {
-                    id = "breakpoints";
-                    size = 0.1;
-                  }
-                  {
-                    id = "scopes";
-                    size = 0.6;
-                  }
-                  {
-                    id = "stacks";
-                    size = 0.15;
-                  }
-                  {
-                    id = "watches";
-                    size = 0.15;
-                  }
-                ];
-                position = "left";
-                size = 40;
+                id = "breakpoints";
+                size = 0.1;
               }
               {
-                elements = [
-                  {
-                    id = "repl";
-                    size = 0.5;
-                  }
-                  {
-                    id = "console";
-                    size = 0.5;
-                  }
-                ];
-                position = "bottom";
-                size = 10;
+                id = "scopes";
+                size = 0.6;
+              }
+              {
+                id = "stacks";
+                size = 0.15;
+              }
+              {
+                id = "watches";
+                size = 0.15;
               }
             ];
-          };
-        };
+            position = "left";
+            size = 40;
+          }
+          {
+            elements = [
+              {
+                id = "repl";
+                size = 0.5;
+              }
+              {
+                id = "console";
+                size = 0.5;
+              }
+            ];
+            position = "bottom";
+            size = 10;
+          }
+        ];
       };
 
       gitsigns.enable = true;
@@ -682,10 +682,15 @@
         };
         onAttach = # lua
           ''
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = bufnr,
-              callback = function() vim.lsp.buf.format({ async = false }) end
-            })
+            if client:supports_method('textDocument/formatting') then
+              -- Format the current buffer on save
+              vim.api.nvim_create_autocmd('BufWritePre', {
+                buffer = bufnr,
+                callback = function(args)
+                  vim.lsp.buf.format({ bufnr = args.buf })
+                end,
+              })
+            end
             vim.api.nvim_create_autocmd("CursorHold", {
               buffer = bufnr,
               callback = vim.lsp.buf.document_highlight,
@@ -713,26 +718,6 @@
                 gofumpt = true;
               };
             };
-            onAttach.function = # lua
-              ''
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                  buffer = bufnr,
-                  callback = function()
-                    local params = vim.lsp.util.make_range_params()
-                    params.context = {only = {"source.organizeImports"}}
-                    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-                    for cid, res in pairs(result or {}) do
-                      for _, r in pairs(res.result or {}) do
-                        if r.edit then
-                          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-                          vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                        end
-                      end
-                    end
-                    vim.lsp.buf.format({async = false})
-                  end
-                })
-              '';
           };
 
           nixd = {
@@ -771,6 +756,12 @@
             };
           };
 
+          zls = {
+            enable = true;
+          };
+
+          jsonls.enable = true;
+
           eslint = {
             enable = true;
             onAttach.function = ''
@@ -780,7 +771,23 @@
               })
             '';
           };
-          ts_ls.enable = true;
+          ts_ls = {
+            enable = true;
+            onAttach.function = # lua
+              ''
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                  buffer = bufnr,
+                  callback = function()
+                    local params = {
+                      command = "_typescript.organizeImports",
+                      arguments = {vim.api.nvim_buf_get_name(bufnr)},
+                      title = ""
+                    }
+                    vim.lsp.buf_request_sync(bufnr, "workspace/executeCommand", params, 500)
+                  end
+                })
+              '';
+          };
 
           pylsp.enable = true;
         };
@@ -1009,7 +1016,7 @@
           auto_install = false;
           highlight = {
             enable = true;
-            additional_vim_regex_highlighting = true;
+            additional_vim_regex_highlighting = false;
           };
           incremental_selection = {
             enable = true;

@@ -18,6 +18,10 @@
     vimAlias = true;
     vimdiffAlias = true;
 
+    globals = {
+      tex_flavor = "latex";
+    };
+
     opts = {
       autoindent = true;
       autowriteall = true;
@@ -35,7 +39,7 @@
       ruler = true;
       scrolloff = 5;
       signcolumn = "yes";
-      sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions";
+      sessionoptions = "blank,curdir,folds,help,tabpages,terminal,skiprtp";
       smartcase = true;
       smartindent = true;
       smarttab = true;
@@ -315,7 +319,7 @@
         {
           key = "<C-v>";
           mode = [ "i" ];
-          action = "<C-o>\"+p";
+          action = "<Esc>\"+pa";
           options.desc = "Paste from system clipboard";
         }
         {
@@ -516,7 +520,16 @@
       '';
 
     plugins = {
-      auto-session.enable = true;
+      auto-session = {
+        enable = true;
+        settings = {
+          suppressed_dirs = [
+            "~/"
+            "~/Documents"
+            "~/Downloads"
+          ];
+        };
+      };
 
       cmp = {
         enable = true;
@@ -652,12 +665,13 @@
         enable = true;
         fromLua = [
           {
-            paths = ./snippets;
+            paths = builtins.path { path = ./snippets; };
             lazyLoad = true;
           }
         ];
         filetypeExtend = {
           typescriptreact = [ "typescript" ];
+          markdown = [ "tex" ];
         };
       };
 
@@ -687,7 +701,19 @@
               vim.api.nvim_create_autocmd('BufWritePre', {
                 buffer = bufnr,
                 callback = function(args)
-                  vim.lsp.buf.format({ bufnr = args.buf })
+                  local params = vim.lsp.util.make_range_params()
+                  params.context = {only = {"source.organizeImports", "source.fixAll"}}
+                  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
+                  for cid, res in pairs(result or {}) do
+                    for _, r in pairs(res.result or {}) do
+                      if r.edit then
+                        local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
+                        vim.lsp.util.apply_workspace_edit(r.edit, enc)
+                      end
+                    end
+                  end
+
+                  vim.lsp.buf.format({ bufnr = args.buf, async = false })
                 end,
               })
             end
@@ -707,16 +733,14 @@
 
           gopls = {
             enable = true;
-            settings = {
-              gopls = {
-                experimentalPostfixCompletions = true;
-                analyses = {
-                  unusedparams = true;
-                  shadow = true;
-                };
-                staticcheck = true;
-                gofumpt = true;
+            settings.gopls = {
+              experimentalPostfixCompletions = true;
+              analyses = {
+                unusedparams = true;
+                shadow = true;
               };
+              staticcheck = true;
+              gofumpt = true;
             };
           };
 
@@ -758,6 +782,10 @@
 
           zls = {
             enable = true;
+            settings.zls = {
+              enable_build_on_save = true;
+              highlight_global_var_declarations = true;
+            };
           };
 
           jsonls.enable = true;
@@ -773,20 +801,6 @@
           };
           ts_ls = {
             enable = true;
-            onAttach.function = # lua
-              ''
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                  buffer = bufnr,
-                  callback = function()
-                    local params = {
-                      command = "_typescript.organizeImports",
-                      arguments = {vim.api.nvim_buf_get_name(bufnr)},
-                      title = ""
-                    }
-                    vim.lsp.buf_request_sync(bufnr, "workspace/executeCommand", params, 500)
-                  end
-                })
-              '';
           };
 
           pylsp.enable = true;

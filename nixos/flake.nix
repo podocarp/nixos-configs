@@ -21,12 +21,11 @@
   };
 
   outputs =
-    inputs@{
-      nixpkgs,
-      home-manager,
-      sops-nix,
-      nix-darwin,
-      ...
+    inputs@{ nixpkgs
+    , home-manager
+    , sops-nix
+    , nix-darwin
+    , ...
     }:
     {
       nixosConfigurations =
@@ -47,6 +46,11 @@
             modules = [
               ./machines/server.nix
               home-manager.nixosModules.home-manager
+              {
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                };
+              }
               sops-nix.nixosModules.sops
               registryPin
             ];
@@ -67,6 +71,11 @@
             modules = [
               ./machines/desktop.nix
               home-manager.nixosModules.home-manager
+              {
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                };
+              }
               sops-nix.nixosModules.sops
               registryPin
             ];
@@ -78,6 +87,11 @@
             modules = [
               ./machines/t420.nix
               home-manager.nixosModules.home-manager
+              {
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                };
+              }
               sops-nix.nixosModules.sops
               registryPin
             ];

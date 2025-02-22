@@ -21,4 +21,3 @@ creation_rules:
     key_groups:
       - age:
           - *jxd_age
-          - *work_age

@@ -20,6 +20,8 @@
     kernelModules = [ "kvm-amd" ];
   };
 
+  services.xserver.dpi = 137;
+
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
     gnupg.sshKeyPaths = [ ];
@@ -60,8 +62,6 @@
   virtualisation.oci-containers.backend = "docker";
 
   home-manager.users.pengu = import ../home-manager/desktop.nix;
-
-  hardware.pulseaudio.enable = true;
 
   system.stateVersion = "22.11";
 }

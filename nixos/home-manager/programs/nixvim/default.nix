@@ -6,7 +6,7 @@
   programs.nixvim = {
     enable = true;
     performance.byteCompileLua = {
-      enable = true;
+      enable = false;
       configs = true;
       initLua = true;
       plugins = true;
@@ -1049,6 +1049,17 @@
 
       which-key = {
         enable = true;
+      };
+
+      vimtex = {
+        enable = true;
+        texlivePackage = pkgs.mytex;
+        settings = {
+          view_method = "zathura";
+          compiler_latexmk = {
+            "aux_dir" = "_latexmk";
+          };
+        };
       };
     };
   };

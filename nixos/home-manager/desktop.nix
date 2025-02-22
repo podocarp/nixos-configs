@@ -2,19 +2,20 @@
 {
   home.stateVersion = "22.11";
 
-  imports =
-    [
-      ./common
+  imports = [
+    ./common
 
-      ./programs/texlive
-      ./programs/zathura
+    ./programs/texlive
+    ./programs/zathura
 
-      ./services/dunst
-      ./services/udiskie
-      ./programs/xmonad
-    ];
+    ./services/dunst
+    ./services/udiskie
+    ./programs/xmonad
+  ];
 
   home.packages = with pkgs; [
+    dolphin
+
     cudatoolkit
     ddcutil
     handbrake
@@ -22,14 +23,20 @@
     jellyfin-media-player
     krita
     libreoffice-fresh
-    runelite
     tdesktop
 
     kicad
     openscad
     prusa-slicer
+    qmk
 
-    godot_4
+    (runelite.overrideAttrs (oldAttrs: {
+      installPhase =
+        oldAttrs.installPhase
+        + ''
+          wrapProgram $out/bin/runelite --set GDK_SCALE 2 --set GDK_DPI_SCALE 2
+        '';
+    }))
   ];
 
   programs.man.enable = false;
